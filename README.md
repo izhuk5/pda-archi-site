@@ -1,6 +1,21 @@
 # Wow-site starter
 
-Заготовка проекта «сайт кодом через Claude Code»: дизайн собирается сразу в HTML/CSS/JS в браузере, без Figma. Скопируй папку, положи бриф, открой Claude Code – и вставь первый промпт из `START.md`.
+Заготовка проекта «сайт кодом через Claude Code»: дизайн собирается сразу в коде на Astro и смотрится в браузере, без Figma. Скопируй папку, положи бриф, выполни `npm install`, открой Claude Code – и вставь первый промпт из `START.md`.
+
+## Команды
+
+Нужны Node 22.12+ и Google Chrome.
+
+```
+npm install          один раз после копирования: Astro, GSAP, Lenis, Three.js
+npm run dev          просмотр на http://localhost:4321 (концепты – /concepts/hero-a)
+npm run dev:stop     остановить dev-сервер, если он ушёл в фон (так делает Astro, когда его запускает агент)
+npm run build        сборка в dist/ – это и выкладывается
+npm run preview      посмотреть сборку перед выкладкой
+npm run check        линтер правил CLAUDE.md
+npm run shot         скриншоты 1440 и 390 + замеры; секция – npm run shot -- hero
+npm run versions     что из библиотек устарело
+```
 
 ## Карта папки
 
@@ -19,30 +34,36 @@ docs/
   design-system.md   источник правды: токены, компоненты, карта секций, ручная доводка, журнал
   motion.md          библиотека приёмов движения (GSAP, ScrollTrigger, Lenis) и реестр data-reveal
   scene.md           3D и Three.js: когда уместно, бюджет, приёмы, запасной вариант
-  publish.md         как выложить: GitHub Pages, Netlify, свой сервер
+  publish.md         как выложить: сборка, GitHub Pages, Netlify, свой сервер
 
-package.json         только скрипты: npm run dev (сервер), npm run check (линтер), npm run shot -- [id] (скриншоты), npm run versions (свежесть библиотек)
-index.html           страница. Каждая секция – <section id="…"> с именем из карты секций
-styles/
-  tokens.css         :root – единственное место, где живут сырые значения
-  base.css           reset, сетка, шкала текста, состояния data-reveal
-  components.css     всё, что повторилось дважды
-  sections.css       правила секций, по одной в блоке, в порядке карты
-js/
-  main.js            запуск: static-режим, reduced-motion, Lenis, подключение движения и сцены
-  motion.js          реестр приёмов data-reveal (GSAP)
-  scene.js           Three.js: рендерер, ленивый старт, пауза вне экрана; объект сцены – слот
-assets/
-  img/  video/  models/   оптимизированные ассеты; источники в SOURCES.md каждой папки
+src/
+  pages/
+    index.astro      главная: секции в порядке карты, по строке на секцию
+    concepts/        концепты hero и ветвления – 2–3 варианта рядом; в сборку не попадают
+    dev/             служебные страницы (/dev/mobile – сайт в iframe 390); в сборку не попадают
+  sections/          секция = файл <Имя>.astro: <section id="…">, разметка, тексты, свои стили
+  components/        всё, что повторилось дважды
+  layouts/
+    Base.astro       каркас страницы: head, шрифты, глобальные стили, запуск движения
+  styles/
+    tokens.css       :root – единственное место, где живут сырые значения
+    base.css         reset, сетка, шкала текста, состояния data-reveal
+  js/
+    main.js          запуск: static-режим, reduced-motion, Lenis, подключение движения и сцены
+    motion.js        реестр приёмов data-reveal (GSAP)
+    scene.js         Three.js: рендерер, ленивый старт, пауза вне экрана; объект сцены – слот
+  assets/
+    img/             картинки – выводятся через <Image>, Astro сам делает WebP/AVIF и srcset
+    SOURCES.md       источники всех ассетов: картинки, видео, модели
+public/
+  video/  models/    файлы, которые уходят на хостинг как есть
 
-concepts/            ветвления: 2–3 варианта отдельными html рядом, не спор словами
 scripts/
-  serve.mjs          локальный сервер: npm run dev → http://127.0.0.1:8765/
   check.mjs          линтер правил: сырые значения вне токенов, спейсеры, капс, моно, тире, картинки, сверка docs с кодом
   shot.mjs           скриншоты 1440 и 390 через Chrome + замеры: горизонтальный скролл, висячие строки, ошибки консоли
-  versions.mjs       версии GSAP, Lenis, Three.js с CDN против последних стабильных в npm; --write обновляет
-  mobile.html        обёртка-iframe 390 px для ручного просмотра в браузере
-  (Node 22+; запуск через npm: npm run dev / check / shot, зависимостей нет)
+
+astro.config.mjs     настройки Astro: статичная сборка, концепты и dev-страницы вне выкладки
+package.json         зависимости (точные версии) и команды
 
 .claude/
   launch.json        локальный сервер для предпросмотра

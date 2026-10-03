@@ -1,6 +1,12 @@
 /* Реестр приёмов data-reveal. Каждый приём описан в docs/motion.md до того, как появился здесь.
    Порядок в элементе: подготовить начальное состояние → пометить is-ready (снять visibility: hidden) → твин по ScrollTrigger.
-   Переопределения из разметки: data-reveal-delay="0.2", data-reveal-stagger="0.05". */
+   Переопределения из разметки: data-reveal-delay="0.2", data-reveal-stagger="0.05".
+   Плагины регистрирует src/js/main.js до initMotion(). */
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+import { CustomEase } from 'gsap/CustomEase';
+
 const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const num = (el, key, fallback) => (el.dataset[key] !== undefined ? parseFloat(el.dataset[key]) : fallback);
 const ready = el => el.classList.add('is-ready');
@@ -15,7 +21,7 @@ const registerEases = () => {
     let rules;
     try { rules = sheet.cssRules; } catch { continue; } /* чужие таблицы (Google Fonts) читать нельзя */
     for (const rule of rules) {
-      if (rule.selectorText !== ':root') continue;
+      if (!rule.selectorText || !rule.selectorText.split(',').some(s => s.trim() === ':root')) continue;
       for (const prop of rule.style) if (prop.startsWith('--ease-')) found.add(prop);
     }
   }

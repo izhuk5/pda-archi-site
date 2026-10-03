@@ -1,0 +1,43 @@
+---
+/* Каркас каждой страницы: <head>, шрифты, глобальные стили, запуск движения.
+   Использование: <Base title="…" description="…"> секции </Base>.
+   Глобальные стили – только токены и база; стили секций и компонентов живут в их .astro-файлах (<style>, Astro их скоупит). */
+import '../styles/tokens.css';
+import '../styles/base.css';
+
+const {
+  title = '[Название проекта]',
+  description = '[Одна фраза из brief.md: что продаём и для кого]',
+} = Astro.props;
+---
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+
+  {/* Шрифты: пара display + text из docs/design-system.md → Типографика. Подключить после этапа 3 (токены) */}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  {/* Движение включено, если нет ?static и prefers-reduced-motion: класс ставится до первой отрисовки, иначе контент
+      сначала мелькнёт, потом спрячется под появление. Если движение не запустилось, js/main.js класс снимает и всё показывает */}
+  <script is:inline>
+    if (!new URLSearchParams(location.search).has('static') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('has-motion');
+    }
+  </script>
+</head>
+<body>
+  <main>
+    <slot />
+  </main>
+
+  {/* Движение и 3D: GSAP, Lenis, Three.js из npm, Astro собирает их сам. Three.js грузится отдельным файлом, только если на странице есть [data-scene] */}
+  <script>
+    import '../js/main.js';
+  </script>
+</body>
+</html>

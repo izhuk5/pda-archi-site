@@ -4,8 +4,13 @@
     {
       "name": "site",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 8765
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--",
+        "--ignore-lock"
+      ],
+      "port": 4321
     }
   ]
 }

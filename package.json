@@ -1,14 +1,24 @@
 {
   "name": "wow-site",
+  "type": "module",
   "private": true,
-  "description": "Сайт кодом через Claude Code: статический HTML/CSS/JS. npm здесь только запускает скрипты – зависимостей нет и не ставятся.",
+  "description": "Сайт кодом через Claude Code на Astro: собирается в статичные файлы (dist/).",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "node scripts/serve.mjs",
+    "dev": "astro dev",
+    "dev:stop": "astro dev stop",
+    "build": "astro build",
+    "preview": "astro preview",
     "check": "node scripts/check.mjs",
     "shot": "node scripts/shot.mjs",
-    "versions": "node scripts/versions.mjs"
+    "versions": "npm outdated"
+  },
+  "dependencies": {
+    "astro": "7.3.5",
+    "gsap": "3.15.0",
+    "lenis": "1.3.26",
+    "three": "0.186.1"
   }
 }

@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-/* Скриншоты 1440 и 390 и замеры, которые видны только в браузере. Только Node и Chrome, без npm.
+/* Скриншоты 1440 и 390 и замеры, которые видны только в браузере. Только встроенные модули Node и Google Chrome.
    Запуск из корня (аргументы npm передаются после --):
-     npm run shot                                  вся страница index.html
+     npm run shot                                  главная (src/pages/index.astro)
      npm run shot -- hero                          только секция #hero
-     npm run shot -- --page concepts/hero-a.html   концепт
-   Как устроено: свой сервер (scripts/serve.mjs) на свободном порту, Chrome headless управляется через DevTools Protocol по pipe.
+     npm run shot -- --page concepts/hero-a        концепт (src/pages/concepts/hero-a.astro)
+   Как устроено: свой astro dev на свободном порту (уже запущенный npm run dev не мешает, панель разработчика скрыта),
+   Chrome headless управляется через DevTools Protocol по pipe.
    Мобильная ширина – эмуляция устройства 390 (как в DevTools), а не iframe: окно Chrome уже ~500 px режет кадр, эмуляция – нет.
    Страница открывается с ?static (анимации выключены, всё видно). Длинная страница режется на куски по два экрана:
    desktop-1440.png, desktop-1440-2.png… – целиком такую картинку не прочитать глазами.
@@ -13,8 +14,11 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
+import net from 'node:net';
 import path from 'node:path';
-import { serve, ROOT } from './serve.mjs';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const OUT = path.join(ROOT, 'scripts', 'out');
 const VIEWPORTS = [
@@ -25,14 +29,40 @@ const TILE_SCREENS = 2;
 
 /* --- аргументы ------------------------------------------------------------ */
 const args = process.argv.slice(2);
-let pagePath = 'index.html';
+let pagePath = '/';
 let sectionId = '';
 for (let i = 0; i < args.length; i++) {
-  if (args[i] === '--page') pagePath = args[++i];
+  if (args[i] === '--page') pagePath = '/' + args[++i].replace(/^\/+|\.astro$/g, '').replace(/(^|\/)index$/, '');
   else sectionId = args[i];
 }
-if (!fs.existsSync(path.join(ROOT, pagePath))) { console.error(`нет файла ${pagePath}`); process.exit(1); }
-const prefix = pagePath === 'index.html' ? '' : `${path.basename(pagePath, '.html')}-`;
+const prefix = pagePath === '/' ? '' : `${path.basename(pagePath)}-`;
+
+/* Остановить astro dev со всеми его дочерними процессами (группа процессов = pid со знаком минус) */
+const stopAstro = proc => { try { process.kill(-proc.pid, 'SIGTERM'); } catch { /* уже остановлен */ } };
+
+/* astro dev на свободном порту; готов, когда отвечает по HTTP */
+const freePort = () => new Promise(resolve => {
+  const probe = net.createServer();
+  probe.listen(0, '127.0.0.1', () => { const { port } = probe.address(); probe.close(() => resolve(port)); });
+});
+const startAstro = async () => {
+  const port = await freePort();
+  /* --ignore-lock: свой экземпляр рядом с уже запущенным npm run dev. detached: своя группа процессов – astro перезапускает себя
+     дочерним процессом, и гасить нужно всю группу, иначе сервер остаётся висеть сиротой */
+  const proc = spawn(process.execPath, [path.join(ROOT, 'node_modules', 'astro', 'bin', 'astro.mjs'), 'dev', '--port', String(port), '--host', '127.0.0.1', '--ignore-lock'],
+    { cwd: ROOT, env: { ...process.env, SHOT: '1' }, stdio: ['ignore', 'pipe', 'pipe'], detached: true });
+  let log = '';
+  proc.stdout.on('data', d => { log += d; });
+  proc.stderr.on('data', d => { log += d; });
+  const base = `http://127.0.0.1:${port}`;
+  for (let t = 0; t < 150; t++) {
+    if (proc.exitCode !== null) throw new Error(`astro dev не запустился (npm install сделан?):\n${log}`);
+    try { await fetch(base + '/'); return { proc, base }; } catch { /* ещё не слушает */ }
+    await new Promise(r => setTimeout(r, 200));
+  }
+  stopAstro(proc);
+  throw new Error(`astro dev не ответил за 30 s:\n${log}`);
+};
 
 const findChrome = () => {
   if (process.env.CHROME) return process.env.CHROME;
@@ -145,14 +175,17 @@ const main = async () => {
   if (!chrome) { console.error('Chrome не найден: укажи путь в переменной CHROME'); process.exit(1); }
   fs.mkdirSync(OUT, { recursive: true });
 
-  const { server, port } = await serve(0);
+  const { proc: astro, base } = await startAstro();
+  const probe = await fetch(base + pagePath);
+  if (probe.status === 404) { stopAstro(astro); console.error(`нет страницы ${pagePath} (файл в src/pages/)`); process.exit(1); }
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'shot-chrome-'));
   const proc = spawn(chrome, [
     '--headless=new', '--remote-debugging-pipe', `--user-data-dir=${profile}`, '--no-first-run', '--no-default-browser-check',
     '--hide-scrollbars', '--mute-audio', '--autoplay-policy=no-user-gesture-required', 'about:blank',
   ], { stdio: ['ignore', 'ignore', 'ignore', 'pipe', 'pipe'] });
 
-  const cleanup = () => { proc.kill(); server.close(); fs.rmSync(profile, { recursive: true, force: true }); };
+  /* Chrome ещё дописывает профиль после kill – удаление с повторами, иначе ENOTEMPTY */
+  const cleanup = () => { proc.kill(); stopAstro(astro); fs.rmSync(profile, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }); };
   const killer = setTimeout(() => { console.error('таймаут 120 s'); cleanup(); process.exit(1); }, 120000);
 
   let problems = 0;
@@ -175,7 +208,7 @@ const main = async () => {
     });
     await Promise.all(['Page.enable', 'Runtime.enable', 'Network.enable'].map(m => s(m)));
 
-    const url = `http://127.0.0.1:${port}/${pagePath}?static`;
+    const url = `${base}${pagePath}?static`;
     console.log(`страница: ${pagePath}${sectionId ? ' #' + sectionId : ''}`);
 
     for (const vp of VIEWPORTS) {

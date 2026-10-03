@@ -1,0 +1,24 @@
+---
+/* Служебная страница: сайт в iframe шириной 390 для ручного просмотра во встроенном браузере – /dev/mobile?static&to=hero.
+   Параметры пробрасываются в iframe. В сборку для выкладки не попадает (astro.config.mjs). Скриншоты и замеры 390 делает
+   scripts/shot.mjs через эмуляцию устройства, эта страница для них не нужна. Сырые значения здесь – служебный стенд, не сайт. */
+---
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>390</title>
+  <style is:global>
+    :root { --stand-bg: #d8d8d8; --stand-pad: 24px; --stand-w: 390px; --stand-h: 844px; --stand-frame: #ffffff; }
+    html, body { margin: 0; height: 100%; background: var(--stand-bg); }
+    body { display: flex; justify-content: center; align-items: flex-start; padding: var(--stand-pad); box-sizing: border-box; }
+    iframe { width: var(--stand-w); height: var(--stand-h); border: 0; background: var(--stand-frame); }
+  </style>
+</head>
+<body>
+  <iframe id="f" title="Сайт на ширине 390"></iframe>
+  <script is:inline>
+    document.getElementById('f').src = '/' + location.search;
+  </script>
+</body>
+</html>

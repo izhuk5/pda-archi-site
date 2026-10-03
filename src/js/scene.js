@@ -1,7 +1,8 @@
-/* Three.js-сцена. Правила – docs/scene.md. Грузится лениво из main.js, когда [data-scene] близко к экрану.
+/* Three.js-сцена. Правила – docs/scene.md. Грузится лениво из src/js/main.js (Three.js – отдельный файл сборки), когда [data-scene] близко к экрану.
    Инфраструктура: рендерер с потолком DPR 2, камера, ресайз, пауза вне экрана, прогресс по скроллу через ScrollTrigger,
    цвета из токенов. Объект сцены – слот buildObject(): здесь стоит тестовый объект SMOKE_TEST, на странице проекта его быть не должно. */
 import * as THREE from 'three';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
@@ -41,9 +42,7 @@ export const mount = (host) => {
   new IntersectionObserver(entries => { state.visible = entries.some(e => e.isIntersecting); }, { rootMargin: '10% 0px' }).observe(host);
 
   /* Прогресс прокрутки хоста через экран, 0…1 – через ScrollTrigger, свой обработчик скролла не пишется */
-  if (typeof ScrollTrigger !== 'undefined') {
-    ScrollTrigger.create({ trigger: host, start: 'top bottom', end: 'bottom top', scrub: true, onUpdate: self => { state.progress = self.progress; } });
-  }
+  ScrollTrigger.create({ trigger: host, start: 'top bottom', end: 'bottom top', scrub: true, onUpdate: self => { state.progress = self.progress; } });
 
   let raf = 0;
   const tick = () => {

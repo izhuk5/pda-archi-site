@@ -1,14 +1,20 @@
 /* Запуск. Режимы: ?static – без анимаций, всё видно (для скриншотов); &to=<id> – показать секцию (headless не рисует прокрутку,
    поэтому страница сдвигается отрицательным margin); prefers-reduced-motion – как static, но Lenis тоже выключен.
    Класс html.has-motion ставит inline-скрипт в <head> до первой отрисовки; здесь он снимается, если движение не запустилось.
-   Движение – js/motion.js (описание приёмов в docs/motion.md), 3D – js/scene.js лениво (docs/scene.md). */
+   Подключается из src/layouts/Base.astro. Библиотеки – из npm, Astro собирает их в файлы сайта.
+   Движение – src/js/motion.js (описание приёмов в docs/motion.md), 3D – src/js/scene.js лениво (docs/scene.md). */
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
+import { CustomEase } from 'gsap/CustomEase';
+import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
 import { initMotion } from './motion.js';
 
 const params = new URLSearchParams(location.search);
 const isStatic = params.has('static');
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const hasGsap = ['gsap', 'ScrollTrigger', 'SplitText', 'CustomEase'].every(name => typeof window[name] !== 'undefined');
-const motionOn = !isStatic && !reduce && hasGsap;
+const motionOn = !isStatic && !reduce;
 
 /* Ленивое видео: в разметке data-src + preload="none"; src подставляется, когда секция в полутора экранах */
 const lazyVideo = () => {
@@ -20,7 +26,7 @@ const lazyVideo = () => {
   vids.forEach(v => io.observe(v));
 };
 
-/* 3D: модуль грузится, только если сцена есть на странице, WebGL доступен и движение включено; иначе остаётся запасной кадр */
+/* 3D: модуль (вместе с Three.js – отдельный файл сборки) грузится, только если сцена есть на странице, WebGL доступен и движение включено; иначе остаётся запасной кадр */
 const lazyScene = () => {
   const host = document.querySelector('[data-scene]');
   if (!host) return;
@@ -35,7 +41,7 @@ const lazyScene = () => {
 
 /* Плавный скролл: Lenis на тикере GSAP, якоря – через lenis.scrollTo */
 const smoothScroll = () => {
-  if (!motionOn || typeof Lenis === 'undefined') return null;
+  if (!motionOn) return null;
   const lenis = new Lenis({ lerp: 0.1 });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(t => lenis.raf(t * 1000));
