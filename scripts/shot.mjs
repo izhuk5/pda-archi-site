@@ -21,9 +21,10 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const OUT = path.join(ROOT, 'scripts', 'out');
+/* Mobile-first: сначала 390, потом 1440 */
 const VIEWPORTS = [
-  { name: 'desktop-1440', width: 1440, height: 900, mobile: false },
   { name: 'mobile-390', width: 390, height: 844, mobile: true },
+  { name: 'desktop-1440', width: 1440, height: 900, mobile: false },
 ];
 const TILE_SCREENS = 2;
 

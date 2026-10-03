@@ -17,7 +17,9 @@
      scene   на странице есть сцена, а в scene.js остался SMOKE_TEST
      structure  секция и компонент – папка Name/ с Name.astro + Name.css + Name.js: файлы подключены, классы с префиксом блока,
                 GSAP только из @lib/gsap.js, своё движение – через onMotion(), импорты между папками – через алиасы (@lib/…)
-     naming  имена классов – только kebab-case: hero-title, is-dark; без __, --, _ и заглавных */
+     naming  имена классов – только kebab-case: hero-title, is-dark; без __, --, _ и заглавных
+     responsive  mobile-first: база – мобильная, шире – только @media (min-width: 500px | 768px), max-width не используется
+     docs    также: docs/libraries.md против src/lib/gsap.js (плагины ✅) и package.json (пакеты) */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -58,6 +60,9 @@ const rootZones = (css) => {
 };
 const declaredProps = css => new Set([...css.matchAll(/(--[\w-]+)\s*:/g)].map(m => m[1]));
 
+/* Брейкпоинты mobile-first. CSS-переменная в @media не работает, поэтому шкала – здесь; те же значения – CLAUDE.md и design-system.md */
+const BREAKPOINTS = ['500px', '768px'];
+
 const TOKENS_FILE = path.join(ROOT, 'src', 'styles', 'tokens.css');
 const globalTokens = exists(TOKENS_FILE) ? declaredProps(blank(read(TOKENS_FILE), /\/\*[\s\S]*?\*\//g)) : new Set();
 
@@ -68,6 +73,15 @@ const lintCss = (file, css, { fileText = css, offset = 0, sectionRules = false, 
   const inRoot = i => zones.some(([a, b]) => i >= a && i < b);
   const tokens = new Set([...known, ...declaredProps(clean)]);
   const at = i => lineAt(fileText, offset + i);
+
+  /* Mobile-first: база – мобильная, шире – только min-width из BREAKPOINTS */
+  for (const m of clean.matchAll(/@media\s*([^{]+)\{/g)) {
+    const q = m[1];
+    if (/max-width|width\s*<|>\s*width/.test(q)) add('responsive', file, at(m.index), `mobile-first: только min-width, база – мобильная: @media ${short(q)}`);
+    for (const w of q.matchAll(/(?:min-width\s*:|width\s*>=?)\s*([\d.]+[a-z]+)/g)) {
+      if (!BREAKPOINTS.includes(w[1])) add('responsive', file, at(m.index), `брейкпоинт ${w[1]} не из шкалы (${BREAKPOINTS.join(', ')})`);
+    }
+  }
 
   /* Декларация: свойство: значение, заканчивается на ; или }. Селекторы вида a:hover { сюда не попадают */
   for (const m of clean.matchAll(/([\w-]+)\s*:\s*([^;{}]+?)\s*(?=;|\})/g)) {
@@ -311,6 +325,22 @@ if (dsText) {
     if (!named.has(t) && !groups.some(g => t.startsWith(g))) add('docs', TOKENS_FILE, 0, `${t} есть в tokens.css, но не описан в docs/design-system.md → Токены`);
   }
   for (const t of named) if (!globalTokens.has(t)) add('docs', ds, 0, `${t} описан в базе, но его нет в tokens.css`);
+}
+
+/* --- Справочник библиотек против кода --------------------------------------------- */
+const libsMd = path.join(ROOT, 'docs', 'libraries.md');
+const gsapJs = path.join(SRC, 'lib', 'gsap.js');
+if (exists(libsMd)) {
+  const libs = read(libsMd);
+  const section = title => (libs.split(`## ${title}`)[1] || '').split('\n## ')[0];
+  const marked = new Set([...section('GSAP: плагины').matchAll(/^\|\s*`(\w+)`\s*\|.*\|\s*✅\s*\|\s*$/gm)].map(m => m[1]));
+  const registered = new Set(exists(gsapJs) ? ((/registerPlugin\(([^)]*)\)/.exec(read(gsapJs)) || [, ''])[1].match(/\w+/g) || []) : []);
+  for (const p of registered) if (!marked.has(p)) add('docs', libsMd, 0, `плагин ${p} зарегистрирован в src/lib/gsap.js, но не отмечен ✅ в docs/libraries.md`);
+  for (const p of marked) if (!registered.has(p)) add('docs', libsMd, 0, `плагин ${p} отмечен ✅, но не зарегистрирован в src/lib/gsap.js`);
+  const listed = new Set([...section('В проекте').matchAll(/^\|\s*`([@\w/.-]+)`\s*\|/gm)].map(m => m[1]));
+  const deps = Object.keys(JSON.parse(read(path.join(ROOT, 'package.json'))).dependencies || {});
+  for (const d of deps) if (!listed.has(d)) add('docs', libsMd, 0, `пакет ${d} есть в package.json, но не описан в docs/libraries.md → «В проекте»`);
+  for (const l of listed) if (!deps.includes(l)) add('docs', libsMd, 0, `пакет ${l} описан в «В проекте», но его нет в package.json`);
 }
 
 /* --- Карта секций: id в src/sections/Name/Name.astro и на главной против карты в базе -- */

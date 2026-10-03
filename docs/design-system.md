@@ -58,10 +58,11 @@
 | `.body-s` | подписи |
 
 ### Сетка и брейкпоинты
-`--container`, `--columns`, `--gutter`, `--page-margin`, `--page-margin-mobile`. Макеты 1440 и 390, правила ≤ 768 и ≤ 500. Почему такой контейнер и поля – одна фраза.
+Mobile-first: база – мобильная (макет 390), шире – только `@media (min-width: 500px)` и `(min-width: 768px)`, `max-width` не используется. Десктоп сверяется на 1440.
+`--container`, `--columns`, `--gutter`, `--page-margin` (мобильный) / `--page-margin-desktop` (с 768). `.grid-12`: на мобильном – одна колонка, с 768 – 12. Почему такой контейнер и поля – одна фраза.
 
 ### Отступы
-Шкала `--space-*`; вертикальный ритм секций – `--space-section` / `--space-section-mobile`, почему такой.
+Шкала `--space-*`; вертикальный ритм секций – `--space-section` (мобильный) / `--space-section-desktop` (с 768), почему такой.
 
 ### Радиусы
 `--radius-*`: где какой и почему именно такие – одна фраза.
@@ -96,6 +97,7 @@
 
 ## Журнал изменений
 Дата – секция – что сделано – файлы.
+- 2026-10-03 – заготовка – mobile-first: база мобильная, шире – `min-width: 500px | 768px`; токены `-desktop`; `.grid-12` одна колонка → 12 с 768 – src/styles/tokens.css, src/styles/base.css.
 - 2026-10-03 – заготовка – классы kebab-case, варианты – `is-*`: `.section.is-dark`, `.section.is-sheet`, `.scene-fallback` – src/styles/base.css.
 - 2026-10-03 – заготовка – секции и компоненты – папки `Name/` с `.astro` + `.css` + `.js`; CSS глобальный, правила с классом блока – src/sections/, src/components/, docs/design-system.md.
 - 2026-10-03 – заготовка – переезд на Astro: стили секций и компонентов – в их `.astro`-файлах, глобальные – `src/styles/tokens.css` и `src/styles/base.css`; карта секций сверяется с `src/sections/` – src/**, docs/design-system.md.

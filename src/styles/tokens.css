@@ -38,12 +38,13 @@
   --ls-display: -0.02em;
   --ls-body: 0;
 
-  /* Сетка */
+  /* Сетка. Mobile-first: имя без суффикса – мобильное значение (база, макет 390), -desktop – с 768 px.
+     Брейкпоинты в CSS-переменную не вынести (media их не читает): только @media (min-width: 500px) и (min-width: 768px) */
   --container: 1280px;
   --columns: 12;
   --gutter: 16px;
-  --page-margin: 24px;
-  --page-margin-mobile: 16px;
+  --page-margin: 16px;
+  --page-margin-desktop: 24px;
 
   /* Отступы: шкала, вертикальный ритм секций – --space-section */
   --space-4: 4px;
@@ -57,8 +58,8 @@
   --space-96: 96px;
   --space-128: 128px;
   --space-180: 180px;
-  --space-section: var(--space-128);
-  --space-section-mobile: var(--space-64);
+  --space-section: var(--space-64);
+  --space-section-desktop: var(--space-128);
 
   /* Радиусы: почему такие – одна фраза в базе */
   --radius-s: 4px;

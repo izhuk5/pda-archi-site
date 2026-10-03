@@ -2,6 +2,13 @@
 
 Новые записи сверху. Формат: дата – решение – почему – что изменилось в файлах. Сюда – продукт, процесс, технологии. Дизайн – в `docs/design-system.md`.
 
+## 2026-10-03 – mobile-first, справочник библиотек
+- Mobile-first (решение владельца): базовые стили – мобильные (макет 390), шире – только `@media (min-width: 500px)` и `(min-width: 768px)`, `max-width` не используется. Токены: без суффикса – мобильные, `-desktop` – с 768 (`--page-margin` 16 / `--page-margin-desktop` 24, `--space-section` 64 / `--space-section-desktop` 128). `.grid-12`: на мобильном одна колонка, с 768 – 12. Скриншоты снимаются в порядке 390 → 1440.
+- `docs/libraries.md` – подсказка: пакеты проекта, 24 плагина GSAP с отметкой подключённых, аддоны Three.js (GLTFLoader, DRACOLoader, HDRLoader вместо устаревшего RGBELoader…), встроенное в Astro, кандидаты (`@astrojs/sitemap`, `@sanity/astro`). `check.mjs` сверяет отметки ✅ с `src/lib/gsap.js` и пакеты с `package.json`.
+- `check.mjs`: категория `responsive` – `max-width` и брейкпоинты вне шкалы.
+- Решения владельца: CLAUDE.md пока не сокращаем (вернёмся позже); стартер пока не публикуем как шаблон на GitHub – сначала проверить на реальном проекте.
+- Файлы: docs/libraries.md, src/styles/tokens.css, src/styles/base.css, scripts/check.mjs, scripts/shot.mjs, CLAUDE.md, README.md, START.md, docs/design-system.md, docs/publish.md, .claude/skills/*, .claude/agents/qa.md.
+
 ## 2026-10-03 – kebab-case и алиасы импортов
 - Имена классов – kebab-case, BEM не используем (решение владельца): `.hero`, `.hero-title`, варианты и состояния – комбо-класс `is-*` (`.section.is-dark`, `.button.is-accent`). Префикс блока в CSS секций остаётся: подключённый `Name.css` Astro не изолирует (изолирует только `<style>` внутри `.astro`), без префикса стили протекают между секциями.
 - base.css: `.section--dark` → `.section.is-dark`, `.section--sheet` → `.section.is-sheet`, `.scene__fallback` → `.scene-fallback`.

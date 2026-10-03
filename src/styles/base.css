@@ -23,7 +23,8 @@ p, h1, h2, h3, h4 { overflow-wrap: break-word; }
 h1, h2, h3 { text-wrap: balance; }
 p, li { text-wrap: pretty; }
 
-/* Сетка: контейнер с полями и 12 колонок. Ширина элементов – через grid-column, не через px */
+/* Сетка, mobile-first. База – мобильная (макет 390): .grid-12 ставит детей в одну колонку. С 768 px – 12 колонок,
+   ширина элементов – через grid-column внутри @media (min-width: 768px) в CSS секции, не через px */
 .wrapper {
   width: 100%;
   max-width: var(--container);
@@ -32,7 +33,7 @@ p, li { text-wrap: pretty; }
 }
 .grid-12 {
   display: grid;
-  grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   column-gap: var(--gutter);
 }
 .section {
@@ -72,7 +73,8 @@ p, li { text-wrap: pretty; }
   position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
 }
 
-@media (max-width: 768px) {
-  .wrapper { padding-inline: var(--page-margin-mobile); }
-  .section { padding-block: var(--space-section-mobile); }
+@media (min-width: 768px) {
+  .wrapper { padding-inline: var(--page-margin-desktop); }
+  .grid-12 { grid-template-columns: repeat(var(--columns), minmax(0, 1fr)); }
+  .section { padding-block: var(--space-section-desktop); }
 }

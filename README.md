@@ -13,7 +13,7 @@ npm run dev:stop     остановить dev-сервер, если он ушё
 npm run build        сборка в dist/ – это и выкладывается
 npm run preview      посмотреть сборку перед выкладкой
 npm run check        линтер правил CLAUDE.md
-npm run shot         скриншоты 1440 и 390 + замеры; секция – npm run shot -- hero
+npm run shot         скриншоты 390 и 1440 + замеры; секция – npm run shot -- hero
 npm run versions     что из библиотек устарело
 ```
 
@@ -34,6 +34,7 @@ docs/
   design-system.md   источник правды: токены, компоненты, карта секций, ручная доводка, журнал
   motion.md          библиотека приёмов движения (GSAP, ScrollTrigger, Lenis) и реестр data-reveal
   scene.md           3D и Three.js: когда уместно, бюджет, приёмы, запасной вариант
+  libraries.md       подсказка: библиотеки проекта, все плагины GSAP, аддоны Three.js, что есть в Astro
   publish.md         как выложить: сборка, GitHub Pages, Netlify, свой сервер
 
 src/
@@ -67,7 +68,7 @@ public/
 
 scripts/
   check.mjs          линтер правил: сырые значения вне токенов, спейсеры, капс, моно, тире, картинки, сверка docs с кодом
-  shot.mjs           скриншоты 1440 и 390 через Chrome + замеры: горизонтальный скролл, висячие строки, ошибки консоли
+  shot.mjs           скриншоты 390 и 1440 через Chrome + замеры: горизонтальный скролл, висячие строки, ошибки консоли
 
 astro.config.mjs     настройки Astro: статичная сборка, концепты и dev-страницы вне выкладки
 tsconfig.json        алиасы импортов: @layouts/ @sections/ @components/ @lib/ @styles/ @assets/
