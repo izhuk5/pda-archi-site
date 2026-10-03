@@ -2,6 +2,11 @@
 
 Новые записи сверху. Формат: дата – решение – почему – что изменилось в файлах. Сюда – продукт, процесс, технологии. Дизайн – в `docs/design-system.md`.
 
+## 2026-10-03 – свежесть библиотек
+- Сверено с npm (тег latest): gsap 3.15.0 (13.04.2026), lenis 1.3.26 (05.08.2026), three 0.186.1 (24.09.2026) – все закреплённые версии последние стабильные. lenis 2.0 – пока только dev, не берём.
+- `npm run versions` (`scripts/versions.mjs`): сверяет версии CDN-ссылок в index.html и concepts/ с npm; `--write` обновляет в пределах мажора после проверки, что файлы есть на jsdelivr; через мажор – `--major`. У three 0.x каждый минор – мажор (API ломается почти в каждом релизе).
+- Файлы: scripts/versions.mjs, package.json, CLAUDE.md, START.md, README.md, docs/publish.md.
+
 ## 2026-10-03 – запуск через npm
 - `package.json` только со скриптами: `npm run dev` (сервер), `npm run check` (линтер), `npm run shot -- [id]` (скриншоты). Зависимостей нет, `npm install` не нужен. Почему: привычный запуск одной командой. Правило 10 в CLAUDE.md уточнено: npm – только запуск скриптов, пакеты не ставятся.
 - Файлы: package.json, .gitignore, .claude/launch.json, scripts/*.mjs (комментарии), CLAUDE.md, START.md, README.md, docs/*, .claude/skills/*, .claude/agents/qa.md.
