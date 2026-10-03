@@ -47,6 +47,7 @@ src/
       Hero.css       стили; каждое правило с классом блока .hero
       Hero.js        своё поведение (пин, scrub) – только если нужно
   components/        всё, что повторилось дважды, – так же папкой из трёх файлов
+                     классы – kebab-case: .hero, .hero-title, варианты .hero.is-dark (BEM не используем)
   layouts/
     Base.astro       каркас страницы: head, шрифты, глобальные стили, запуск движения
   styles/
@@ -69,6 +70,7 @@ scripts/
   shot.mjs           скриншоты 1440 и 390 через Chrome + замеры: горизонтальный скролл, висячие строки, ошибки консоли
 
 astro.config.mjs     настройки Astro: статичная сборка, концепты и dev-страницы вне выкладки
+tsconfig.json        алиасы импортов: @layouts/ @sections/ @components/ @lib/ @styles/ @assets/
 package.json         зависимости (точные версии) и команды
 
 .claude/

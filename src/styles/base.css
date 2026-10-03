@@ -38,11 +38,11 @@ p, li { text-wrap: pretty; }
 .section {
   padding-block: var(--space-section);
 }
-.section--dark {
+.section.is-dark {
   background: var(--color-bg-dark);
   color: var(--color-fg-on-dark);
 }
-.section--sheet {
+.section.is-sheet {
   background: var(--color-bg-sheet);
 }
 
@@ -56,7 +56,7 @@ p, li { text-wrap: pretty; }
 .body-m     { font-size: var(--fs-body-m); }
 .body-s     { font-size: var(--fs-body-s); }
 .muted      { color: var(--color-fg-muted); }
-.section--dark .muted { color: var(--color-fg-muted-on-dark); }
+.section.is-dark .muted { color: var(--color-fg-muted-on-dark); }
 
 /* Движение: пока JS не подготовил элемент, он скрыт – но только когда движение включено (html.has-motion).
    Без JS, в ?static и при prefers-reduced-motion класса нет, и всё видно сразу */
@@ -66,7 +66,7 @@ p, li { text-wrap: pretty; }
 [data-scene] { position: relative; }
 [data-scene] canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: var(--z-scene); }
 [data-scene] > :not(canvas) { position: relative; z-index: var(--z-content); }
-[data-scene].is-live .scene__fallback { display: none; }
+[data-scene].is-live .scene-fallback { display: none; }
 
 .visually-hidden {
   position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;

@@ -33,8 +33,8 @@
 | Токен | Где | Почему так |
 |---|---|---|
 | `--color-bg-page` | фон страницы | |
-| `--color-bg-sheet` | светлый лист (`.section--sheet`) | |
-| `--color-bg-dark` | тёмная секция (`.section--dark`) | |
+| `--color-bg-sheet` | светлый лист (`.section.is-sheet`) | |
+| `--color-bg-dark` | тёмная секция (`.section.is-dark`) | |
 | `--color-bg-elevated` | приподнятая поверхность на тёмном | |
 | `--color-fg` | основной текст | |
 | `--color-fg-muted` | вторичный текст на светлом (правила контраста – CLAUDE.md, грабли) | |
@@ -96,6 +96,7 @@
 
 ## Журнал изменений
 Дата – секция – что сделано – файлы.
+- 2026-10-03 – заготовка – классы kebab-case, варианты – `is-*`: `.section.is-dark`, `.section.is-sheet`, `.scene-fallback` – src/styles/base.css.
 - 2026-10-03 – заготовка – секции и компоненты – папки `Name/` с `.astro` + `.css` + `.js`; CSS глобальный, правила с классом блока – src/sections/, src/components/, docs/design-system.md.
 - 2026-10-03 – заготовка – переезд на Astro: стили секций и компонентов – в их `.astro`-файлах, глобальные – `src/styles/tokens.css` и `src/styles/base.css`; карта секций сверяется с `src/sections/` – src/**, docs/design-system.md.
 - 2026-10-03 – заготовка – веса шрифтов вынесены в токены `--fw-display`, `--fw-title`; раздел «Токены» без значений (они только в tokens.css), сверяется линтером – styles/tokens.css, styles/base.css, docs/design-system.md.

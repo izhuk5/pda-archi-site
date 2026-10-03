@@ -2,8 +2,8 @@
 /* Каркас каждой страницы: <head>, шрифты, глобальные стили, запуск движения.
    Использование: <Base title="…" description="…"> секции </Base>.
    Глобальные стили – только токены и база; стили секций и компонентов живут в их .astro-файлах (<style>, Astro их скоупит). */
-import '../styles/tokens.css';
-import '../styles/base.css';
+import '@styles/tokens.css';
+import '@styles/base.css';
 
 const {
   title = '[Название проекта]',
@@ -37,7 +37,7 @@ const {
 
   {/* Движение и 3D: GSAP, Lenis, Three.js из npm, Astro собирает их сам. Three.js грузится отдельным файлом, только если на странице есть [data-scene] */}
   <script>
-    import '../lib/main.js';
+    import '@lib/main.js';
   </script>
 </body>
 </html>

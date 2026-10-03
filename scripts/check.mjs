@@ -16,7 +16,8 @@
      map     id секций не по карте, секция не подключена на главной
      scene   на странице есть сцена, а в scene.js остался SMOKE_TEST
      structure  секция и компонент – папка Name/ с Name.astro + Name.css + Name.js: файлы подключены, классы с префиксом блока,
-                GSAP только из src/lib/gsap.js, своё движение – через onMotion() */
+                GSAP только из @lib/gsap.js, своё движение – через onMotion(), импорты между папками – через алиасы (@lib/…)
+     naming  имена классов – только kebab-case: hero-title, is-dark; без __, --, _ и заглавных */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -117,13 +118,13 @@ const walk = (dir, ext) => (exists(dir) ? fs.readdirSync(dir, { recursive: true 
 for (const file of walk(path.join(SRC, 'styles'), '.css')) lintCss(file, read(file));
 
 /* Секции и компоненты: папка Name/ с Name.astro, Name.css, Name.js. Их CSS глобальный (Astro его не скоупит),
-   поэтому каждое правило обязано содержать класс блока: .hero, .hero__title, .hero--dark – иначе стили протекают в чужие секции */
+   поэтому каждое правило обязано содержать класс блока или его продолжение: .hero, .hero-title, .hero.is-dark – иначе стили протекают в чужие секции */
 const UNITS_DIRS = ['sections', 'components'].map(d => path.join(SRC, d));
 const kebab = name => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 const blockCss = (file) => {
   const text = read(file);
   const block = kebab(path.basename(file, '.css'));
-  const blockRe = new RegExp(`\\.${block}(?:__[\\w-]+|--[\\w-]+)*(?![\\w-])`);
+  const blockRe = new RegExp(`\\.${block}(?:-[a-z0-9]+)*(?![\\w-])`);
   const clean = blank(blank(text, /\/\*[\s\S]*?\*\//g), /"[^"\n]*"|'[^'\n]*'/g);
   for (const m of clean.matchAll(/([^{};]+)\{/g)) {
     const sel = m[1].trim();
@@ -131,7 +132,7 @@ const blockCss = (file) => {
     const at = lineAt(text, m.index + m[0].length - m[1].trimStart().length - 1);
     if (/:root\b/.test(sel)) { add('structure', file, at, 'токены только в src/styles/tokens.css, не в стилях секции'); continue; }
     for (const one of sel.split(',')) {
-      if (!blockRe.test(one)) add('structure', file, at, `селектор без класса блока .${block}: ${short(one)}`);
+      if (!blockRe.test(one)) add('structure', file, at, `селектор без класса блока .${block} или .${block}-…: ${short(one)}`);
     }
   }
   lintCss(file, text, { sectionRules: true });
@@ -155,7 +156,7 @@ for (const file of walk(path.join(SRC, 'lib'), '.js')) {
 for (const dir of UNITS_DIRS) for (const file of walk(dir, '.js')) {
   const text = read(file);
   lintJs(file, text);
-  for (const m of text.matchAll(/from\s+['"]gsap(\/[\w]+)?['"]/g)) add('structure', file, lineAt(text, m.index), "GSAP – только из src/lib/gsap.js: import { gsap } from '../../lib/gsap.js'");
+  for (const m of text.matchAll(/from\s+['"]gsap(\/[\w]+)?['"]/g)) add('structure', file, lineAt(text, m.index), "GSAP – только из @lib/gsap.js: import { gsap } from '@lib/gsap.js'");
   if (/\b(gsap|ScrollTrigger|SplitText)\./.test(text) && !/\bonMotion\(/.test(text)) add('structure', file, 0, 'своё движение – внутри onMotion() из src/lib/env.js: так оно уважает ?static и prefers-reduced-motion');
 }
 
@@ -235,6 +236,40 @@ const lintAstro = (file) => {
 const markupOf = new Map();
 for (const file of walk(SRC, '.astro')) markupOf.set(file, lintAstro(file));
 
+/* --- Имена классов: kebab-case ------------------------------------------------- */
+const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const badClass = (cls) => (KEBAB.test(cls) ? null : cls.includes('__') || cls.includes('--') ? 'BEM не используем' : 'только строчные буквы, цифры и дефис');
+for (const file of [...walk(path.join(SRC, 'styles'), '.css'), ...UNITS_DIRS.flatMap(d => walk(d, '.css'))]) {
+  const text = read(file);
+  const clean = blank(blank(text, /\/\*[\s\S]*?\*\//g), /"[^"\n]*"|'[^'\n]*'/g);
+  for (const m of clean.matchAll(/([^{};]+)\{/g)) {
+    if (m[1].trim().startsWith('@')) continue;
+    for (const c of m[1].matchAll(/\.(-?[A-Za-z_][\w-]*)/g)) {
+      const why = badClass(c[1]);
+      if (why) add('naming', file, lineAt(text, m.index + c.index), `класс .${c[1]} – kebab-case: ${why}`);
+    }
+  }
+}
+for (const file of walk(SRC, '.astro')) {
+  const text = read(file);
+  for (const m of text.matchAll(/\sclass\s*=\s*"([^"]*)"/g)) {
+    for (const cls of m[1].split(/\s+/).filter(Boolean)) {
+      const why = badClass(cls);
+      if (why) add('naming', file, lineAt(text, m.index), `класс ${cls} – kebab-case: ${why}`);
+    }
+  }
+}
+
+/* --- Импорты между папками – через алиасы (tsconfig.json → paths): @lib/, @styles/, @sections/… ------- */
+const lintImports = (file, raw) => {
+  /* комментарии не считаются: в них бывают примеры */
+  const text = blank(blank(blank(raw, /\/\*[\s\S]*?\*\//g), /(^|[^:'"`\\])\/\/[^\n]*/g), /<!--[\s\S]*?-->/g);
+  for (const m of text.matchAll(/(?:from\s+|import\s+|import\()\s*['"](\.\.\/[^'"]*)['"]/g)) {
+    add('structure', file, lineAt(text, m.index), `импорт ${m[1]} – через алиас (@lib/, @styles/, @layouts/, @sections/, @components/, @assets/)`);
+  }
+};
+for (const file of [...walk(SRC, '.astro'), ...walk(SRC, '.js')]) lintImports(file, read(file));
+
 /* --- Структура: секция и компонент – папка Name/ с Name.astro; Name.css и Name.js подключены в Name.astro --- */
 for (const dir of UNITS_DIRS) {
   if (!exists(dir)) continue;
@@ -298,7 +333,7 @@ if (idsHtml.length) for (const id of mapIds) if (id && !idsHtml.some(s => s.id =
 for (const file of sectionFiles) {
   const name = path.basename(file);
   const folder = path.basename(path.dirname(file));
-  if (!indexText.includes(`/sections/${folder}/${name}`)) add('map', file, 0, `секция не подключена в src/pages/index.astro (import … from '../sections/${folder}/${name}')`);
+  if (!indexText.includes(`sections/${folder}/${name}`)) add('map', file, 0, `секция не подключена в src/pages/index.astro (import ${folder} from '@sections/${folder}/${name}')`);
 }
 
 /* --- Сцена -------------------------------------------------------------------- */

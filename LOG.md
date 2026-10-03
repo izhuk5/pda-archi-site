@@ -2,6 +2,13 @@
 
 Новые записи сверху. Формат: дата – решение – почему – что изменилось в файлах. Сюда – продукт, процесс, технологии. Дизайн – в `docs/design-system.md`.
 
+## 2026-10-03 – kebab-case и алиасы импортов
+- Имена классов – kebab-case, BEM не используем (решение владельца): `.hero`, `.hero-title`, варианты и состояния – комбо-класс `is-*` (`.section.is-dark`, `.button.is-accent`). Префикс блока в CSS секций остаётся: подключённый `Name.css` Astro не изолирует (изолирует только `<style>` внутри `.astro`), без префикса стили протекают между секциями.
+- base.css: `.section--dark` → `.section.is-dark`, `.section--sheet` → `.section.is-sheet`, `.scene__fallback` → `.scene-fallback`.
+- Алиасы в `tsconfig.json` (`paths`, без `baseUrl` – Astro 7 читает и так, редактор подсказывает пути): `@layouts/`, `@sections/`, `@components/`, `@lib/`, `@styles/`, `@assets/`. Внутри своей папки – `./`, `../` не используется.
+- check.mjs: категория `naming` (только kebab-case в CSS и разметке), импорт через `../` – замечание `structure`.
+- Файлы: tsconfig.json, src/layouts/Base.astro, src/pages/index.astro, src/lib/gsap.js, src/styles/base.css, scripts/check.mjs, CLAUDE.md, README.md, docs/design-system.md, docs/scene.md, .claude/skills/section, scene, check.
+
 ## 2026-10-03 – структура по образцу astro-gsap
 - Образец – github.com/Webflow-Examples/astro-gsap (только структура HTML/CSS/JS, не Webflow). Взято: секция и компонент – папка `Name/` с `Name.astro` (разметка), `Name.css` (стили, подключён во frontmatter), `Name.js` (поведение, подключён в `<script>`); GSAP – один файл `src/lib/gsap.js` с регистрацией плагинов; общий JS – `src/lib/` (бывший `src/js/`).
 - Не взято: регистрация всех 24 плагинов – у нас только используемые (ScrollTrigger, SplitText, CustomEase), каждый лишний попадает в сборку; глобальные стили – не в index.astro, а в Base.astro (общий макет для главной и концептов).

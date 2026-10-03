@@ -1,8 +1,8 @@
 ---
 /* Главная. Секции – в порядке карты из docs/design-system.md, по одной за промпт:
-   файл src/sections/<Имя>.astro с <section id="<id>" class="section">, здесь – import и одна строка <Имя />.
+   папка src/sections/<Имя>/ с <section id="<id>" class="section">, здесь – import Hero from '@sections/Hero/Hero.astro' и <Hero />.
    Имя id = имя в карте. Каждому появляющемуся элементу – data-reveal из docs/motion.md. */
-import Base from '../layouts/Base.astro';
+import Base from '@layouts/Base.astro';
 ---
 <Base>
 </Base>

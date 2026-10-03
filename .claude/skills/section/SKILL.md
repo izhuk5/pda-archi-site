@@ -9,9 +9,9 @@ description: Собрать одну секцию сайта по карте и�
 
 1. **Перечитать.** `docs/design-system.md`: строка секции в карте (роль, поверхность, движение, 3D, адаптив), «Принятые решения», токены, компоненты. `brief/brief.md` – тексты этой секции. Если секция уже есть в `src/sections/` – перечитать её и сказать, что изменилось с журнала (`git diff` с последнего коммита).
 2. **Критика до сборки** (TASTE.md, раздел 4), письменно: что здесь можно было сделать для любого продукта; где фирменный приём; какие штампы соблазнительны и что вместо. Если похожая секция уже собрана – открыть её и взять реальные классы и отступы.
-3. **Разметка** – папка `src/sections/<Имя>/` (PascalCase), файл `<Имя>.astro`: `<section id="<id>" class="section <блок> [section--dark|section--sheet]">`, внутри `.wrapper` и `.grid-12` там, где ширина считается колонками. Классы – от блока: `.hero__title`, `.hero__lead`. Тексты – из брифа, прямо в разметке, без lorem. Картинки – `<Image>` из `astro:assets`. Пустых элементов нет. Подключить в `src/pages/index.astro` (import и `<Имя />`) на место из карты.
+3. **Разметка** – папка `src/sections/<Имя>/` (PascalCase), файл `<Имя>.astro`: `<section id="<id>" class="section <блок> [is-dark|is-sheet]">`, внутри `.wrapper` и `.grid-12` там, где ширина считается колонками. Классы – kebab-case от блока: `.hero-title`, `.hero-lead`, варианты – `is-*`. BEM не используем. Тексты – из брифа, прямо в разметке, без lorem. Картинки – `<Image>` из `astro:assets`. Пустых элементов нет. Подключить в `src/pages/index.astro` (`import Hero from '@sections/Hero/Hero.astro'` и `<Hero />`) на место из карты. Импорты между папками – только алиасы (`@lib/`, `@components/`…).
 4. **Стили** – `<Имя>.css` рядом, подключён во frontmatter. Каждое правило содержит класс блока (CSS глобальный, без префикса протекает в чужие секции). Только токены и классы шкалы; мобильные правила ≤ 768 и ≤ 500 в конце файла. Повторилось дважды – компонент в `src/components/<Имя>/` и в базу.
-4a. **Поведение** – `<Имя>.js`, только если нужен приём, которого нет в `data-reveal` (пин, scrub, hover, своя таймлиния; приём – сначала в `docs/motion.md`). GSAP – из `src/lib/gsap.js`, всё движение – внутри `onMotion()` из `src/lib/env.js`.
+4a. **Поведение** – `<Имя>.js`, только если нужен приём, которого нет в `data-reveal` (пин, scrub, hover, своя таймлиния; приём – сначала в `docs/motion.md`). GSAP – из `@lib/gsap.js`, всё движение – внутри `onMotion()` из `src/lib/env.js`.
 
 Шаблон:
 ```astro
@@ -20,8 +20,8 @@ description: Собрать одну секцию сайта по карте и�
 import './Hero.css';
 ---
 <section id="hero" class="section hero">
-  <div class="wrapper hero__inner">
-    <h1 class="display-xl hero__title" data-reveal="lines">Текст из брифа</h1>
+  <div class="wrapper hero-inner">
+    <h1 class="display-xl hero-title" data-reveal="lines">Текст из брифа</h1>
   </div>
 </section>
 
@@ -31,11 +31,11 @@ import './Hero.css';
 ```
 ```js
 // Hero.js – только если есть своё поведение
-import { ScrollTrigger } from '../../lib/gsap.js';
-import { onMotion } from '../../lib/env.js';
+import { ScrollTrigger } from '@lib/gsap.js';
+import { onMotion } from '@lib/env.js';
 
 onMotion(() => {
-  ScrollTrigger.create({ trigger: '.hero__pin', start: 'top top', end: '+=600', pin: true });
+  ScrollTrigger.create({ trigger: '.hero-pin', start: 'top top', end: '+=600', pin: true });
 });
 ```
 5. **Движение**: каждому появляющемуся элементу `data-reveal` из реестра `docs/motion.md`. Нужен приём, которого нет, – скилл `motion`, не самодеятельность в разметке. 3D – только если у секции стоит «да» в карте, тогда скилл `scene`.
