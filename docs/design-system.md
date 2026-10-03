@@ -58,18 +58,18 @@
 | `.body-s` | подписи |
 
 ### Сетка и брейкпоинты
-Mobile-first, диапазоны как в Webflow, но планшет до 1024:
+Desktop-first, диапазоны как в Webflow, но планшет до 1024:
 | Устройство | Ширина | CSS |
 |---|---|---|
-| Mobile portrait | до 478 | база, без `@media` (макет 390) |
-| Mobile landscape | 479–767 | `@media (min-width: 479px)` |
-| Tablet | 768–1023 | `@media (min-width: 768px)` |
-| Desktop | от 1024 | `@media (min-width: 1024px)` (сверка на 1440) |
+| Desktop | от 1024 | база, без `@media` (сверка на 1440) |
+| Tablet | 768–1023 | `@media (max-width: 1023px)` |
+| Mobile landscape | 479–767 | `@media (max-width: 767px)` |
+| Mobile portrait | до 478 | `@media (max-width: 478px)` (макет 390) |
 
-`max-width` не используется. `--container`, `--columns`, `--gutter`, `--page-margin` (мобильный) / `--page-margin-desktop` (с 1024). `.grid-12`: на мобильном – одна колонка, с 768 – 12. Почему такой контейнер и поля – одна фраза.
+`min-width` не используется, `@media` в файле – по убыванию. `--container`, `--columns`, `--gutter`, `--page-margin` (десктоп) / `--page-margin-tablet` (до 1023). `.grid-12`: 12 колонок, до 767 – одна (flex-колонка). Почему такой контейнер и поля – одна фраза.
 
 ### Отступы
-Шкала `--space-*`; вертикальный ритм секций – `--space-section` (мобильный) / `--space-section-desktop` (с 1024), почему такой.
+Шкала `--space-*`; вертикальный ритм секций – `--space-section` (десктоп) / `--space-section-tablet` (до 1023), почему такой.
 
 ### Радиусы
 `--radius-*`: где какой и почему именно такие – одна фраза.
@@ -104,6 +104,7 @@ Mobile-first, диапазоны как в Webflow, но планшет до 102
 
 ## Журнал изменений
 Дата – секция – что сделано – файлы.
+- 2026-10-03 – заготовка – desktop-first: база десктоп, `max-width: 1023 | 767 | 478`; токены `-tablet`; `.grid-12` до 767 – flex-колонка – src/styles/base.css, src/styles/tokens.css.
 - 2026-10-03 – заготовка – брейкпоинты 479 / 768 / 1024 (как Webflow, планшет до 1024); `-desktop` токены с 1024 – src/styles/base.css, src/styles/tokens.css.
 - 2026-10-03 – заготовка – mobile-first: база мобильная, шире – `min-width: 500px | 768px`; токены `-desktop`; `.grid-12` одна колонка → 12 с 768 – src/styles/tokens.css, src/styles/base.css.
 - 2026-10-03 – заготовка – классы kebab-case, варианты – `is-*`: `.section.is-dark`, `.section.is-sheet`, `.scene-fallback` – src/styles/base.css.

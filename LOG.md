@@ -2,6 +2,13 @@
 
 Новые записи сверху. Формат: дата – решение – почему – что изменилось в файлах. Сюда – продукт, процесс, технологии. Дизайн – в `docs/design-system.md`.
 
+## 2026-10-03 – desktop-first вместо mobile-first
+- Решение владельца: шаблон desktop-first, логика `max-width`, как в Webflow. Отменяет записи «mobile-first» ниже. Диапазоны прежние: база – desktop (от 1024), `max-width: 1023px` – tablet, `767px` – mobile landscape, `478px` – mobile portrait; в файле по убыванию.
+- Токены: без суффикса – десктоп, `-tablet` – до 1023 (`--page-margin` 24 / `--page-margin-tablet` 16, `--space-section` 128 / `--space-section-tablet` 64) – внешне как было.
+- `.grid-12`: 12 колонок, до 767 – `display: flex; flex-direction: column`. Почему flex, а не одна grid-колонка: `grid-column: 2 / span 6` у детей на одноколоночной сетке создаёт неявные колонки и горизонтальный скролл; во flex-колонке `grid-column` не действует.
+- `check.mjs`: `responsive` – `min-width` запрещён, брейкпоинты только из шкалы и по убыванию в файле. Скриншоты снова 1440 → 390. Мобильный вид по-прежнему проектируется наравне с десктопным.
+- Файлы: src/styles/tokens.css, src/styles/base.css, scripts/check.mjs, scripts/shot.mjs, CLAUDE.md, docs/design-system.md, .claude/skills/section, check.
+
 ## 2026-10-03 – брейкпоинты как в Webflow, планшет до 1024
 - Решение владельца: диапазоны Webflow, но tablet до 1024; записаны mobile-first: база – mobile portrait (до 478), `min-width: 479px` – mobile landscape, `768px` – tablet, `1024px` – desktop. Было: 500 / 768. Толкование «до 1024»: desktop начинается с 1024 (iPad в горизонтали – десктопная раскладка); если 1024 должен быть планшетом – граница 1025.
 - Сетка 12 колонок – с 768 (tablet), токены `-desktop` (поля, отступ секций) – с 1024. Скриншоты – по-прежнему 390 и 1440.

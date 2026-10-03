@@ -18,7 +18,7 @@
      structure  секция и компонент – папка Name/ с Name.astro + Name.css + Name.js: файлы подключены, классы с префиксом блока,
                 GSAP только из @lib/gsap.js, своё движение – через onMotion(), импорты между папками – через алиасы (@lib/…)
      naming  имена классов – только kebab-case: hero-title, is-dark; без __, --, _ и заглавных
-     responsive  mobile-first: база – мобильная, шире – только @media (min-width: 479px | 768px | 1024px), max-width не используется
+     responsive  desktop-first: база – десктоп, уже – только @media (max-width: 1023px | 767px | 478px) по убыванию, min-width не используется
      docs    также: docs/libraries.md против src/lib/gsap.js (плагины ✅) и package.json (пакеты) */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -60,9 +60,9 @@ const rootZones = (css) => {
 };
 const declaredProps = css => new Set([...css.matchAll(/(--[\w-]+)\s*:/g)].map(m => m[1]));
 
-/* Брейкпоинты mobile-first, диапазоны как в Webflow, но планшет до 1024: база – mobile portrait (до 478), 479 – mobile landscape,
-   768 – tablet, 1024 – desktop. CSS-переменная в @media не работает, поэтому шкала – здесь; те же значения – CLAUDE.md и design-system.md */
-const BREAKPOINTS = ['479px', '768px', '1024px'];
+/* Брейкпоинты desktop-first, как в Webflow, но планшет до 1024: база – desktop (от 1024), 1023 – tablet, 767 – mobile landscape,
+   478 – mobile portrait. CSS-переменная в @media не работает, поэтому шкала – здесь; те же значения – CLAUDE.md и design-system.md */
+const BREAKPOINTS = ['1023px', '767px', '478px'];
 
 const TOKENS_FILE = path.join(ROOT, 'src', 'styles', 'tokens.css');
 const globalTokens = exists(TOKENS_FILE) ? declaredProps(blank(read(TOKENS_FILE), /\/\*[\s\S]*?\*\//g)) : new Set();
@@ -75,12 +75,17 @@ const lintCss = (file, css, { fileText = css, offset = 0, sectionRules = false, 
   const tokens = new Set([...known, ...declaredProps(clean)]);
   const at = i => lineAt(fileText, offset + i);
 
-  /* Mobile-first: база – мобильная, шире – только min-width из BREAKPOINTS */
+  /* Desktop-first: база – десктоп, уже – только max-width из BREAKPOINTS, по убыванию (1023 → 767 → 478):
+     при одинаковой специфичности побеждает правило ниже по файлу, и узкий брейкпоинт выше широкого перебивается */
+  let lastBp = Infinity;
   for (const m of clean.matchAll(/@media\s*([^{]+)\{/g)) {
     const q = m[1];
-    if (/max-width|width\s*<|>\s*width/.test(q)) add('responsive', file, at(m.index), `mobile-first: только min-width, база – мобильная: @media ${short(q)}`);
-    for (const w of q.matchAll(/(?:min-width\s*:|width\s*>=?)\s*([\d.]+[a-z]+)/g)) {
-      if (!BREAKPOINTS.includes(w[1])) add('responsive', file, at(m.index), `брейкпоинт ${w[1]} не из шкалы (${BREAKPOINTS.join(', ')})`);
+    if (/min-width|width\s*>|<\s*width/.test(q)) add('responsive', file, at(m.index), `desktop-first: только max-width, база – десктоп: @media ${short(q)}`);
+    for (const w of q.matchAll(/(?:max-width\s*:|width\s*<=?)\s*([\d.]+[a-z]+)/g)) {
+      if (!BREAKPOINTS.includes(w[1])) { add('responsive', file, at(m.index), `брейкпоинт ${w[1]} не из шкалы (${BREAKPOINTS.join(', ')})`); continue; }
+      const v = parseFloat(w[1]);
+      if (v > lastBp) add('responsive', file, at(m.index), `@media (max-width: ${w[1]}) ниже более узкого – порядок по убыванию: ${BREAKPOINTS.join(' → ')}`);
+      lastBp = v;
     }
   }
 
