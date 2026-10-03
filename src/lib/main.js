@@ -1,20 +1,13 @@
 /* Запуск. Режимы: ?static – без анимаций, всё видно (для скриншотов); &to=<id> – показать секцию (headless не рисует прокрутку,
    поэтому страница сдвигается отрицательным margin); prefers-reduced-motion – как static, но Lenis тоже выключен.
    Класс html.has-motion ставит inline-скрипт в <head> до первой отрисовки; здесь он снимается, если движение не запустилось.
-   Подключается из src/layouts/Base.astro. Библиотеки – из npm, Astro собирает их в файлы сайта.
-   Движение – src/js/motion.js (описание приёмов в docs/motion.md), 3D – src/js/scene.js лениво (docs/scene.md). */
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SplitText } from 'gsap/SplitText';
-import { CustomEase } from 'gsap/CustomEase';
+   Подключается из src/layouts/Base.astro. GSAP – из src/lib/gsap.js, режимы – из src/lib/env.js.
+   Движение – src/lib/motion.js (описание приёмов в docs/motion.md), 3D – src/lib/scene.js лениво (docs/scene.md). */
+import { gsap, ScrollTrigger } from './gsap.js';
+import { params, isStatic, reduce, motionOn, ready } from './env.js';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import { initMotion } from './motion.js';
-
-const params = new URLSearchParams(location.search);
-const isStatic = params.has('static');
-const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const motionOn = !isStatic && !reduce;
 
 /* Ленивое видео: в разметке data-src + preload="none"; src подставляется, когда секция в полутора экранах */
 const lazyVideo = () => {
@@ -68,13 +61,10 @@ const showAll = () => {
   document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-ready'));
 };
 
-/* Шрифты ждём не дольше 3 s: пока они грузятся, элементы с data-reveal скрыты */
-const fontsReady = Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 3000))]);
-
-fontsReady.then(() => {
+/* Шрифты ждём не дольше 3 s (ready из env.js): пока они грузятся, элементы с data-reveal скрыты */
+ready.then(() => {
   if (motionOn) {
     try {
-      gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase);
       smoothScroll();
       initMotion();
     } catch (err) {

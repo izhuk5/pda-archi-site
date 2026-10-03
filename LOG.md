@@ -2,6 +2,13 @@
 
 Новые записи сверху. Формат: дата – решение – почему – что изменилось в файлах. Сюда – продукт, процесс, технологии. Дизайн – в `docs/design-system.md`.
 
+## 2026-10-03 – структура по образцу astro-gsap
+- Образец – github.com/Webflow-Examples/astro-gsap (только структура HTML/CSS/JS, не Webflow). Взято: секция и компонент – папка `Name/` с `Name.astro` (разметка), `Name.css` (стили, подключён во frontmatter), `Name.js` (поведение, подключён в `<script>`); GSAP – один файл `src/lib/gsap.js` с регистрацией плагинов; общий JS – `src/lib/` (бывший `src/js/`).
+- Не взято: регистрация всех 24 плагинов – у нас только используемые (ScrollTrigger, SplitText, CustomEase), каждый лишний попадает в сборку; глобальные стили – не в index.astro, а в Base.astro (общий макет для главной и концептов).
+- Своё: `src/lib/env.js` – режимы и `onMotion()`, чтобы JS секций уважал `?static` и reduced-motion; CSS секций глобальный, поэтому каждое правило обязано содержать класс блока (`.hero__title`), `<style>` в секциях не используется; концепты – одним файлом в `src/pages/concepts/` (`.js` в pages Astro считает маршрутом).
+- `check.mjs`: категория `structure` – папка PascalCase, файлы подключены, префикс блока в CSS, нет `:root` в CSS секции, GSAP только из `lib/gsap.js`, движение через `onMotion()`, посторонние файлы в папке.
+- Файлы: src/lib/* (из src/js/), src/lib/gsap.js, src/lib/env.js, src/layouts/Base.astro, scripts/check.mjs, CLAUDE.md, README.md, START.md, docs/design-system.md, docs/motion.md, docs/scene.md, .claude/skills/*, .claude/agents/critic.md.
+
 ## 2026-10-03 – переезд на Astro
 - Решение: сайт собирается на Astro 7.3.5 в статичные файлы (`output: 'static'`, `npm run build` → `dist/`). Почему: компоненты вместо одного index.html, оптимизация картинок, путь к CMS. Правило 10 и «Сборка и публикация» в CLAUDE.md переписаны: npm-зависимости и сборка разрешены; UI-фреймворки, Tailwind и CSS-in-JS – только отдельным решением.
 - Библиотеки – из npm, точные версии (`.npmrc` save-exact): astro 7.3.5, gsap 3.15.0, lenis 1.3.26, three 0.186.1 – все последние стабильные. CDN и importmap убраны. Three.js – отдельный файл сборки, грузится только при `[data-scene]`. Добавлен `lenis/dist/lenis.css` (рекомендованные стили Lenis).

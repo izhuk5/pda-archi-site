@@ -1,6 +1,6 @@
 # Wow-site starter
 
-Заготовка проекта «сайт кодом через Claude Code»: дизайн собирается сразу в коде на Astro и смотрится в браузере, без Figma. Скопируй папку, положи бриф, выполни `npm install`, открой Claude Code – и вставь первый промпт из `START.md`.
+Заготовка проекта «сайт кодом через Claude Code»: дизайн собирается сразу в коде на Astro и смотрится в браузере, без Figma. Структура HTML/CSS/JS – по образцу [Webflow-Examples/astro-gsap](https://github.com/Webflow-Examples/astro-gsap): компонент – папка из `.astro`, `.css` и `.js`, GSAP подключается в одном месте. Скопируй папку, положи бриф, выполни `npm install`, открой Claude Code – и вставь первый промпт из `START.md`.
 
 ## Команды
 
@@ -41,16 +41,22 @@ src/
     index.astro      главная: секции в порядке карты, по строке на секцию
     concepts/        концепты hero и ветвления – 2–3 варианта рядом; в сборку не попадают
     dev/             служебные страницы (/dev/mobile – сайт в iframe 390); в сборку не попадают
-  sections/          секция = файл <Имя>.astro: <section id="…">, разметка, тексты, свои стили
-  components/        всё, что повторилось дважды
+  sections/
+    Hero/            секция = папка из трёх файлов:
+      Hero.astro     разметка и тексты, <section id="hero">
+      Hero.css       стили; каждое правило с классом блока .hero
+      Hero.js        своё поведение (пин, scrub) – только если нужно
+  components/        всё, что повторилось дважды, – так же папкой из трёх файлов
   layouts/
     Base.astro       каркас страницы: head, шрифты, глобальные стили, запуск движения
   styles/
     tokens.css       :root – единственное место, где живут сырые значения
     base.css         reset, сетка, шкала текста, состояния data-reveal
-  js/
-    main.js          запуск: static-режим, reduced-motion, Lenis, подключение движения и сцены
-    motion.js        реестр приёмов data-reveal (GSAP)
+  lib/               общий JS
+    gsap.js          GSAP и плагины: импорт и регистрация один раз, остальные берут отсюда
+    env.js           режимы ?static и reduced-motion, onMotion() для движения секций
+    main.js          запуск: Lenis, подключение движения и сцены
+    motion.js        реестр приёмов data-reveal
     scene.js         Three.js: рендерер, ленивый старт, пауза вне экрана; объект сцены – слот
   assets/
     img/             картинки – выводятся через <Image>, Astro сам делает WebP/AVIF и srcset

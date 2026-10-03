@@ -1,8 +1,8 @@
-/* Three.js-сцена. Правила – docs/scene.md. Грузится лениво из src/js/main.js (Three.js – отдельный файл сборки), когда [data-scene] близко к экрану.
+/* Three.js-сцена. Правила – docs/scene.md. Грузится лениво из src/lib/main.js (Three.js – отдельный файл сборки), когда [data-scene] близко к экрану.
    Инфраструктура: рендерер с потолком DPR 2, камера, ресайз, пауза вне экрана, прогресс по скроллу через ScrollTrigger,
    цвета из токенов. Объект сцены – слот buildObject(): здесь стоит тестовый объект SMOKE_TEST, на странице проекта его быть не должно. */
 import * as THREE from 'three';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from './gsap.js';
 
 const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 

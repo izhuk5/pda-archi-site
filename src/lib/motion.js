@@ -1,11 +1,8 @@
 /* Реестр приёмов data-reveal. Каждый приём описан в docs/motion.md до того, как появился здесь.
    Порядок в элементе: подготовить начальное состояние → пометить is-ready (снять visibility: hidden) → твин по ScrollTrigger.
    Переопределения из разметки: data-reveal-delay="0.2", data-reveal-stagger="0.05".
-   Плагины регистрирует src/js/main.js до initMotion(). */
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SplitText } from 'gsap/SplitText';
-import { CustomEase } from 'gsap/CustomEase';
+   GSAP и плагины – из src/lib/gsap.js. Запускает src/lib/main.js. */
+import { gsap, ScrollTrigger, SplitText, CustomEase } from './gsap.js';
 
 const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const num = (el, key, fallback) => (el.dataset[key] !== undefined ? parseFloat(el.dataset[key]) : fallback);

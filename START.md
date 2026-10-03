@@ -22,7 +22,7 @@
 
 ## Промпт после выбора направления
 
-Выбираю вариант [a/b/c]. Перенеси его токены в src/styles/tokens.css и в docs/design-system.md раздел «Токены», собери hero как секцию src/sections/Hero.astro и подключи в src/pages/index.astro по скиллу section: движение по docs/motion.md, проверка npm run check, скриншоты 1440 и 390, три вопроса критики, DoD, ручная доводка, журнал. Остальные секции не трогай.
+Выбираю вариант [a/b/c]. Перенеси его токены в src/styles/tokens.css и в docs/design-system.md раздел «Токены», собери hero как секцию src/sections/Hero/ (Hero.astro, Hero.css, Hero.js при необходимости) и подключи в src/pages/index.astro по скиллу section: движение по docs/motion.md, проверка npm run check, скриншоты 1440 и 390, три вопроса критики, DoD, ручная доводка, журнал. Остальные секции не трогай.
 
 ## Промпт для продолжения в новом чате
 

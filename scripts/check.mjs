@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /* Линтер правил CLAUDE.md. Только встроенные модули Node. Запуск из корня: npm run check
-   Проверяет все .astro в src/ (разметку, <style>, <script>, frontmatter), src/styles/*.css, src/js/*.js и сверяет документацию с кодом.
+   Проверяет все .astro в src/ (разметку, <script>, frontmatter), CSS (src/styles/, Name.css секций и компонентов),
+   JS (src/lib/, Name.js секций и компонентов) и сверяет документацию с кодом.
    Сырые значения допустимы только внутри :root { } – это tokens.css и токены концепта (src/pages/concepts/). Выход 1, если есть замечания.
    Категории:
      raw     сырые значения вне токенов: цвет, размер, длительность, easing, вес, интерлиньяж, z-index, !important
@@ -13,7 +14,9 @@
      motion  data-reveal вне реестра; реестр в src/js/motion.js и docs/motion.md расходится
      docs    токены в tokens.css и docs/design-system.md расходятся
      map     id секций не по карте, секция не подключена на главной
-     scene   на странице есть сцена, а в scene.js остался SMOKE_TEST */
+     scene   на странице есть сцена, а в scene.js остался SMOKE_TEST
+     structure  секция и компонент – папка Name/ с Name.astro + Name.css + Name.js: файлы подключены, классы с префиксом блока,
+                GSAP только из src/lib/gsap.js, своё движение – через onMotion() */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -110,8 +113,30 @@ const lintCss = (file, css, { fileText = css, offset = 0, sectionRules = false, 
 const SRC = path.join(ROOT, 'src');
 const walk = (dir, ext) => (exists(dir) ? fs.readdirSync(dir, { recursive: true }).map(String).filter(f => f.endsWith(ext)).sort().map(f => path.join(dir, f)) : []);
 
-/* --- CSS: глобальные стили ---------------------------------------------------- */
+/* --- CSS --------------------------------------------------------------------- */
 for (const file of walk(path.join(SRC, 'styles'), '.css')) lintCss(file, read(file));
+
+/* Секции и компоненты: папка Name/ с Name.astro, Name.css, Name.js. Их CSS глобальный (Astro его не скоупит),
+   поэтому каждое правило обязано содержать класс блока: .hero, .hero__title, .hero--dark – иначе стили протекают в чужие секции */
+const UNITS_DIRS = ['sections', 'components'].map(d => path.join(SRC, d));
+const kebab = name => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+const blockCss = (file) => {
+  const text = read(file);
+  const block = kebab(path.basename(file, '.css'));
+  const blockRe = new RegExp(`\\.${block}(?:__[\\w-]+|--[\\w-]+)*(?![\\w-])`);
+  const clean = blank(blank(text, /\/\*[\s\S]*?\*\//g), /"[^"\n]*"|'[^'\n]*'/g);
+  for (const m of clean.matchAll(/([^{};]+)\{/g)) {
+    const sel = m[1].trim();
+    if (!sel || sel.startsWith('@') || /^(from|to|\d+(\.\d+)?%)(\s*,\s*(from|to|\d+(\.\d+)?%))*$/.test(sel)) continue;
+    const at = lineAt(text, m.index + m[0].length - m[1].trimStart().length - 1);
+    if (/:root\b/.test(sel)) { add('structure', file, at, 'токены только в src/styles/tokens.css, не в стилях секции'); continue; }
+    for (const one of sel.split(',')) {
+      if (!blockRe.test(one)) add('structure', file, at, `селектор без класса блока .${block}: ${short(one)}`);
+    }
+  }
+  lintCss(file, text, { sectionRules: true });
+};
+for (const dir of UNITS_DIRS) for (const file of walk(dir, '.css')) blockCss(file);
 
 /* --- JS ----------------------------------------------------------------------- */
 const lintJs = (file, js, { fileText = js, offset = 0 } = {}) => {
@@ -120,12 +145,22 @@ const lintJs = (file, js, { fileText = js, offset = 0 } = {}) => {
   for (const m of clean.matchAll(/['"`]\s*(#[0-9a-fA-F]{3,8}|(?:rgba?|hsla?|oklch)\([^'"`]*\))\s*['"`]/g)) {
     add('raw', file, at(m.index), `цвет в JS (${m[1]}) – читать токен: css('--color-…')`);
   }
-  for (const m of clean.matchAll(/cubic-bezier\(\s*[\d.]/g)) add('raw', file, at(m.index), 'easing числом в JS – токен --ease-* через CustomEase (src/js/motion.js)');
+  for (const m of clean.matchAll(/cubic-bezier\(\s*[\d.]/g)) add('raw', file, at(m.index), 'easing числом в JS – токен --ease-* через CustomEase (src/lib/motion.js)');
 };
-for (const file of walk(path.join(SRC, 'js'), '.js')) lintJs(file, read(file));
+for (const file of walk(path.join(SRC, 'lib'), '.js')) {
+  const text = read(file);
+  lintJs(file, text);
+  if (path.basename(file) !== 'gsap.js') for (const m of text.matchAll(/from\s+['"]gsap(\/[\w]+)?['"]/g)) add('structure', file, lineAt(text, m.index), 'GSAP – только из ./gsap.js: там плагины регистрируются один раз');
+}
+for (const dir of UNITS_DIRS) for (const file of walk(dir, '.js')) {
+  const text = read(file);
+  lintJs(file, text);
+  for (const m of text.matchAll(/from\s+['"]gsap(\/[\w]+)?['"]/g)) add('structure', file, lineAt(text, m.index), "GSAP – только из src/lib/gsap.js: import { gsap } from '../../lib/gsap.js'");
+  if (/\b(gsap|ScrollTrigger|SplitText)\./.test(text) && !/\bonMotion\(/.test(text)) add('structure', file, 0, 'своё движение – внутри onMotion() из src/lib/env.js: так оно уважает ?static и prefers-reduced-motion');
+}
 
 /* --- .astro: разметка, <style>, <script>, frontmatter ---------------------------- */
-const motionJs = path.join(SRC, 'js', 'motion.js');
+const motionJs = path.join(SRC, 'lib', 'motion.js');
 const presetsBlock = exists(motionJs) ? (read(motionJs).split('export const PRESETS')[1] || '') : '';
 const presets = new Set([...presetsBlock.matchAll(/^\s+'([a-z-]+)':/gm)].map(m => m[1]));
 const FRONTMATTER = /^---\r?\n[\s\S]*?\r?\n---/;
@@ -143,6 +178,7 @@ const lintAstro = (file) => {
   const noComments = blank(blank(blank(text, FRONTMATTER), /<!--[\s\S]*?-->/g), /\{\/\*[\s\S]*?\*\/\}/g);
 
   for (const m of noComments.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)) {
+    if (sectionRules) add('structure', file, at(m.index), `стили – в ${path.basename(file, '.astro')}.css рядом, <style> в секциях и компонентах не используется`);
     lintCss(file, m[1], { fileText: text, offset: m.index + m[0].indexOf('>') + 1, sectionRules });
   }
   for (const m of noComments.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) {
@@ -161,9 +197,9 @@ const lintAstro = (file) => {
     }
     if (tag === 'img') add('media', file, line, '<img> – только <Image> / <Picture> из astro:assets: WebP/AVIF, размеры, srcset и loading Astro ставит сам');
     if ((tag === 'Image' || tag === 'Picture') && !/\salt\s*=/.test(attrs)) add('media', file, line, `<${tag}> без alt (декор – alt="")`);
-    if (tag === 'video' && /\ssrc\s*=/.test(attrs)) add('media', file, line, '<video src> – только data-src + preload="none", src ставит src/js/main.js');
+    if (tag === 'video' && /\ssrc\s*=/.test(attrs)) add('media', file, line, '<video src> – только data-src + preload="none", src ставит src/lib/main.js');
     for (const r of attrs.matchAll(/data-reveal\s*=\s*"([^"]+)"/g)) {
-      if (!presets.has(r[1])) add('motion', file, line, `data-reveal="${r[1]}" нет в реестре src/js/motion.js / docs/motion.md`);
+      if (!presets.has(r[1])) add('motion', file, line, `data-reveal="${r[1]}" нет в реестре src/lib/motion.js / docs/motion.md`);
     }
   }
 
@@ -199,13 +235,35 @@ const lintAstro = (file) => {
 const markupOf = new Map();
 for (const file of walk(SRC, '.astro')) markupOf.set(file, lintAstro(file));
 
+/* --- Структура: секция и компонент – папка Name/ с Name.astro; Name.css и Name.js подключены в Name.astro --- */
+for (const dir of UNITS_DIRS) {
+  if (!exists(dir)) continue;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name.startsWith('.')) continue;
+    const full = path.join(dir, entry.name);
+    if (!entry.isDirectory()) { add('structure', full, 0, `файл вне папки: ${entry.name} → ${path.basename(dir)}/${entry.name.split('.')[0]}/${entry.name}`); continue; }
+    const name = entry.name;
+    const astro = path.join(full, `${name}.astro`);
+    if (!/^[A-Z][A-Za-z0-9]*$/.test(name)) add('structure', full, 0, `имя папки – PascalCase, как у компонента: ${name}`);
+    if (!exists(astro)) { add('structure', full, 0, `нет ${name}.astro`); continue; }
+    const text = read(astro);
+    const fm = (FRONTMATTER.exec(text) || [''])[0];
+    const scripts = [...text.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].map(m => m[1]).join('\n');
+    if (exists(path.join(full, `${name}.css`)) && !fm.includes(`'./${name}.css'`)) add('structure', astro, 0, `${name}.css не подключён: во frontmatter import './${name}.css';`);
+    if (exists(path.join(full, `${name}.js`)) && !scripts.includes(`'./${name}.js'`)) add('structure', astro, 0, `${name}.js не подключён: <script> import './${name}.js'; </script>`);
+    for (const f of fs.readdirSync(full)) {
+      if (!f.startsWith('.') && ![`${name}.astro`, `${name}.css`, `${name}.js`].includes(f)) add('structure', path.join(full, f), 0, `в папке ${name}/ только ${name}.astro, .css и .js; картинки – src/assets/img/`);
+    }
+  }
+}
+
 /* --- Документация против кода ------------------------------------------------- */
 const motionMd = path.join(ROOT, 'docs', 'motion.md');
 if (exists(motionMd)) {
   const registry = read(motionMd).split('## Реестр `data-reveal`')[1] || '';
   const documented = new Set([...registry.split('\n## ')[0].matchAll(/^\|\s*`([a-z-]+)`\s*\|/gm)].map(m => m[1]));
   for (const p of presets) if (!documented.has(p)) add('motion', motionJs, 0, `приём «${p}» есть в коде, но не описан в docs/motion.md`);
-  for (const d of documented) if (!presets.has(d)) add('motion', motionMd, 0, `приём «${d}» описан, но нет в src/js/motion.js`);
+  for (const d of documented) if (!presets.has(d)) add('motion', motionMd, 0, `приём «${d}» описан, но нет в src/lib/motion.js`);
 }
 
 const ds = path.join(ROOT, 'docs', 'design-system.md');
@@ -220,10 +278,11 @@ if (dsText) {
   for (const t of named) if (!globalTokens.has(t)) add('docs', ds, 0, `${t} описан в базе, но его нет в tokens.css`);
 }
 
-/* --- Карта секций: id в src/sections/*.astro и на главной против карты в базе ---- */
+/* --- Карта секций: id в src/sections/Name/Name.astro и на главной против карты в базе -- */
 const indexPage = path.join(SRC, 'pages', 'index.astro');
 const indexText = exists(indexPage) ? read(indexPage) : '';
-const sectionFiles = walk(path.join(SRC, 'sections'), '.astro');
+/* Только src/sections/Name/Name.astro: файлы не на своём месте уже названы в проверке структуры */
+const sectionFiles = walk(path.join(SRC, 'sections'), '.astro').filter(f => path.basename(f, '.astro') === path.basename(path.dirname(f)));
 const idsHtml = [];
 for (const file of [indexPage, ...sectionFiles]) {
   for (const m of (markupOf.get(file) || '').matchAll(/<section\b[^>]*\bid="([^"]+)"/g)) idsHtml.push({ id: m[1], file });
@@ -238,11 +297,12 @@ for (const { id, file } of idsHtml) if (!mapIds.includes(id)) add('map', file, 0
 if (idsHtml.length) for (const id of mapIds) if (id && !idsHtml.some(s => s.id === id)) add('map', ds, 0, `секция «${id}» есть в карте, но не в src/sections/ (статус в карте – концепт?)`);
 for (const file of sectionFiles) {
   const name = path.basename(file);
-  if (!indexText.includes(`/sections/${name}`)) add('map', file, 0, `секция не подключена в src/pages/index.astro (import … from '../sections/${name}')`);
+  const folder = path.basename(path.dirname(file));
+  if (!indexText.includes(`/sections/${folder}/${name}`)) add('map', file, 0, `секция не подключена в src/pages/index.astro (import … from '../sections/${folder}/${name}')`);
 }
 
 /* --- Сцена -------------------------------------------------------------------- */
-const sceneJs = path.join(SRC, 'js', 'scene.js');
+const sceneJs = path.join(SRC, 'lib', 'scene.js');
 const hasScene = [...markupOf.values()].some(m => /<[^>]*\sdata-scene\b/.test(m));
 if (hasScene && exists(sceneJs) && read(sceneJs).includes('SMOKE_TEST')) {
   add('scene', sceneJs, 0, 'на странице есть [data-scene], а в scene.js остался тестовый объект SMOKE_TEST');
