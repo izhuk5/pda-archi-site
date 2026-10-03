@@ -1,12 +1,13 @@
 /* Запуск. Режимы: ?static – без анимаций, всё видно (для скриншотов); &to=<id> – показать секцию (headless не рисует прокрутку,
    поэтому страница сдвигается отрицательным margin); prefers-reduced-motion – как static, но Lenis тоже выключен.
+   Класс html.has-motion ставит inline-скрипт в <head> до первой отрисовки; здесь он снимается, если движение не запустилось.
    Движение – js/motion.js (описание приёмов в docs/motion.md), 3D – js/scene.js лениво (docs/scene.md). */
 import { initMotion } from './motion.js';
 
 const params = new URLSearchParams(location.search);
 const isStatic = params.has('static');
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+const hasGsap = ['gsap', 'ScrollTrigger', 'SplitText', 'CustomEase'].every(name => typeof window[name] !== 'undefined');
 const motionOn = !isStatic && !reduce && hasGsap;
 
 /* Ленивое видео: в разметке data-src + preload="none"; src подставляется, когда секция в полутора экранах */
@@ -40,7 +41,8 @@ const smoothScroll = () => {
   gsap.ticker.add(t => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
   document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
+    /* getElementById, а не querySelector: href="#" и id с цифры не роняют обработчик */
+    const target = document.getElementById(a.getAttribute('href').slice(1));
     if (!target) return;
     e.preventDefault();
     lenis.scrollTo(target, { duration: 1.2 });
@@ -54,14 +56,27 @@ const showSection = () => {
   if (el) document.body.style.marginTop = `-${el.offsetTop}px`;
 };
 
-document.fonts.ready.then(() => {
+/* Без движения или при ошибке в нём – всё видно сразу */
+const showAll = () => {
+  document.documentElement.classList.remove('has-motion');
+  document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-ready'));
+};
+
+/* Шрифты ждём не дольше 3 s: пока они грузятся, элементы с data-reveal скрыты */
+const fontsReady = Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 3000))]);
+
+fontsReady.then(() => {
   if (motionOn) {
-    document.documentElement.classList.add('has-motion');
-    gsap.registerPlugin(ScrollTrigger, SplitText);
-    smoothScroll();
-    initMotion();
+    try {
+      gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase);
+      smoothScroll();
+      initMotion();
+    } catch (err) {
+      console.warn('motion: не запустилось, показываю всё', err);
+      showAll();
+    }
   } else {
-    document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-ready'));
+    showAll();
   }
   lazyVideo();
   lazyScene();

@@ -28,6 +28,10 @@
   --fs-body-m: 1.125rem;
   --fs-body-s: 0.9375rem;
 
+  /* Веса: у display и title свои, чтобы менять характер шкалы одним токеном */
+  --fw-display: 500;
+  --fw-title: 500;
+
   --lh-display: 0.95;
   --lh-title: 1.15;
   --lh-body: 1.45;

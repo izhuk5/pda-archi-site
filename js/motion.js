@@ -7,10 +7,30 @@ const ready = el => el.classList.add('is-ready');
 const trigger = (el, once = true) => ({ trigger: el, start: 'top 85%', once });
 const yPx = () => parseFloat(css('--reveal-y')) || 24;
 
+/* Easing из токенов. GSAP не понимает строку cubic-bezier(…) и молча подставляет свой дефолт, поэтому каждый --ease-* из :root
+   регистрируется как CustomEase с тем же именем без «--»: --ease-sharp → ease: 'ease-sharp'. Новый токен подхватывается сам */
+const registerEases = () => {
+  const found = new Set();
+  for (const sheet of document.styleSheets) {
+    let rules;
+    try { rules = sheet.cssRules; } catch { continue; } /* чужие таблицы (Google Fonts) читать нельзя */
+    for (const rule of rules) {
+      if (rule.selectorText !== ':root') continue;
+      for (const prop of rule.style) if (prop.startsWith('--ease-')) found.add(prop);
+    }
+  }
+  found.forEach(prop => {
+    const m = css(prop).match(/cubic-bezier\(([^)]+)\)/);
+    if (m) CustomEase.create(prop.slice(2), m[1].replace(/\s+/g, ''));
+    else console.warn(`motion: ${prop} не cubic-bezier(), пропущен`);
+  });
+};
+const ease = (name, fallback) => (CustomEase.get(name) ? name : fallback);
+
 export const PRESETS = {
   'fade': (el) => {
     gsap.set(el, { autoAlpha: 0, y: yPx() }); ready(el);
-    gsap.to(el, { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: num(el, 'revealDelay', 0), scrollTrigger: trigger(el) });
+    gsap.to(el, { autoAlpha: 1, y: 0, duration: 0.8, ease: ease('ease-out', 'power3.out'), delay: num(el, 'revealDelay', 0), scrollTrigger: trigger(el) });
   },
   'lines': (el) => {
     const split = SplitText.create(el, { type: 'lines', mask: 'lines', linesClass: 'line' }); ready(el);
@@ -22,7 +42,7 @@ export const PRESETS = {
   },
   'clip': (el) => {
     gsap.set(el, { clipPath: 'inset(100% 0 0 0)' }); ready(el);
-    gsap.to(el, { clipPath: 'inset(0% 0 0 0)', duration: 1, ease: css('--ease-sharp') || 'power4.inOut', delay: num(el, 'revealDelay', 0), scrollTrigger: trigger(el) });
+    gsap.to(el, { clipPath: 'inset(0% 0 0 0)', duration: 1, ease: ease('ease-sharp', 'power4.inOut'), delay: num(el, 'revealDelay', 0), scrollTrigger: trigger(el) });
   },
   'card': (el) => {
     const kids = Array.from(el.children);
@@ -45,6 +65,7 @@ export const PRESETS = {
 
 export const initMotion = () => {
   gsap.config({ nullTargetWarn: false });
+  registerEases();
   document.querySelectorAll('[data-reveal]').forEach(el => {
     const name = el.dataset.reveal;
     const fn = PRESETS[name];

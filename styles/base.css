@@ -47,11 +47,11 @@ p, li { text-wrap: pretty; }
 }
 
 /* Шкала текста. Размер текста в правилах секций не ставится – только эти классы */
-.display-xl { font-family: var(--font-display); font-size: var(--fs-display-xl); line-height: var(--lh-display); letter-spacing: var(--ls-display); font-weight: 500; }
-.display-l  { font-family: var(--font-display); font-size: var(--fs-display-l);  line-height: var(--lh-display); letter-spacing: var(--ls-display); font-weight: 500; }
-.display-s  { font-family: var(--font-display); font-size: var(--fs-display-s);  line-height: var(--lh-display); letter-spacing: var(--ls-display); font-weight: 500; }
-.title-m    { font-family: var(--font-display); font-size: var(--fs-title-m);    line-height: var(--lh-title); font-weight: 500; }
-.title-xxs  { font-family: var(--font-text);    font-size: var(--fs-title-xxs);  line-height: var(--lh-title); font-weight: 500; }
+.display-xl { font-family: var(--font-display); font-size: var(--fs-display-xl); line-height: var(--lh-display); letter-spacing: var(--ls-display); font-weight: var(--fw-display); }
+.display-l  { font-family: var(--font-display); font-size: var(--fs-display-l);  line-height: var(--lh-display); letter-spacing: var(--ls-display); font-weight: var(--fw-display); }
+.display-s  { font-family: var(--font-display); font-size: var(--fs-display-s);  line-height: var(--lh-display); letter-spacing: var(--ls-display); font-weight: var(--fw-display); }
+.title-m    { font-family: var(--font-display); font-size: var(--fs-title-m);    line-height: var(--lh-title); font-weight: var(--fw-title); }
+.title-xxs  { font-family: var(--font-text);    font-size: var(--fs-title-xxs);  line-height: var(--lh-title); font-weight: var(--fw-title); }
 .body-l     { font-size: var(--fs-body-l); }
 .body-m     { font-size: var(--fs-body-m); }
 .body-s     { font-size: var(--fs-body-s); }
