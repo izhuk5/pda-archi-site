@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-/* Локальный сервер для просмотра. Только встроенные модули Node, без npm.
-   Запуск из корня: node scripts/serve.mjs [порт] (по умолчанию 8765), адрес http://127.0.0.1:8765/
+/* Локальный сервер для просмотра. Только встроенные модули Node, без пакетов npm.
+   Запуск из корня: npm run dev (другой порт – npm run dev -- 8766), по умолчанию 8765, адрес http://127.0.0.1:8765/
    Поддерживает Range-запросы (перемотка видео) и отдаёт файлы без кеша, чтобы правки были видны сразу. */
 import http from 'node:http';
 import fs from 'node:fs';
@@ -53,5 +53,5 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const port = Number(process.argv[2]) || 8765;
   serve(port)
     .then(({ port: p }) => console.log(`сервер: http://127.0.0.1:${p}/  (корень ${ROOT}, остановить – Ctrl+C)`))
-    .catch(err => { console.error(err.code === 'EADDRINUSE' ? `порт ${port} занят: node scripts/serve.mjs <другой порт>` : err.message); process.exit(1); });
+    .catch(err => { console.error(err.code === 'EADDRINUSE' ? `порт ${port} занят: npm run dev -- <другой порт>` : err.message); process.exit(1); });
 }

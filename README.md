@@ -21,6 +21,7 @@ docs/
   scene.md           3D и Three.js: когда уместно, бюджет, приёмы, запасной вариант
   publish.md         как выложить: GitHub Pages, Netlify, свой сервер
 
+package.json         только скрипты: npm run dev (сервер), npm run check (линтер), npm run shot -- [id] (скриншоты)
 index.html           страница. Каждая секция – <section id="…"> с именем из карты секций
 styles/
   tokens.css         :root – единственное место, где живут сырые значения
@@ -36,11 +37,11 @@ assets/
 
 concepts/            ветвления: 2–3 варианта отдельными html рядом, не спор словами
 scripts/
-  serve.mjs          локальный сервер: node scripts/serve.mjs → http://127.0.0.1:8765/
+  serve.mjs          локальный сервер: npm run dev → http://127.0.0.1:8765/
   check.mjs          линтер правил: сырые значения вне токенов, спейсеры, капс, моно, тире, картинки, сверка docs с кодом
   shot.mjs           скриншоты 1440 и 390 через Chrome + замеры: горизонтальный скролл, висячие строки, ошибки консоли
   mobile.html        обёртка-iframe 390 px для ручного просмотра в браузере
-  (Node 22+, без npm)
+  (Node 22+; запуск через npm: npm run dev / check / shot, зависимостей нет)
 
 .claude/
   launch.json        локальный сервер для предпросмотра

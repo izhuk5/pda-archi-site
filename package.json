@@ -1,0 +1,13 @@
+{
+  "name": "wow-site",
+  "private": true,
+  "description": "Сайт кодом через Claude Code: статический HTML/CSS/JS. npm здесь только запускает скрипты – зависимостей нет и не ставятся.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "check": "node scripts/check.mjs",
+    "shot": "node scripts/shot.mjs"
+  }
+}

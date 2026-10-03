@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Линтер правил CLAUDE.md. Только Node, без npm. Запуск из корня: node scripts/check.mjs
+/* Линтер правил CLAUDE.md. Только Node, без npm. Запуск из корня: npm run check (то же, что node scripts/check.mjs)
    Проверяет index.html, concepts/*.html (их <style> тоже), styles/*.css, js/*.js и сверяет документацию с кодом.
    Сырые значения допустимы только внутри :root { } – это tokens.css и токены концепта. Выход 1, если есть замечания.
    Категории:

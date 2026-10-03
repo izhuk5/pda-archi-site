@@ -2,6 +2,10 @@
 
 Новые записи сверху. Формат: дата – решение – почему – что изменилось в файлах. Сюда – продукт, процесс, технологии. Дизайн – в `docs/design-system.md`.
 
+## 2026-10-03 – запуск через npm
+- `package.json` только со скриптами: `npm run dev` (сервер), `npm run check` (линтер), `npm run shot -- [id]` (скриншоты). Зависимостей нет, `npm install` не нужен. Почему: привычный запуск одной командой. Правило 10 в CLAUDE.md уточнено: npm – только запуск скриптов, пакеты не ставятся.
+- Файлы: package.json, .gitignore, .claude/launch.json, scripts/*.mjs (комментарии), CLAUDE.md, START.md, README.md, docs/*, .claude/skills/*, .claude/agents/qa.md.
+
 ## 2026-10-03 – инженерный аудит заготовки
 - git: репозиторий `main`, первый коммит – исходная заготовка. Коммит после каждой закрытой секции; «что изменилось» – `git diff`. Почему: правило «я правлю руками, скажи, что изменилось» без git невыполнимо.
 - Python и bash убраны, инструменты – Node 22+ без npm: `scripts/serve.mjs` (сервер с Range для видео), `scripts/check.mjs` (линтер), `scripts/shot.mjs` (скриншоты через Chrome DevTools Protocol). Удалены `scripts/check.py`, `scripts/shot.sh`; `.claude/launch.json` – на node.

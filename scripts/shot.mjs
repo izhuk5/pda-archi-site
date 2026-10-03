@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /* Скриншоты 1440 и 390 и замеры, которые видны только в браузере. Только Node и Chrome, без npm.
-   Запуск из корня:
-     node scripts/shot.mjs                         вся страница index.html
-     node scripts/shot.mjs hero                    только секция #hero
-     node scripts/shot.mjs --page concepts/hero-a.html   концепт
+   Запуск из корня (аргументы npm передаются после --):
+     npm run shot                                  вся страница index.html
+     npm run shot -- hero                          только секция #hero
+     npm run shot -- --page concepts/hero-a.html   концепт
    Как устроено: свой сервер (scripts/serve.mjs) на свободном порту, Chrome headless управляется через DevTools Protocol по pipe.
    Мобильная ширина – эмуляция устройства 390 (как в DevTools), а не iframe: окно Chrome уже ~500 px режет кадр, эмуляция – нет.
    Страница открывается с ?static (анимации выключены, всё видно). Длинная страница режется на куски по два экрана:
