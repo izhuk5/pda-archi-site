@@ -1,0 +1,6 @@
+.DS_Store
+*.log
+assets/video/*.mov
+assets/video/*.mp4.orig
+assets/models/*.blend
+scripts/out/
