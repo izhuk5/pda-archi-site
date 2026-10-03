@@ -2,6 +2,11 @@
 
 Новые записи сверху. Формат: дата – решение – почему – что изменилось в файлах. Сюда – продукт, процесс, технологии. Дизайн – в `docs/design-system.md`.
 
+## 2026-10-03 – брейкпоинты как в Webflow, планшет до 1024
+- Решение владельца: диапазоны Webflow, но tablet до 1024; записаны mobile-first: база – mobile portrait (до 478), `min-width: 479px` – mobile landscape, `768px` – tablet, `1024px` – desktop. Было: 500 / 768. Толкование «до 1024»: desktop начинается с 1024 (iPad в горизонтали – десктопная раскладка); если 1024 должен быть планшетом – граница 1025.
+- Сетка 12 колонок – с 768 (tablet), токены `-desktop` (поля, отступ секций) – с 1024. Скриншоты – по-прежнему 390 и 1440.
+- Файлы: scripts/check.mjs (BREAKPOINTS), src/styles/tokens.css, src/styles/base.css, CLAUDE.md, docs/design-system.md, .claude/skills/section, check.
+
 ## 2026-10-03 – mobile-first, справочник библиотек
 - Mobile-first (решение владельца): базовые стили – мобильные (макет 390), шире – только `@media (min-width: 500px)` и `(min-width: 768px)`, `max-width` не используется. Токены: без суффикса – мобильные, `-desktop` – с 768 (`--page-margin` 16 / `--page-margin-desktop` 24, `--space-section` 64 / `--space-section-desktop` 128). `.grid-12`: на мобильном одна колонка, с 768 – 12. Скриншоты снимаются в порядке 390 → 1440.
 - `docs/libraries.md` – подсказка: пакеты проекта, 24 плагина GSAP с отметкой подключённых, аддоны Three.js (GLTFLoader, DRACOLoader, HDRLoader вместо устаревшего RGBELoader…), встроенное в Astro, кандидаты (`@astrojs/sitemap`, `@sanity/astro`). `check.mjs` сверяет отметки ✅ с `src/lib/gsap.js` и пакеты с `package.json`.

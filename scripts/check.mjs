@@ -18,7 +18,7 @@
      structure  секция и компонент – папка Name/ с Name.astro + Name.css + Name.js: файлы подключены, классы с префиксом блока,
                 GSAP только из @lib/gsap.js, своё движение – через onMotion(), импорты между папками – через алиасы (@lib/…)
      naming  имена классов – только kebab-case: hero-title, is-dark; без __, --, _ и заглавных
-     responsive  mobile-first: база – мобильная, шире – только @media (min-width: 500px | 768px), max-width не используется
+     responsive  mobile-first: база – мобильная, шире – только @media (min-width: 479px | 768px | 1024px), max-width не используется
      docs    также: docs/libraries.md против src/lib/gsap.js (плагины ✅) и package.json (пакеты) */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -60,8 +60,9 @@ const rootZones = (css) => {
 };
 const declaredProps = css => new Set([...css.matchAll(/(--[\w-]+)\s*:/g)].map(m => m[1]));
 
-/* Брейкпоинты mobile-first. CSS-переменная в @media не работает, поэтому шкала – здесь; те же значения – CLAUDE.md и design-system.md */
-const BREAKPOINTS = ['500px', '768px'];
+/* Брейкпоинты mobile-first, диапазоны как в Webflow, но планшет до 1024: база – mobile portrait (до 478), 479 – mobile landscape,
+   768 – tablet, 1024 – desktop. CSS-переменная в @media не работает, поэтому шкала – здесь; те же значения – CLAUDE.md и design-system.md */
+const BREAKPOINTS = ['479px', '768px', '1024px'];
 
 const TOKENS_FILE = path.join(ROOT, 'src', 'styles', 'tokens.css');
 const globalTokens = exists(TOKENS_FILE) ? declaredProps(blank(read(TOKENS_FILE), /\/\*[\s\S]*?\*\//g)) : new Set();

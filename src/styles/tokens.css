@@ -38,8 +38,8 @@
   --ls-display: -0.02em;
   --ls-body: 0;
 
-  /* Сетка. Mobile-first: имя без суффикса – мобильное значение (база, макет 390), -desktop – с 768 px.
-     Брейкпоинты в CSS-переменную не вынести (media их не читает): только @media (min-width: 500px) и (min-width: 768px) */
+  /* Сетка. Mobile-first: имя без суффикса – мобильное значение (база, макет 390), -desktop – с 1024 px.
+     Брейкпоинты в CSS-переменную не вынести (media их не читает): только @media (min-width: 479px | 768px | 1024px) */
   --container: 1280px;
   --columns: 12;
   --gutter: 16px;

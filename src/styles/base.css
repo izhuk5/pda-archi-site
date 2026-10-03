@@ -23,8 +23,9 @@ p, h1, h2, h3, h4 { overflow-wrap: break-word; }
 h1, h2, h3 { text-wrap: balance; }
 p, li { text-wrap: pretty; }
 
-/* Сетка, mobile-first. База – мобильная (макет 390): .grid-12 ставит детей в одну колонку. С 768 px – 12 колонок,
-   ширина элементов – через grid-column внутри @media (min-width: 768px) в CSS секции, не через px */
+/* Сетка, mobile-first. База – мобильная (макет 390): .grid-12 ставит детей в одну колонку. С 768 px (tablet) – 12 колонок,
+   ширина элементов – через grid-column внутри @media (min-width: 768px) или (min-width: 1024px) в CSS секции, не через px.
+   С 1024 px (desktop) – десктопные поля и отступы секций */
 .wrapper {
   width: 100%;
   max-width: var(--container);
@@ -74,7 +75,9 @@ p, li { text-wrap: pretty; }
 }
 
 @media (min-width: 768px) {
-  .wrapper { padding-inline: var(--page-margin-desktop); }
   .grid-12 { grid-template-columns: repeat(var(--columns), minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .wrapper { padding-inline: var(--page-margin-desktop); }
   .section { padding-block: var(--space-section-desktop); }
 }
