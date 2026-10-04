@@ -6,4 +6,7 @@ import './facts.css';
 
 const { class: className, ...attrs } = Astro.props;
 ---
-<dl class:list={['facts', className]} {...attrs}><slot /></dl>
+
+<dl class:list={['facts', className]} {...attrs}>
+  <slot />
+</dl>

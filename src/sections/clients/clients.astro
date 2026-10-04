@@ -7,7 +7,10 @@ import './clients.css';
 import { Image } from 'astro:assets';
 import SectionHead from '@components/section-head/section-head.astro';
 
-const thumbs = import.meta.glob('/src/assets/img/projects/thumbs/*.jpg', { eager: true, import: 'default' });
+const thumbs = import.meta.glob('/src/assets/img/projects/thumbs/*.jpg', {
+  eager: true,
+  import: 'default',
+});
 const thumb = id => {
   const img = thumbs[`/src/assets/img/projects/thumbs/${id}.jpg`];
   if (!img) throw new Error(`clients: нет превью src/assets/img/projects/thumbs/${id}.jpg`);
@@ -15,23 +18,84 @@ const thumb = id => {
 };
 
 const rows = [
-  { project: "virtuose", name: "PIMCO Prime Real Estate", type: "Investment manager", work: "Virtuose, Paris 16. Prime offices, 6\u00a0548\u00a0m²" },
-  { project: "volney", name: "Swiss Life Asset Managers", type: "Asset manager", work: "Volney, Paris 1. Headquarters of a luxury brand" },
-  { project: "biopark", name: "Gecina", type: "Listed real estate investor", work: "Le Biopark, Éclat, Concerto. Three office buildings in Paris" },
-  { project: "saussure", name: "AEW and Eiffage Immobilier", type: "Investment manager and developer", work: "125 Saussure, Paris 17. Offices, Geste d’Argent 2023" },
-  { project: "raiselab", name: "Raise", type: "Investor", work: "RaiseLab, OnMars, Holiday Inn La Villette" },
-  { project: "chaussee", name: "CRPN and Nexity", type: "Pension fund and property manager", work: "Chaussée, Paris 9. Prime offices" },
-  { project: "inbois", name: "INCO", type: "Impact investor", work: "InBois, Paris 19. Timber extension" },
-  { project: "timbre", name: "Black Swan", type: "Investor", work: "Timbre, Paris 9. Mixed Haussmann building" },
-  { project: "verde", name: "Sogeprom", type: "Developer", work: "Verde, Saint-Ouen. Reversible offices, competition" },
-  { project: "volney", name: "Artelia", type: "Engineering and project management", work: "Volney, 125 Saussure" },
-  { project: "cooperation", name: "French Ministry for Europe and Foreign Affairs", type: "Public client", work: "Offices of the OECD, Paris 16" },
+  {
+    project: 'virtuose',
+    name: 'PIMCO Prime Real Estate',
+    type: 'Investment manager',
+    work: 'Virtuose, Paris 16. Prime offices, 6\u00a0548\u00a0m²',
+  },
+  {
+    project: 'volney',
+    name: 'Swiss Life Asset Managers',
+    type: 'Asset manager',
+    work: 'Volney, Paris 1. Headquarters of a luxury brand',
+  },
+  {
+    project: 'biopark',
+    name: 'Gecina',
+    type: 'Listed real estate investor',
+    work: 'Le Biopark, Éclat, Concerto. Three office buildings in Paris',
+  },
+  {
+    project: 'saussure',
+    name: 'AEW and Eiffage Immobilier',
+    type: 'Investment manager and developer',
+    work: '125 Saussure, Paris 17. Offices, Geste d’Argent 2023',
+  },
+  {
+    project: 'raiselab',
+    name: 'Raise',
+    type: 'Investor',
+    work: 'RaiseLab, OnMars, Holiday Inn La Villette',
+  },
+  {
+    project: 'chaussee',
+    name: 'CRPN and Nexity',
+    type: 'Pension fund and property manager',
+    work: 'Chaussée, Paris 9. Prime offices',
+  },
+  {
+    project: 'inbois',
+    name: 'INCO',
+    type: 'Impact investor',
+    work: 'InBois, Paris 19. Timber extension',
+  },
+  {
+    project: 'timbre',
+    name: 'Black Swan',
+    type: 'Investor',
+    work: 'Timbre, Paris 9. Mixed Haussmann building',
+  },
+  {
+    project: 'verde',
+    name: 'Sogeprom',
+    type: 'Developer',
+    work: 'Verde, Saint-Ouen. Reversible offices, competition',
+  },
+  {
+    project: 'volney',
+    name: 'Artelia',
+    type: 'Engineering and project management',
+    work: 'Volney, 125 Saussure',
+  },
+  {
+    project: 'cooperation',
+    name: 'French Ministry for Europe and Foreign Affairs',
+    type: 'Public client',
+    work: 'Offices of the OECD, Paris 16',
+  },
 ];
 ---
+
 <section id="clients" class="section is-dark clients" aria-labelledby="clients-title">
   <SectionHead>
-    <h2 id="clients-title" class="section-head-title display-s" data-reveal="lines">Clients</h2>
-    <p class="section-head-lead body-l" data-reveal="lines">Funds, asset managers and developers. Many come back: Gecina for three buildings, Raise for three more.</p>
+    <h2 id="clients-title" class="section-head-title display-s" data-reveal="lines">
+      Clients
+    </h2>
+    <p class="section-head-lead body-l" data-reveal="lines">
+      Funds, asset managers and developers. Many come back: Gecina for three buildings, Raise for
+      three more.
+    </p>
   </SectionHead>
   <div class="wrapper">
     <ul class="clients-list" data-reveal="rows">
@@ -41,7 +105,14 @@ const rows = [
             <span class="clients-name display-s">{r.name}</span>
             <span class="clients-type body-s">{r.type}</span>
             <span class="clients-work body-s">{r.work}</span>
-            <Image class="clients-thumb" src={thumb(r.project)} widths={[240, 480]} sizes="17vw" loading="lazy" alt="" />
+            <Image
+              class="clients-thumb"
+              src={thumb(r.project)}
+              widths={[240, 480]}
+              sizes="17vw"
+              loading="lazy"
+              alt=""
+            />
           </div>
         </li>
       ))}

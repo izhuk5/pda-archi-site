@@ -5,38 +5,102 @@
 import './footer.css';
 import Link from '@components/link/link.astro';
 ---
+
 <footer class="footer">
   <div class="wrapper grid-12 footer-top body-s">
-    <p class="footer-name">PDA <span class="footer-line">Architecture</span> <span class="footer-line serif">Paris</span></p>
+    <p class="footer-name">
+      PDA <span class="footer-line">Architecture</span> <span class="footer-line serif">Paris</span>
+    </p>
     <div class="footer-group is-nav">
       <p class="footer-label serif">Navigation</p>
       <ul class="footer-list">
-        <li><Link quiet href="#projects">Projects</Link></li>
-        <li><Link quiet href="#transformation">Before and after</Link></li>
-        <li><Link quiet href="#expertise">Expertise</Link></li>
-        <li><Link quiet href="#digital-lab">Digital Lab</Link></li>
-        <li><Link quiet href="#contact">Contact</Link></li>
+        <li>
+          <Link quiet href="#projects">
+            Projects
+          </Link>
+        </li>
+        <li>
+          <Link quiet href="#transformation">
+            Before and after
+          </Link>
+        </li>
+        <li>
+          <Link quiet href="#expertise">
+            Expertise
+          </Link>
+        </li>
+        <li>
+          <Link quiet href="#digital-lab">
+            Digital Lab
+          </Link>
+        </li>
+        <li>
+          <Link quiet href="#contact">
+            Contact
+          </Link>
+        </li>
       </ul>
     </div>
     <div class="footer-group is-contact">
       <p class="footer-label serif">Contact</p>
       <ul class="footer-list">
-        <li><Link quiet href="mailto:agence@pda.archi">Email</Link></li>
-        <li><Link quiet href="tel:+33140059385">Phone</Link></li>
-        <li><Link quiet href="https://www.instagram.com/pdaarchitecture/" target="_blank" rel="noopener">Instagram</Link></li>
+        <li>
+          <Link quiet href="mailto:agence@pda.archi">
+            Email
+          </Link>
+        </li>
+        <li>
+          <Link quiet href="tel:+33140059385">
+            Phone
+          </Link>
+        </li>
+        <li>
+          <Link
+            quiet
+            href="https://www.instagram.com/pdaarchitecture/"
+            target="_blank"
+            rel="noopener"
+          >
+            Instagram
+          </Link>
+        </li>
       </ul>
     </div>
     <div class="footer-group is-address">
       <p class="footer-label serif">Address</p>
-      <address class="footer-list">15 rue du Conservatoire<br>75009 Paris<br>France</address>
+      <address class="footer-list">
+        15 rue du Conservatoire
+        <br />
+        75009 Paris
+        <br />
+        France
+      </address>
     </div>
   </div>
-  <p class="footer-mark display-mega" aria-hidden="true" data-reveal="letters">PDA</p>
+  <p class="footer-mark display-mega" aria-hidden="true" data-reveal="letters">
+    PDA
+  </p>
   <div class="wrapper grid-12 footer-bottom body-s">
     <span class="footer-b1 serif">All rights reserved</span>
     <span class="footer-b2 serif">PDA Architecture, since&nbsp;2002</span>
-    <Link quiet class="footer-b3 serif" href="https://www.pda.archi/mentions-legales" target="_blank" rel="noopener">Legal notice</Link>
-    <Link quiet class="footer-b4 serif" href="https://www.pda.archi/politique-de-confidentialite" target="_blank" rel="noopener">Privacy policy</Link>
+    <Link
+      quiet
+      class="footer-b3 serif"
+      href="https://www.pda.archi/mentions-legales"
+      target="_blank"
+      rel="noopener"
+    >
+      Legal notice
+    </Link>
+    <Link
+      quiet
+      class="footer-b4 serif"
+      href="https://www.pda.archi/politique-de-confidentialite"
+      target="_blank"
+      rel="noopener"
+    >
+      Privacy policy
+    </Link>
     <span class="footer-b5 serif">© 2026</span>
   </div>
 </footer>

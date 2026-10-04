@@ -13,30 +13,76 @@ import buildSite from '@assets/img/digital/build-site.jpg';
 
 /* Шаги через один: высокий кадр с текстом сбоку снизу, низкий – с текстом над кадром. drawing – чертёж белыми линиями (инверсия) */
 const steps = [
-  { shape: "tall", drawing: true, img: scanSection, alt: "InBois, Paris 19: section through the existing building and the new timber floors",
-    num: "01", title: "Scan", text: "We scan the existing building: point clouds, panoramic photos, thermal data. Every project starts from what is really there." },
-  { shape: "short", drawing: true, img: modelAxonometry, alt: "InBois, Paris 19: exploded view of the building model, floor by floor",
-    num: "02", title: "Model", text: "BIM on every project. Architects, engineers, cost consultants and environmental specialists work on one model, and clients walk through it in VR before anything is built." },
-  { shape: "tall", drawing: true, img: generateGrid, alt: "A parametric shell, designed in the Digital Lab",
-    num: "03", title: "Generate", text: "Parametric design and AI workshops test many forms and keep only the material the structure needs." },
-  { shape: "short", drawing: false, img: printModel, alt: "The same shell, printed in PLA",
-    num: "04", title: "Print", text: "The model becomes a 3D print in bio-based PLA at every design stage. Clients hold the decision in their hands." },
-  { shape: "tall", drawing: false, img: buildSite, alt: "InBois, Paris 19: the timber structure during construction",
-    num: "05", title: "Build", text: "Before works start, we build the site virtually and plan every task. On site, every company works on the same digital model." },
+  {
+    shape: 'tall',
+    drawing: true,
+    img: scanSection,
+    alt: 'InBois, Paris 19: section through the existing building and the new timber floors',
+    num: '01',
+    title: 'Scan',
+    text: 'We scan the existing building: point clouds, panoramic photos, thermal data. Every project starts from what is really there.',
+  },
+  {
+    shape: 'short',
+    drawing: true,
+    img: modelAxonometry,
+    alt: 'InBois, Paris 19: exploded view of the building model, floor by floor',
+    num: '02',
+    title: 'Model',
+    text: 'BIM on every project. Architects, engineers, cost consultants and environmental specialists work on one model, and clients walk through it in VR before anything is built.',
+  },
+  {
+    shape: 'tall',
+    drawing: true,
+    img: generateGrid,
+    alt: 'A parametric shell, designed in the Digital Lab',
+    num: '03',
+    title: 'Generate',
+    text: 'Parametric design and AI workshops test many forms and keep only the material the structure needs.',
+  },
+  {
+    shape: 'short',
+    drawing: false,
+    img: printModel,
+    alt: 'The same shell, printed in PLA',
+    num: '04',
+    title: 'Print',
+    text: 'The model becomes a 3D print in bio-based PLA at every design stage. Clients hold the decision in their hands.',
+  },
+  {
+    shape: 'tall',
+    drawing: false,
+    img: buildSite,
+    alt: 'InBois, Paris 19: the timber structure during construction',
+    num: '05',
+    title: 'Build',
+    text: 'Before works start, we build the site virtually and plan every task. On site, every company works on the same digital model.',
+  },
 ];
 /* Ширины картинки – не больше исходника */
 const widths = img => [700, 1000, 1400].filter(w => w <= img.width);
 ---
+
 <section id="digital-lab" class="section is-dark digital-lab" aria-labelledby="digital-title">
   <ol class="digital-lab-track" aria-label="Digital Lab, five steps">
     <li class="digital-lab-intro">
-      <h2 id="digital-title" class="display-l serif indent" data-reveal="lines">Digital Lab. We test a building on screen and in our hands before it is built.</h2>
-      <p class="digital-lab-sub body-l">Five steps, from the survey of an existing building to the site.</p>
+      <h2 id="digital-title" class="display-l serif indent" data-reveal="lines">
+        Digital Lab. We test a building on screen and in our hands before it is built.
+      </h2>
+      <p class="digital-lab-sub body-l">
+        Five steps, from the survey of an existing building to the site.
+      </p>
     </li>
     {steps.map(s => (
       <li class:list={['digital-lab-step', `is-${s.shape}`]}>
         <figure class:list={['digital-lab-figure', { 'is-drawing': s.drawing }]}>
-          <Image src={s.img} widths={widths(s.img)} sizes="(max-width: 767px) 82vw, 64vw" loading="lazy" alt={s.alt} />
+          <Image
+            src={s.img}
+            widths={widths(s.img)}
+            sizes="(max-width: 767px) 82vw, 64vw"
+            loading="lazy"
+            alt={s.alt}
+          />
         </figure>
         <div class="digital-lab-text">
           <span class="digital-lab-num display-l serif">{s.num}</span>

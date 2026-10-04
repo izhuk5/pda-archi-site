@@ -20,26 +20,112 @@ import tribunesPhoto from '@assets/img/projects/tribunes-0.jpg';
 
 /* Карточки – в порядке сетки: пары «широкая + высокая», стороны чередуются (раскладка – projects.css, классы is-1…is-8) */
 const cards = [
-  { id: "virtuose", shape: "wide", photo: virtuosePhoto, alt: "An office floor with the Eiffel Tower through the window", name: "Virtuose", area: "6\u00a0548\u00a0m²", type: "Prime offices, heavy rehabilitation, Paris 16", year: "2025" },
-  { id: "volney", shape: "tall", photo: volneyPhoto, alt: "The facade on rue Volney", name: "Volney", area: "2\u00a0400\u00a0m²", type: "Headquarters for a luxury brand, Paris 1", year: "2024" },
-  { id: "inbois", shape: "tall", photo: inboisPhoto, alt: "Render: the timber extension from the courtyard", name: "InBois", area: "800\u00a0m²", type: "Timber extension of an office building, Paris 19", year: "Under construction" },
-  { id: "chaussee", shape: "wide", photo: chausseePhoto, alt: "The Haussmann facade on rue de la Chaussée d’Antin", name: "Chaussée", area: "2\u00a0400\u00a0m²", type: "Prime offices near the Grands Boulevards, Paris 9", year: "2024" },
-  { id: "belvista", shape: "wide", photo: belvistaPhoto, alt: "The planted roof terrace", name: "Belvista", area: "2\u00a0300\u00a0m²", type: "Prime offices on the Champs-Élysées, Paris 8", year: "2026" },
-  { id: "raiselab", shape: "tall", photo: raiselabPhoto, alt: "The street facade", name: "RaiseLab", area: "2\u00a0200\u00a0m²", type: "Heavy rehabilitation and extension, Paris 11", year: "2021" },
-  { id: "carat", shape: "tall", photo: caratPhoto, alt: "Render: the entrance to the new venue on Place Vendôme", name: "Carat", area: "23\u00a0000\u00a0m²", type: "A car park under Place Vendôme, turned into a place for French jewellery", year: "Research 2021" },
-  { id: "tribunes", shape: "wide", photo: tribunesPhoto, alt: "The existing grandstands", name: "Tribunes", area: "12\u00a0400\u00a0m²", type: "Racecourse grandstands turned into a hybrid venue, Maisons-Laffitte", year: "Competition 2022" },
+  {
+    id: 'virtuose',
+    shape: 'wide',
+    photo: virtuosePhoto,
+    alt: 'An office floor with the Eiffel Tower through the window',
+    name: 'Virtuose',
+    area: '6\u00a0548\u00a0m²',
+    type: 'Prime offices, heavy rehabilitation, Paris 16',
+    year: '2025',
+  },
+  {
+    id: 'volney',
+    shape: 'tall',
+    photo: volneyPhoto,
+    alt: 'The facade on rue Volney',
+    name: 'Volney',
+    area: '2\u00a0400\u00a0m²',
+    type: 'Headquarters for a luxury brand, Paris 1',
+    year: '2024',
+  },
+  {
+    id: 'inbois',
+    shape: 'tall',
+    photo: inboisPhoto,
+    alt: 'Render: the timber extension from the courtyard',
+    name: 'InBois',
+    area: '800\u00a0m²',
+    type: 'Timber extension of an office building, Paris 19',
+    year: 'Under construction',
+  },
+  {
+    id: 'chaussee',
+    shape: 'wide',
+    photo: chausseePhoto,
+    alt: 'The Haussmann facade on rue de la Chaussée d’Antin',
+    name: 'Chaussée',
+    area: '2\u00a0400\u00a0m²',
+    type: 'Prime offices near the Grands Boulevards, Paris 9',
+    year: '2024',
+  },
+  {
+    id: 'belvista',
+    shape: 'wide',
+    photo: belvistaPhoto,
+    alt: 'The planted roof terrace',
+    name: 'Belvista',
+    area: '2\u00a0300\u00a0m²',
+    type: 'Prime offices on the Champs-Élysées, Paris 8',
+    year: '2026',
+  },
+  {
+    id: 'raiselab',
+    shape: 'tall',
+    photo: raiselabPhoto,
+    alt: 'The street facade',
+    name: 'RaiseLab',
+    area: '2\u00a0200\u00a0m²',
+    type: 'Heavy rehabilitation and extension, Paris 11',
+    year: '2021',
+  },
+  {
+    id: 'carat',
+    shape: 'tall',
+    photo: caratPhoto,
+    alt: 'Render: the entrance to the new venue on Place Vendôme',
+    name: 'Carat',
+    area: '23\u00a0000\u00a0m²',
+    type: 'A car park under Place Vendôme, turned into a place for French jewellery',
+    year: 'Research 2021',
+  },
+  {
+    id: 'tribunes',
+    shape: 'wide',
+    photo: tribunesPhoto,
+    alt: 'The existing grandstands',
+    name: 'Tribunes',
+    area: '12\u00a0400\u00a0m²',
+    type: 'Racecourse grandstands turned into a hybrid venue, Maisons-Laffitte',
+    year: 'Competition 2022',
+  },
 ];
 ---
+
 <section id="projects" class="section projects" aria-labelledby="projects-title">
   <SectionHead>
-    <h2 id="projects-title" class="section-head-title display-s" data-reveal="lines">Selected projects</h2>
-    <p class="section-head-lead body-l" data-reveal="lines">Eight buildings from 800 to <span class="nowrap">23 000 m²:</span> prime offices, a luxury headquarters, a timber extension, a racecourse and a car park under Place Vendôme.</p>
+    <h2 id="projects-title" class="section-head-title display-s" data-reveal="lines">
+      Selected projects
+    </h2>
+    <p class="section-head-lead body-l" data-reveal="lines">
+      Eight buildings from 800 to <span class="nowrap">23 000 m²:</span> prime offices, a luxury
+      headquarters, a timber extension, a racecourse and a car park under Place Vendôme.
+    </p>
   </SectionHead>
   <div class="wrapper">
     <ul class="projects-grid grid-12">
       {cards.map((c, i) => (
         <li class:list={['projects-item', `is-${i + 1}`, `is-${c.shape}`]}>
-          <ProjectCard photo={c.photo} alt={c.alt} shape={c.shape} name={c.name} area={c.area} type={c.type} year={c.year} />
+          <ProjectCard
+            photo={c.photo}
+            alt={c.alt}
+            shape={c.shape}
+            name={c.name}
+            area={c.area}
+            type={c.type}
+            year={c.year}
+          />
         </li>
       ))}
     </ul>

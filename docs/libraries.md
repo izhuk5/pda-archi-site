@@ -12,7 +12,8 @@
 | `gsap` | движение: появление, скролл, таймлинии | только `src/lib/gsap.js`, остальные берут оттуда (`@lib/gsap.js`) |
 | `lenis` | плавный скролл | `src/lib/main.js` |
 | `three` | 3D-сцена | `src/lib/scene.js`, грузится лениво, только при `[data-scene]` |
-| `prettier` (dev) | форматирование JS: одна команда на строку, длинные твины – по свойству в строке | `npm run format` (`src/**/*.js`), в VS Code – при сохранении JS (`.vscode/settings.json`, расширение `esbenp.prettier-vscode`); настройки – `.prettierrc.json`; в сборку не попадает |
+| `prettier` (dev) | форматирование JS: одна команда на строку, длинные твины – по свойству в строке | `npm run format` (`src/**/*.{js,astro}`), в VS Code – при сохранении JS и `.astro` (`.vscode/settings.json`, расширение `esbenp.prettier-vscode`); настройки – `.prettierrc.json`; в сборку не попадает |
+| `prettier-plugin-astro` (dev) | Prettier понимает `.astro`: frontmatter, разметку, `<script>` | подключён в `.prettierrc.json` (`plugins`, `parser: astro`) |
 
 ## GSAP: плагины
 

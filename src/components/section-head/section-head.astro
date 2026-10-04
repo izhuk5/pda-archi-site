@@ -6,4 +6,7 @@ import './section-head.css';
 
 const { class: className, ...attrs } = Astro.props;
 ---
-<div class:list={['wrapper', 'grid-12', 'section-head', className]} {...attrs}><slot /></div>
+
+<div class:list={['wrapper', 'grid-12', 'section-head', className]} {...attrs}>
+  <slot />
+</div>

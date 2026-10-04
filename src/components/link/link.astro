@@ -7,4 +7,7 @@ import './link.css';
 
 const { quiet = false, class: className, ...attrs } = Astro.props;
 ---
-<a class:list={['link', { 'is-quiet': quiet }, className]} {...attrs}><slot /></a>
+
+<a class:list={['link', { 'is-quiet': quiet }, className]} {...attrs}>
+  <slot />
+</a>
