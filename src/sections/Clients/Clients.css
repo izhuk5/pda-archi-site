@@ -1,0 +1,39 @@
+/* Clients: тёмная. Клиенты набраны текстом, без логотипов: строка с линией – название гротеском (1–6), тип (7–8), работы (9–10).
+   Каждая строка – кнопка, открывает окно проекта; при наведении курсор-рука, название сдвигается (row-shift),
+   в колонках 11–12 раскрывается обложка проекта (thumb-reveal). На телефоне обложек нет, строка стопкой. */
+.clients { display: flex; flex-direction: column; gap: var(--space-64); }
+.clients-list { border-bottom: 1px solid var(--color-line); }
+.clients-row { width: 100%; padding-block: var(--space-24); border-top: 1px solid var(--color-line); align-items: center; text-align: left; cursor: pointer; }
+.clients-name { grid-column: 1 / span 6; transition: translate var(--dur-600) var(--ease-out); }
+.clients-type { grid-column: 7 / span 2; }  /* не серым: серый на тёмном – только ≥ 18 px, здесь 15 px */
+.clients-work { grid-column: 9 / span 2; }
+/* Превью на две колонки и на всю высоту строки, включая её отступы: заметно, но не раздвигает строку */
+.clients-thumb {
+  grid-column: 11 / span 2; grid-row: 1;
+  align-self: stretch;
+  width: 100%; height: calc(100% + 2 * var(--space-24)); min-height: 0;
+  margin-block: calc(-1 * var(--space-24));
+  object-fit: cover;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--dur-600) var(--ease-out);
+}
+.clients-row:hover .clients-name, .clients-row:focus-visible .clients-name { translate: var(--row-shift) 0; }
+.clients-row:hover .clients-thumb, .clients-row:focus-visible .clients-thumb { clip-path: inset(0 0 0 0); }
+.clients-row:focus-visible { outline: 1px solid var(--color-fg-on-dark); outline-offset: var(--space-4); }
+
+/* До 1023: название во всю ширину, тип и работы второй строкой рядом, без обложек (на старом сайте – до 768: iPad в вертикали так;
+   на планшете колонки по 106 px переносили тип и работы на 3–4 строки, а обложка по наведению на тачскрине не нужна) */
+@media (max-width: 1023px) {
+  .clients-row { row-gap: var(--space-8); }
+  .clients-name { grid-column: 1 / -1; }
+  .clients-type { grid-column: 1 / span 5; }
+  .clients-work { grid-column: 6 / -1; }
+  .clients-thumb { display: none; }
+}
+/* До 767 строка остаётся сеткой: .clients .clients-row сильнее .grid-12, который там становится flex-колонкой (base.css) */
+@media (max-width: 767px) {
+  .clients .clients-row { display: grid; }
+}
+@media (max-width: 478px) {
+  .clients-type, .clients-work { grid-column: 1 / -1; }
+}
