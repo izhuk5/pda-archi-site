@@ -4,7 +4,7 @@
 
 ## 2026-10-04 – сайт на Netlify создан
 - Вход в Netlify CLI – пользователь (`netlify login`). Сайт создан через CLI по выбору пользователя: `netlify sites:create --name pda-archi-site --account-slug ihorzhuk94` → https://pda-archi-site.netlify.app (Project ID 61698a78-e21d-4d85-9c22-33569d8ae844), папка связана `netlify link`.
-- Автодеплой с GitHub – следующим шагом: `netlify init` в терминале пользователя (вопросы и доступ к репозиторию в браузере – у агента нет интерактивного терминала).
+- Автодеплой с GitHub подключён: `netlify init` в терминале пользователя (доступ к GitHub подтверждён в браузере). Netlify собирает `main` (`npm run build` → `dist`) при каждом push; первый деплой – этим коммитом.
 
 ## 2026-10-04 – Netlify CLI глобально
 - Решение пользователя: `netlify-cli` 27.10.2 – глобальная установка (`~/.nvm/versions/node/v24.15.0`), из `devDependencies` убран: сборка на Netlify не тянет 1033 лишних пакета. Команды – `netlify …` без `npx`. После смены версии Node через nvm CLI ставится заново.
