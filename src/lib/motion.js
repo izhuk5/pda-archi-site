@@ -36,7 +36,8 @@ const ease = (name, fallback) => (CustomEase.get(name) ? name : fallback);
 export const PRESETS = {
   'fade': (el) => {
     gsap.set(el, { autoAlpha: 0, y: yPx() }); ready(el);
-    gsap.to(el, { autoAlpha: 1, y: 0, duration: 0.8, ease: ease('ease-out', 'power3.out'), delay: num(el, 'revealDelay', 0), scrollTrigger: trigger(el) });
+    /* power3.out – как на старом сайте (подпись hero); токен --ease-out шаблона – другая, более резкая кривая */
+    gsap.to(el, { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: num(el, 'revealDelay', 0), scrollTrigger: trigger(el) });
   },
   'lines': (el) => {
     const split = SplitText.create(el, { type: 'lines', mask: 'lines', linesClass: 'line' }); ready(el);
@@ -59,7 +60,10 @@ export const PRESETS = {
   },
   'clip': (el) => {
     gsap.set(el, { clipPath: 'inset(100% 0 0 0)' }); ready(el);
-    gsap.to(el, { clipPath: 'inset(0% 0 0 0)', duration: 1, ease: ease('ease-sharp', 'power4.inOut'), delay: num(el, 'revealDelay', 0), scrollTrigger: trigger(el) });
+    /* power1.out – раскрытие сразу и плавно тормозит. Так фото открывались на старом сайте (утверждено глазами): там стояла строка
+       cubic-bezier(--ease-sharp), GSAP её не понимал и брал свой power1.out. Настоящий --ease-sharp (медленный старт, рывок посередине)
+       ощущается резко – замер 2026-10-04: 7 % за 300 мс, затем 17 → 63 % за 100 мс */
+    gsap.to(el, { clipPath: 'inset(0% 0 0 0)', duration: 1, ease: 'power1.out', delay: num(el, 'revealDelay', 0), scrollTrigger: trigger(el) });
   },
   'card': (el) => {
     const kids = Array.from(el.children);
