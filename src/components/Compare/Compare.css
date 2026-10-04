@@ -1,0 +1,20 @@
+/* Сравнение «до / после»: два фото в одной ячейке сетки, «после» открыто справа от --split.
+   Ползунок – прозрачный input range поверх кадра (жест compare, docs/motion.md); линия шторки – ::after той же ячейки,
+   сдвинута отступом, без absolute. Где: transformation. */
+.compare { display: flex; flex-direction: column; gap: var(--space-12); }
+.compare-frame { --split: 50%; display: grid; aspect-ratio: var(--ratio-photo-mobile); overflow: clip; }
+.compare-frame > * { grid-area: 1 / 1; }
+.compare-before, .compare-after { width: 100%; height: 100%; object-fit: cover; }
+.compare-after { clip-path: inset(0 0 0 var(--split)); }
+.compare-frame::after {
+  content: "";
+  grid-area: 1 / 1;
+  justify-self: start;
+  width: 1px;
+  margin-inline-start: var(--split);
+  background: var(--color-fg-on-photo);
+}
+/* touch-action: pan-y – вертикальный свайп по кадру листает страницу, горизонтальный двигает шторку */
+.compare-range { width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y; z-index: var(--z-content); }
+.compare-range:focus-visible { opacity: 1; }
+.compare:has(.compare-range:focus-visible) .compare-frame { outline: 1px solid var(--color-fg); outline-offset: var(--space-4); }
