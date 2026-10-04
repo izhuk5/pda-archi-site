@@ -2,8 +2,7 @@
 /* Projects – главное доказательство: 8 проектов вразброс по сетке, под фото название, площадь, тип и год
    (docs/design-system.md → Паттерны, «Сетка проектов вразброс»). Карточка не кликается: страниц и окон проектов на сайте нет.
    Тексты – здесь, данными (при переходе на CMS выносятся):
-   перевод технических карточек pda.archi, предлагаю заменить текстами клиента. Фото – src/assets/img/projects/<photo>.jpg.
-   \u00a0 – неразрывный пробел (число и единица, «m²»). */
+   перевод технических карточек pda.archi, предлагаю заменить текстами клиента. Фото – src/assets/img/projects/<photo>.jpg. */
 import './projects.css';
 import SectionHead from '@components/section-head/section-head.astro';
 import ProjectCard from '@components/project-card/project-card.astro';
@@ -26,7 +25,7 @@ const cards = [
     photo: virtuosePhoto,
     alt: 'An office floor with the Eiffel Tower through the window',
     name: 'Virtuose',
-    area: '6\u00a0548\u00a0m²',
+    area: '6 548 m²',
     type: 'Prime offices, heavy rehabilitation, Paris 16',
     year: '2025',
   },
@@ -36,7 +35,7 @@ const cards = [
     photo: volneyPhoto,
     alt: 'The facade on rue Volney',
     name: 'Volney',
-    area: '2\u00a0400\u00a0m²',
+    area: '2 400 m²',
     type: 'Headquarters for a luxury brand, Paris 1',
     year: '2024',
   },
@@ -46,7 +45,7 @@ const cards = [
     photo: inboisPhoto,
     alt: 'Render: the timber extension from the courtyard',
     name: 'InBois',
-    area: '800\u00a0m²',
+    area: '800 m²',
     type: 'Timber extension of an office building, Paris 19',
     year: 'Under construction',
   },
@@ -56,7 +55,7 @@ const cards = [
     photo: chausseePhoto,
     alt: 'The Haussmann facade on rue de la Chaussée d’Antin',
     name: 'Chaussée',
-    area: '2\u00a0400\u00a0m²',
+    area: '2 400 m²',
     type: 'Prime offices near the Grands Boulevards, Paris 9',
     year: '2024',
   },
@@ -66,7 +65,7 @@ const cards = [
     photo: belvistaPhoto,
     alt: 'The planted roof terrace',
     name: 'Belvista',
-    area: '2\u00a0300\u00a0m²',
+    area: '2 300 m²',
     type: 'Prime offices on the Champs-Élysées, Paris 8',
     year: '2026',
   },
@@ -76,7 +75,7 @@ const cards = [
     photo: raiselabPhoto,
     alt: 'The street facade',
     name: 'RaiseLab',
-    area: '2\u00a0200\u00a0m²',
+    area: '2 200 m²',
     type: 'Heavy rehabilitation and extension, Paris 11',
     year: '2021',
   },
@@ -86,7 +85,7 @@ const cards = [
     photo: caratPhoto,
     alt: 'Render: the entrance to the new venue on Place Vendôme',
     name: 'Carat',
-    area: '23\u00a0000\u00a0m²',
+    area: '23 000 m²',
     type: 'A car park under Place Vendôme, turned into a place for French jewellery',
     year: 'Research 2021',
   },
@@ -96,7 +95,7 @@ const cards = [
     photo: tribunesPhoto,
     alt: 'The existing grandstands',
     name: 'Tribunes',
-    area: '12\u00a0400\u00a0m²',
+    area: '12 400 m²',
     type: 'Racecourse grandstands turned into a hybrid venue, Maisons-Laffitte',
     year: 'Competition 2022',
   },

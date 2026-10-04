@@ -68,7 +68,7 @@ h1, h2, h3 { text-wrap: balance; }
 .body-m     { font-size: var(--fs-body-m); line-height: var(--lh-body-m); letter-spacing: var(--ls-body); }
 .body-s     { font-size: var(--fs-body-s); line-height: var(--lh-body-s); letter-spacing: var(--ls-body); }
 .serif      { font-family: var(--font-serif); }
-/* Число с единицей в тексте с анимацией lines: SplitText рвёт строку по &nbsp;, а по span с nowrap – нет */
+/* Число с единицей в тексте с анимацией lines – не разрывать строкой (SplitText уважает nowrap) */
 .nowrap     { white-space: nowrap; }
 .muted      { color: var(--color-fg-muted); }
 .section.is-dark .muted { color: var(--color-fg-muted-on-dark); }
