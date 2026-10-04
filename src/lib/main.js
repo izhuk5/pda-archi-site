@@ -8,6 +8,7 @@ import { params, isStatic, reduce, motionOn, ready } from './env.js';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import { initMotion } from './motion.js';
+import { scroll } from './scroll.js';
 
 /* Ленивое видео: в разметке data-src + preload="none"; src подставляется, когда секция в полутора экранах */
 const lazyVideo = () => {
@@ -36,6 +37,7 @@ const lazyScene = () => {
 const smoothScroll = () => {
   if (!motionOn) return null;
   const lenis = new Lenis({ lerp: 0.1 });
+  scroll.lenis = lenis;  /* для секций и компонентов: src/lib/scroll.js */
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(t => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
