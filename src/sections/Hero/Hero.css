@@ -1,0 +1,72 @@
+/* Hero: фото на весь первый экран, имя бюро парой шрифтов внизу слева, фраза и подпись с данными проекта справа.
+   Фото, затемнение (::before) и текст лежат в одной области сетки друг над другом – grid-area, без absolute.
+   Фото не участвует в расчёте высоты (contain: size), высоту задаёт --hero-min-h.
+   Движение: вход – photo-in (transform), параллакс – scrub на секции даёт --p, фото сдвигается свойством translate
+   на обёртке picture: GSAP при входе пишет картинке translate: none, поэтому вход двигает img, а параллакс – picture.
+   Отставание – 20 % прокрутки, как у референса. */
+.section.hero {
+  padding-block: 0;  /* .section.hero, а не .hero: иначе отступ секции из base.css (≤ 1023) перебил бы ноль */
+  min-height: var(--hero-min-h);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+  color: var(--color-fg-on-photo);
+  overflow: clip;
+}
+/* Затемнение под текстом – декор, не элемент: ::before той же ячейки; проявляется вместе с фото (--photo-in от photo-in) */
+.hero::before {
+  content: "";
+  grid-row: 1 / -1;
+  grid-column: 1;
+  z-index: var(--z-content);
+  opacity: var(--photo-in, 1);
+  background:
+    linear-gradient(to top, var(--color-scrim) 0%, var(--color-scrim-0) var(--scrim-bottom-stop)),
+    linear-gradient(to bottom, var(--color-scrim) 0%, var(--color-scrim-0) var(--scrim-top-stop));
+}
+.hero-picture {
+  grid-row: 1 / -1;
+  grid-column: 1;
+  contain: size;
+  translate: 0 calc(max(0, var(--p, 0.5) - 0.5) * var(--parallax-hero));
+  will-change: translate;
+}
+.hero-photo { width: 100%; height: 100%; object-fit: cover; }
+.hero-bottom {
+  grid-row: 3;
+  grid-column: 1;
+  z-index: var(--z-header);
+  padding: 0 var(--page-margin) var(--space-24);
+  row-gap: var(--space-32);
+  align-items: end;
+}
+.hero-title { grid-column: 1 / span 7; }
+.hero-title .serif { display: block; }
+.hero-lead { grid-column: 9 / span 4; display: flex; flex-direction: column; gap: var(--space-24); }
+
+/* До 1023 – имя и фраза друг под другом во всю ширину (на старом сайте так было до 768: iPad в вертикали – стопкой;
+   в колонках 9–12 на планшете подпись разваливалась по слову в строку). Поля текста = поля страницы – планшетные */
+@media (max-width: 1023px) {
+  .hero-bottom { padding-inline: var(--page-margin-tablet); }
+  .hero-title, .hero-lead { grid-column: 1 / -1; }
+}
+/* До 767 .grid-12 – flex-колонка (base.css): align-items: end там прижал бы блоки вправо */
+@media (max-width: 767px) {
+  .hero-bottom { align-items: stretch; }
+}
+@media (max-width: 478px) {
+  /* Фото на весь первый экран, на нём имя и подпись; фраза – сразу под фото на белом */
+  .section.hero { grid-template-rows: auto 1fr auto auto auto; }
+  .hero::before {
+    grid-row: 1 / 5;
+    background:
+      linear-gradient(to top, var(--color-scrim) 0%, var(--color-scrim-0) var(--scrim-bottom-stop-mobile)),
+      linear-gradient(to bottom, var(--color-scrim-strong) 0%, var(--color-scrim-0) var(--scrim-top-stop-mobile));
+  }
+  .hero-picture { grid-row: 1 / 5; min-height: var(--hero-min-h); }
+  /* .hero .hero-bottom – сильнее .grid-12 из base.css (≤ 767 там flex) */
+  .hero .hero-bottom, .hero-lead { display: contents; }
+  .hero-title { grid-row: 3; grid-column: 1; z-index: var(--z-header); padding: 0 var(--page-margin-tablet) var(--space-24); }
+  .hero-caption { grid-row: 4; grid-column: 1; z-index: var(--z-header); margin: 0 var(--page-margin-tablet) var(--space-24); }
+  .hero-text { grid-row: 5; grid-column: 1; z-index: var(--z-header); background: var(--color-bg-page); color: var(--color-fg); padding: var(--space-32) var(--page-margin-tablet) var(--space-48); }
+}

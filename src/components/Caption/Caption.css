@@ -1,0 +1,11 @@
+/* Подпись к фото: название проекта слева, факты справа; на телефоне – столбиком.
+   is-rule: линия сверху (подпись поверх фото в hero); is-keep: остаётся строкой на телефоне.
+   Правая часть (факты) не переносится. Где: hero, about, projects, transformation. */
+.caption { display: flex; justify-content: space-between; gap: var(--space-16); }
+.caption > :last-child { flex-shrink: 0; white-space: nowrap; text-align: right; }
+.caption.is-rule { padding-top: var(--space-12); border-top: 1px solid var(--color-line-on-photo); }
+
+@media (max-width: 478px) {
+  .caption:not(.is-keep) { flex-direction: column; gap: var(--space-8); }
+  .caption:not(.is-keep) > :last-child { text-align: left; }
+}
