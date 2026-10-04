@@ -1,8 +1,8 @@
 {
-  "name": "wow-site",
+  "name": "pda-archi-site",
   "type": "module",
   "private": true,
-  "description": "Сайт кодом через Claude Code на Astro: собирается в статичные файлы (dist/).",
+  "description": "Сайт PDA Architecture на Astro: собирается в статичные файлы (dist/), хостинг – Netlify.",
   "engines": {
     "node": ">=22.12.0"
   },

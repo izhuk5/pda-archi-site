@@ -1,9 +1,31 @@
-.DS_Store
-*.log
+# Бриф клиента и референсы – только локально: репозиторий публичный (LOG.md, 2026-10-04)
+brief/
+
+# Зависимости и сборка – ставятся и собираются заново (npm ci, npm run build)
 node_modules/
 dist/
 .astro/
+
+# Netlify CLI (локальные настройки и связка с сайтом)
+.netlify/
+
+# Переменные окружения и ключи – никогда в git
+.env
+.env.*
+!.env.example
+
+# Логи
+*.log
+npm-debug.log*
+
+# Системный мусор
+.DS_Store
+Thumbs.db
+
+# Скриншоты и замеры scripts/shot.mjs
+scripts/out/
+
+# Исходники медиа – в git только пережатое
 public/video/*.mov
 public/video/*.mp4.orig
 public/models/*.blend
-scripts/out/

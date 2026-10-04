@@ -1,0 +1,20 @@
+# Netlify: сборка из репозитория при каждом push в main (docs/publish.md)
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # package.json → engines: node >= 22.12
+  NODE_VERSION = "22"
+
+# Файлы с хешем в имени (_astro/имя.a1b2c3.js) не меняются никогда – кеш на год
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Шрифты без хеша в имени – кеш на месяц
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
