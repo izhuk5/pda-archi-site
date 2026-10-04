@@ -10,5 +10,5 @@ form?.addEventListener('submit', e => {
   const subject = `New project${d.get('company') ? ` – ${d.get('company')}` : ''}`;
   const body = `${d.get('message')}\n\n${d.get('name')}${d.get('company') ? `, ${d.get('company')}` : ''}\n${d.get('email')}`;
   window.location.href = `mailto:agence@pda.archi?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  status.textContent = 'Your email app opens with the message ready. If nothing happens, write to agence@pda.archi.';
+  if (status) status.textContent = 'Your email app opens with the message ready. If nothing happens, write to agence@pda.archi.';
 });

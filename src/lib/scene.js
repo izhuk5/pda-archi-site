@@ -3,14 +3,13 @@
    цвета из токенов. Объект сцены – слот buildObject(): здесь стоит тестовый объект SMOKE_TEST, на странице проекта его быть не должно. */
 import * as THREE from 'three';
 import { ScrollTrigger } from './gsap.js';
-
-const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+import { token } from './tokens.js';
 
 /* Объект сцены. Заменить целиком на то, что записано в базе (Принятые решения, пункт 6). */
 const buildObject = (scene) => {
   /* SMOKE_TEST: проверка, что рендер, свет, ресайз и прогресс работают. Убрать перед первой секцией со сценой. */
   const geo = new THREE.BoxGeometry(1, 1, 1);
-  const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(css('--color-accent')), wireframe: true });
+  const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(token('--color-accent')), wireframe: true });
   const mesh = new THREE.Mesh(geo, mat);
   scene.add(mesh);
   return { update: (t, progress) => { mesh.rotation.x = t * 0.3 + progress * Math.PI; mesh.rotation.y = t * 0.4; } };

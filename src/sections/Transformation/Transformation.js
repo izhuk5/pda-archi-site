@@ -35,7 +35,8 @@ onMotion(() => {
       onUpdate: () => {
         el.style.setProperty('--tr-p', tl.progress().toFixed(4));
         const t = tl.time();
-        show(chapters.reduce((idx, c, i) => (t >= tl.labels[`ch${i}`] - 0.0001 ? i : idx), 0));
+        /* Текущая глава – последняя, чья метка уже пройдена (ch0 стоит на 0, поэтому -1 не бывает) */
+        show(chapters.findLastIndex((_, i) => t >= tl.labels[`ch${i}`] - 0.0001));
       } });
     /* Стартовые значения – внутри таймлайна: выставленное до него ScrollTrigger при пересчёте пина откатывает */
     tl.set(frames, { '--split': '100%' }, 0);

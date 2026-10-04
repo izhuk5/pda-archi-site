@@ -2,6 +2,15 @@
 
 Новые записи сверху. Формат: дата – решение – почему – что изменилось в файлах. Сюда – продукт, процесс, технологии. Дизайн – в `docs/design-system.md`.
 
+## 2026-10-04 – JS: ревью по GSAP и ES6, правки поведения
+- Ревью всего JS (583 строки): ES6+ везде (модули, const/let, стрелочные, шаблонные строки, ?.), GSAP по правилам. Поправлено:
+  - `gsap.config({ nullTargetWarn: false })` убран из `motion.js`: прятал ошибки селекторов. Предупреждений после прохода по странице, аккордеону и окну проекта на 1440 и 390 – 0.
+  - Шапка (`SiteHeader.js`): свой обработчик scroll и resize с `getBoundingClientRect` → два `ScrollTrigger.create` (`header-blend`, `header-hide`), пересчёт порогов при ресайзе и после пинов – сам ScrollTrigger. `onEnter` / `onLeaveBack`, а не `isActive`: у конца страницы прогресс = 1, а `isActive` при 1 – false. Сверено со старой версией в 6 режимах (1440 / 390 × обычный / ?static / reduced) в 8 точках прокрутки – совпадает.
+  - Чтение токена `css()` в трёх копиях (`motion.js`, `scene.js`, `DigitalLab.js`) → `token()` из `src/lib/tokens.js`.
+  - `ready(el)` в `motion.js` → `markReady(el)`: не путать с промисом `ready` из `env.js`.
+  - Мелочи: `Contact.js` – статус через проверку на null; `Transformation.js` – `findLastIndex` вместо `reduce` с лишним параметром; `motion.js` – `trigger()` без неиспользуемого `once`.
+- Файлы: src/lib/motion.js, src/lib/scene.js, src/components/SiteHeader/SiteHeader.js, src/sections/DigitalLab/DigitalLab.js, src/sections/Contact/Contact.js, src/sections/Transformation/Transformation.js, docs/motion.md.
+
 ## 2026-10-04 – одна проверка «движение включено»
 - Решение пользователя (вариант 1 из трёх): условие `!?static && !prefers-reduced-motion` считалось дважды – inline-скрипт в `<head>` и `src/lib/env.js`. Теперь только inline-скрипт (до первой отрисовки, GSAP там ещё нет – поэтому не `gsap.matchMedia`), `env.js` читает результат: `motionOn = html.has-motion`. Экспорт `reduce` убран, сцена в `main.js` проверяет `!motionOn`.
 - Глобальный выключатель на `gsap.matchMedia()` (Lenis, `data-reveal`, `onMotion()` откатываются при переключении reduced-motion без перезагрузки) не делаем: большая переделка ради редкого случая.
