@@ -4,7 +4,7 @@
    Подключается из src/layouts/Base.astro. GSAP – из src/lib/gsap.js, режимы – из src/lib/env.js.
    Движение – src/lib/motion.js (описание приёмов в docs/motion.md), 3D – src/lib/scene.js лениво (docs/scene.md). */
 import { gsap, ScrollTrigger } from './gsap.js';
-import { params, isStatic, reduce, motionOn, ready } from './env.js';
+import { params, isStatic, motionOn, ready } from './env.js';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import { initMotion } from './motion.js';
@@ -26,7 +26,7 @@ const lazyScene = () => {
   if (!host) return;
   const canvas = document.createElement('canvas');
   const webgl = !!(canvas.getContext('webgl2') || canvas.getContext('webgl'));
-  if (!webgl || isStatic || reduce) return;
+  if (!webgl || !motionOn) return;
   const start = () => import('./scene.js').then(m => m.mount(host)).catch(err => console.warn('scene: не запустилась', err));
   if (!('IntersectionObserver' in window)) { start(); return; }
   const io = new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) { io.disconnect(); start(); } }, { rootMargin: '100% 0px' });
