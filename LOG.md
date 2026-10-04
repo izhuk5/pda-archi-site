@@ -2,6 +2,21 @@
 
 Новые записи сверху. Формат: дата – решение – почему – что изменилось в файлах. Сюда – продукт, процесс, технологии. Дизайн – в `docs/design-system.md`.
 
+## 2026-10-04 – перенос PDA Architecture с wow-site-starter, шаг 0
+- Решение пользователя: сайт PDA, собранный в `/Users/ihorzhuk/Downloads/wow-site-starter` (статический HTML/CSS/JS), переносится сюда, на Astro, посекционно. Шаг 0 – фундамент без секций, дальше по одной секции за ход в порядке карты. Правило переноса – 1 в 1, без редизайна; улучшения – после.
+- Решения пользователя: концепты не переносим (старый `concepts/` – архив); из истории переносим только то, что действует сейчас.
+- Действующие продуктовые решения (из журнала старого проекта):
+  - бриф – PDF клиента, текстовая копия `brief/source/wow_PDA_Architecture_brief.md`; главный референс – kononenkogroup.com (`brief/references.md`, скриншоты `brief/references/kononenko/`);
+  - язык страницы – английский; тексты – перевод брифа и страниц pda.archi, ждут английских текстов клиента;
+  - фото – с pda.archi, права и авторов подтвердить у клиента; Belvista и Biopark похожи на рендеры;
+  - шрифты от пользователя урезаны до 79 глифов, пользователь подтвердил, что набора хватает;
+  - CMS – потом, отдельно; форма contact – `mailto` на agence@pda.archi до решения по бэкенду;
+  - прелоадер и WebGL-изображения отложены, не отменены;
+  - две пин-секции (transformation, digital-lab) – исключение по решению пользователя;
+  - сняты: studio (2026-10-01), архив проектов (2026-10-02), переходы из «In practice» в окна проектов (2026-10-04); DWS убран из clients до появления проекта, заказчик Belvista «Confidential» не показывается.
+- Технически: новых библиотек нет – GSAP, Lenis, Three.js уже стоят в шаблоне. Шрифты – свои файлы в `public/fonts/` вместо Google Fonts. Брейкпоинты старого сайта 768 / 500 → шкала шаблона 1023 / 767 / 478. Правила переноса и соответствие имён классов – `docs/design-system.md` → «Перенос».
+- Файлы: brief/*, src/styles/tokens.css, src/styles/base.css, src/layouts/Base.astro, src/lib/motion.js, src/assets/SOURCES.md, src/assets/img/**, public/fonts/*, docs/motion.md, docs/design-system.md.
+
 ## 2026-10-03 – desktop-first вместо mobile-first
 - Решение владельца: шаблон desktop-first, логика `max-width`, как в Webflow. Отменяет записи «mobile-first» ниже. Диапазоны прежние: база – desktop (от 1024), `max-width: 1023px` – tablet, `767px` – mobile landscape, `478px` – mobile portrait; в файле по убыванию.
 - Токены: без суффикса – десктоп, `-tablet` – до 1023 (`--page-margin` 24 / `--page-margin-tablet` 16, `--space-section` 128 / `--space-section-tablet` 64) – внешне как было.

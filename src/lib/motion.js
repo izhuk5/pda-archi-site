@@ -7,7 +7,10 @@ import { gsap, ScrollTrigger, SplitText, CustomEase } from './gsap.js';
 const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const num = (el, key, fallback) => (el.dataset[key] !== undefined ? parseFloat(el.dataset[key]) : fallback);
 const ready = el => el.classList.add('is-ready');
-const trigger = (el, once = true) => ({ trigger: el, start: 'top 85%', once });
+/* Элемент, видимый уже при загрузке (первый экран), появляется сразу: его верх ниже линии 85 % и иначе ждал бы прокрутки */
+const inFirstScreen = el => el.getBoundingClientRect().top < window.innerHeight;
+/* clamp(): у конца страницы точка 85 % может оказаться дальше, чем страница прокручивается, – тогда элемент не появится никогда */
+const trigger = (el, once = true) => ({ trigger: el, start: inFirstScreen(el) ? 'top bottom' : 'clamp(top 85%)', once });
 const yPx = () => parseFloat(css('--reveal-y')) || 24;
 
 /* Easing из токенов. GSAP не понимает строку cubic-bezier(…) и молча подставляет свой дефолт, поэтому каждый --ease-* из :root
@@ -39,9 +42,20 @@ export const PRESETS = {
     const split = SplitText.create(el, { type: 'lines', mask: 'lines', linesClass: 'line' }); ready(el);
     gsap.from(split.lines, { yPercent: 110, duration: 0.9, ease: 'power4.out', stagger: num(el, 'revealStagger', 0.08), delay: num(el, 'revealDelay', 0), scrollTrigger: trigger(el), onComplete: () => split.revert() });
   },
+  'words': (el) => {
+    /* Заявление about (docs/motion.md): слова по одному выезжают из маски строки, замер kononenkogroup.com – 1.55 s expo.out, шаг 0.1 */
+    const split = SplitText.create(el, { type: 'lines,words', mask: 'lines', linesClass: 'line' }); ready(el);
+    gsap.from(split.words, { yPercent: 101, duration: 1.55, ease: 'expo.out', stagger: num(el, 'revealStagger', 0.1), delay: num(el, 'revealDelay', 0), scrollTrigger: trigger(el), onComplete: () => split.revert() });
+  },
   'chars': (el) => {
     const split = SplitText.create(el, { type: 'lines,chars', mask: 'lines', linesClass: 'line' }); ready(el);
     gsap.from(split.chars, { yPercent: 110, duration: 1, ease: 'power4.out', stagger: num(el, 'revealStagger', 0.025), delay: num(el, 'revealDelay', 0), scrollTrigger: trigger(el), onComplete: () => split.revert() });
+  },
+  'letters': (el) => {
+    /* Знак в подвале (docs/motion.md): буквы по одной снизу, маска – сам элемент (overflow: clip в CSS) */
+    const split = SplitText.create(el, { type: 'chars' }); ready(el);
+    gsap.from(split.chars, { y: () => el.offsetHeight * 1.05, duration: 1.6, ease: 'expo.out', stagger: num(el, 'revealStagger', 0.065),
+      delay: num(el, 'revealDelay', 0), scrollTrigger: { trigger: el, start: 'clamp(top 75%)', once: true }, onComplete: () => split.revert() });
   },
   'clip': (el) => {
     gsap.set(el, { clipPath: 'inset(100% 0 0 0)' }); ready(el);
@@ -58,6 +72,24 @@ export const PRESETS = {
     const kids = Array.from(el.children);
     gsap.set(kids, { autoAlpha: 0, y: yPx() }); ready(el);
     gsap.to(kids, { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: num(el, 'revealStagger', 0.08), delay: num(el, 'revealDelay', 0), scrollTrigger: trigger(el) });
+  },
+  'rows': (el) => {
+    /* Длинный список: каждая строка появляется сама, когда въезжает на экран (ScrollTrigger.batch), а не все разом */
+    const kids = Array.from(el.children);
+    gsap.set(kids, { autoAlpha: 0, y: yPx() }); ready(el);
+    ScrollTrigger.batch(kids, { start: 'clamp(top 92%)', once: true,
+      onEnter: batch => gsap.to(batch, { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: num(el, 'revealStagger', 0.06), overwrite: true }) });
+  },
+  'photo-in': (el) => {
+    /* Фото первого экрана: из фона страницы с лёгким масштабом. Затемнение секции (::before) читает --photo-in */
+    const section = el.closest('section');
+    gsap.set(el, { autoAlpha: 0, scale: 1.06 }); if (section) gsap.set(section, { '--photo-in': 0 }); ready(el);
+    const play = () => {
+      const tl = gsap.timeline({ delay: num(el, 'revealDelay', 0) });
+      tl.to(el, { autoAlpha: 1, scale: 1, duration: 1.4, ease: 'power2.out' });
+      if (section) tl.to(section, { '--photo-in': 1, duration: 1.4, ease: 'power2.out' }, 0);
+    };
+    (el.decode ? el.decode() : Promise.resolve()).then(play, play);
   },
   'scrub': (el) => {
     /* Прогресс прокрутки элемента через экран → CSS-переменная --p (0…1). Что с ней делать, решает правило секции */

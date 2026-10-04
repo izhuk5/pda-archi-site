@@ -6,21 +6,21 @@ import '@styles/tokens.css';
 import '@styles/base.css';
 
 const {
-  title = '[Название проекта]',
-  description = '[Одна фраза из brief.md: что продаём и для кого]',
+  title = 'PDA Architecture – Paris architects for existing buildings',
+  description = 'PDA Architecture, Paris, since 2002: we transform existing buildings – offices into homes, Haussmann facades, old offices raised to BREEAM.',
 } = Astro.props;
 ---
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{title}</title>
   <meta name="description" content={description}>
 
-  {/* Шрифты: пара display + text из docs/design-system.md → Типографика. Подключить после этапа 3 (токены) */}
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  {/* Шрифты: свои файлы в public/fonts/, @font-face – в src/styles/base.css. Предзагрузка – оба начертания нужны первому экрану */}
+  <link rel="preload" href="/fonts/NeueMontreal-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/HedvigLettersSerif18pt-Regular.woff2" as="font" type="font/woff2" crossorigin>
 
   {/* Движение включено, если нет ?static и prefers-reduced-motion: класс ставится до первой отрисовки, иначе контент
       сначала мелькнёт, потом спрячется под появление. Если движение не запустилось, js/main.js класс снимает и всё показывает */}
