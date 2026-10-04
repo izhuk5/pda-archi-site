@@ -9,15 +9,15 @@ description: Собрать одну секцию сайта по карте и�
 
 1. **Перечитать.** `docs/design-system.md`: строка секции в карте (роль, поверхность, движение, 3D, адаптив), «Принятые решения», токены, компоненты. `brief/brief.md` – тексты этой секции. Если секция уже есть в `src/sections/` – перечитать её и сказать, что изменилось с журнала (`git diff` с последнего коммита).
 2. **Критика до сборки** (TASTE.md, раздел 4), письменно: что здесь можно было сделать для любого продукта; где фирменный приём; какие штампы соблазнительны и что вместо. Если похожая секция уже собрана – открыть её и взять реальные классы и отступы.
-3. **Разметка** – папка `src/sections/<Имя>/` (PascalCase), файл `<Имя>.astro`: `<section id="<id>" class="section <блок> [is-dark|is-sheet]">`, внутри `.wrapper` и `.grid-12` там, где ширина считается колонками. Классы – kebab-case от блока: `.hero-title`, `.hero-lead`, варианты – `is-*`. BEM не используем. Тексты – из брифа, прямо в разметке, без lorem. Картинки – `<Image>` из `astro:assets`. Пустых элементов нет. Подключить в `src/pages/index.astro` (`import Hero from '@sections/Hero/Hero.astro'` и `<Hero />`) на место из карты. Импорты между папками – только алиасы (`@lib/`, `@components/`…).
-4. **Стили** – `<Имя>.css` рядом, подключён во frontmatter. Каждое правило содержит класс блока (CSS глобальный, без префикса протекает в чужие секции). Только токены и классы шкалы. Desktop-first: сначала базовые (десктоп, 1440) правила, ниже по убыванию – `@media (max-width: 1023px)` – tablet, `(max-width: 767px)` – mobile landscape, `(max-width: 478px)` – mobile portrait; `min-width` не используется. Раскладка по колонкам (`grid-column`) – в базовых правилах; до 767 `.grid-12` сам ставит детей в колонку, `grid-column` там сбрасывать не нужно. Повторилось дважды – компонент в `src/components/<Имя>/` и в базу.
-4a. **Поведение** – `<Имя>.js`, только если нужен приём, которого нет в `data-reveal` (пин, scrub, hover, своя таймлиния; приём – сначала в `docs/motion.md`). GSAP – из `@lib/gsap.js`, всё движение – внутри `onMotion()` из `src/lib/env.js`.
+3. **Разметка** – папка `src/sections/<имя>/` (kebab-case, = класс блока), файл `<имя>.astro`: `<section id="<id>" class="section <блок> [is-dark|is-sheet]">`, внутри `.wrapper` и `.grid-12` там, где ширина считается колонками. Классы – kebab-case от блока: `.hero-title`, `.hero-lead`, варианты – `is-*`. BEM не используем. Тексты – из брифа, прямо в разметке, без lorem. Картинки – `<Image>` из `astro:assets`. Пустых элементов нет. Подключить в `src/pages/index.astro` (`import Hero from '@sections/hero/hero.astro'` и `<Hero />`) на место из карты. Импорты между папками – только алиасы (`@lib/`, `@components/`…).
+4. **Стили** – `<имя>.css` рядом, подключён во frontmatter. Каждое правило содержит класс блока (CSS глобальный, без префикса протекает в чужие секции). Только токены и классы шкалы. Desktop-first: сначала базовые (десктоп, 1440) правила, ниже по убыванию – `@media (max-width: 1023px)` – tablet, `(max-width: 767px)` – mobile landscape, `(max-width: 478px)` – mobile portrait; `min-width` не используется. Раскладка по колонкам (`grid-column`) – в базовых правилах; до 767 `.grid-12` сам ставит детей в колонку, `grid-column` там сбрасывать не нужно. Повторилось дважды – компонент в `src/components/<имя>/` и в базу.
+4a. **Поведение** – `<имя>.js`, только если нужен приём, которого нет в `data-reveal` (пин, scrub, hover, своя таймлиния; приём – сначала в `docs/motion.md`). GSAP – из `@lib/gsap.js`, всё движение – внутри `onMotion()` из `src/lib/env.js`.
 
 Шаблон:
 ```astro
 ---
-/* Hero.astro */
-import './Hero.css';
+/* hero.astro */
+import './hero.css';
 ---
 <section id="hero" class="section hero">
   <div class="wrapper hero-inner">
@@ -26,11 +26,11 @@ import './Hero.css';
 </section>
 
 <script>
-  import './Hero.js';
+  import './hero.js';
 </script>
 ```
 ```js
-// Hero.js – только если есть своё поведение
+// hero.js – только если есть своё поведение
 import { ScrollTrigger } from '@lib/gsap.js';
 import { onMotion } from '@lib/env.js';
 

@@ -44,13 +44,13 @@ src/
     dev/             служебные страницы (/dev/mobile – сайт в iframe 390); в сборку не попадают
   sections/
     Hero/            секция = папка из трёх файлов:
-      Hero.astro     разметка и тексты, <section id="hero">
-      Hero.css       стили; каждое правило с классом блока .hero
-      Hero.js        своё поведение (пин, scrub) – только если нужно
+      hero.astro     разметка и тексты, <section id="hero">
+      hero.css       стили; каждое правило с классом блока .hero
+      hero.js        своё поведение (пин, scrub) – только если нужно
   components/        всё, что повторилось дважды, – так же папкой из трёх файлов
                      классы – kebab-case: .hero, .hero-title, варианты .hero.is-dark (BEM не используем)
   layouts/
-    Base.astro       каркас страницы: head, шрифты, глобальные стили, запуск движения
+    base.astro       каркас страницы: head, шрифты, глобальные стили, запуск движения
   styles/
     tokens.css       :root – единственное место, где живут сырые значения
     base.css         reset, сетка, шкала текста, состояния data-reveal

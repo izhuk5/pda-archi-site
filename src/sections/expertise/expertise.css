@@ -1,0 +1,29 @@
+/* Expertise: пять групп строками с линией, как таблица офисов у референса. Строка – <details>, открытием управляет expertise.js (одна за раз):
+   название гротеском на 6 колонок, направления – на колонках 7–11, знак +/− справа.
+   Раскрытая панель – текст, факты (Facts) и проекты-доказательства на колонках 7–12. */
+.expertise { display: flex; flex-direction: column; gap: var(--space-64); }
+.expertise-list { border-bottom: 1px solid var(--color-line); }
+.expertise-item { border-top: 1px solid var(--color-line); }
+.expertise-summary { padding-block: var(--space-24); align-items: baseline; cursor: pointer; list-style: none; }
+.expertise-name, .expertise-sign { transition: translate var(--dur-600) var(--ease-out), rotate var(--dur-600) var(--ease-out); }
+.expertise-summary:hover .expertise-name { translate: var(--row-shift) 0; }
+.expertise-summary:hover .expertise-sign { translate: calc(-1 * var(--row-shift)) 0; }
+.expertise-item.is-open .expertise-sign { rotate: var(--sign-turn); }
+.expertise-summary::-webkit-details-marker { display: none; }
+.expertise-name { grid-column: 1 / span 6; }
+.expertise-disciplines { grid-column: 7 / span 5; }
+.expertise-sign { grid-column: 12; justify-self: end; }
+.expertise-summary:focus-visible { outline: 1px solid var(--color-fg); outline-offset: var(--space-4); }
+/* Панель анимируется по высоте (expertise.js): отступы – внутри, у .expertise-content, иначе высота 0 их не прячет */
+.expertise-panel { overflow: clip; }
+.expertise-content { padding-bottom: var(--space-48); }
+.expertise-inner { grid-column: 7 / span 6; display: flex; flex-direction: column; gap: var(--space-24); }
+
+/* До 767: название и направления стопкой, знак справа. Строка остаётся сеткой из двух колонок –
+   .expertise .expertise-summary сильнее .grid-12, который там становится flex-колонкой (base.css); панель – колонкой во всю ширину */
+@media (max-width: 767px) {
+  .expertise .expertise-summary { display: grid; grid-template-columns: minmax(0, 1fr) auto; row-gap: var(--space-8); }
+  .expertise-name { grid-column: 1; }
+  .expertise-disciplines { grid-column: 1; grid-row: 2; }
+  .expertise-sign { grid-column: 2; grid-row: 1; }
+}

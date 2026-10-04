@@ -1,7 +1,7 @@
 /* Запуск. Режимы: ?static – без анимаций, всё видно (для скриншотов); &to=<id> – показать секцию (headless не рисует прокрутку,
    поэтому страница сдвигается отрицательным margin); prefers-reduced-motion – как static, но Lenis тоже выключен.
    Класс html.has-motion ставит inline-скрипт в <head> до первой отрисовки; здесь он снимается, если движение не запустилось.
-   Подключается из src/layouts/Base.astro. GSAP – из src/lib/gsap.js, режимы – из src/lib/env.js.
+   Подключается из src/layouts/base.astro. GSAP – из src/lib/gsap.js, режимы – из src/lib/env.js.
    Движение – src/lib/motion.js (описание приёмов в docs/motion.md), 3D – src/lib/scene.js лениво (docs/scene.md). */
 import { gsap, ScrollTrigger } from './gsap.js';
 import { params, isStatic, motionOn, ready } from './env.js';

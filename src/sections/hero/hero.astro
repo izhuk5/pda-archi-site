@@ -1,0 +1,26 @@
+---
+/* Hero – фото объекта во весь экран, имя бюро парой шрифтов и фраза с фактом (docs/design-system.md → Карта секций, Паттерны).
+   Фото, затемнение (::before) и текст – в одной области сетки, без absolute. На телефоне (≤ 478) – свой вертикальный кадр:
+   <Picture> из astro:assets не меняет кадр по ширине экрана, поэтому <source> с кадром из getImage(), а основной кадр – <Image>.
+   Движение: секция – scrub (параллакс фото), фото – photo-in, текст – lines и fade с задержками после фото. */
+import './hero.css';
+import { Image, getImage } from 'astro:assets';
+import Caption from '@components/caption/caption.astro';
+import photo from '@assets/img/hero-virtuose-entrance-2400.jpg';
+import photoMobile from '@assets/img/hero-virtuose-entrance-mobile.jpg';
+
+const mobile = await getImage({ src: photoMobile, widths: [480, 739], sizes: '100vw' });
+---
+<section id="hero" class="section hero" data-reveal="scrub">
+  <picture class="hero-picture">
+    <source media="(max-width: 478px)" srcset={mobile.srcSet.attribute} sizes="100vw" width="739" height="1600">
+    <Image class="hero-photo" data-reveal="photo-in" src={photo} widths={[1280, 1920, 2400]} sizes="100vw" loading="eager" fetchpriority="high" alt="Virtuose, Paris 16: the restored entrance hall with its columns, after rehabilitation" />
+  </picture>
+  <div class="grid-12 hero-bottom">
+    <h1 class="hero-title display-xl" data-reveal="lines" data-reveal-delay="0.6">PDA Architecture <span class="serif">Paris, since 2002</span></h1>
+    <div class="hero-lead">
+      <p class="hero-text body-l" data-reveal="lines" data-reveal-delay="0.8">We transform existing buildings: offices into homes, Haussmann facades brought back, old offices raised to BREEAM.</p>
+      <Caption rule class="hero-caption body-s" data-reveal="fade" data-reveal-delay="1"><span>Virtuose, Paris 16. Offices for PIMCO</span><span>6&nbsp;500&nbsp;m², −40% energy</span></Caption>
+    </div>
+  </div>
+</section>

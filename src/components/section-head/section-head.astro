@@ -1,0 +1,9 @@
+---
+/* Голова секции: заголовок на 5 колонок слева, лид засечками на колонках 7–12, по нижнему краю.
+   Заголовок и лид – в слоте, с классами section-head-title и section-head-lead (id, data-reveal ставит секция):
+   <SectionHead><h2 class="section-head-title display-s">…</h2><p class="section-head-lead body-l">…</p></SectionHead> */
+import './section-head.css';
+
+const { class: className, ...attrs } = Astro.props;
+---
+<div class:list={['wrapper', 'grid-12', 'section-head', className]} {...attrs}><slot /></div>

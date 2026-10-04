@@ -1,21 +1,21 @@
 ---
 /* Главная. Секции – в порядке карты из docs/design-system.md, по одной за промпт:
-   папка src/sections/<Имя>/ с <section id="<id>" class="section">, здесь – import Hero from '@sections/Hero/Hero.astro' и <Hero />.
+   папка src/sections/<Имя>/ с <section id="<id>" class="section">, здесь – import Hero from '@sections/hero/hero.astro' и <Hero />.
    Имя id = имя в карте. Каждому появляющемуся элементу – data-reveal из docs/motion.md. */
-import Base from '@layouts/Base.astro';
-import SiteHeader from '@components/SiteHeader/SiteHeader.astro';
-import SiteFooter from '@components/SiteFooter/SiteFooter.astro';
-import Hero from '@sections/Hero/Hero.astro';
-import About from '@sections/About/About.astro';
-import Projects from '@sections/Projects/Projects.astro';
-import Transformation from '@sections/Transformation/Transformation.astro';
-import Expertise from '@sections/Expertise/Expertise.astro';
-import DigitalLab from '@sections/DigitalLab/DigitalLab.astro';
-import Clients from '@sections/Clients/Clients.astro';
-import Contact from '@sections/Contact/Contact.astro';
+import Base from '@layouts/base.astro';
+import Header from '@components/header/header.astro';
+import Footer from '@components/footer/footer.astro';
+import Hero from '@sections/hero/hero.astro';
+import About from '@sections/about/about.astro';
+import Projects from '@sections/projects/projects.astro';
+import Transformation from '@sections/transformation/transformation.astro';
+import Expertise from '@sections/expertise/expertise.astro';
+import DigitalLab from '@sections/digital-lab/digital-lab.astro';
+import Clients from '@sections/clients/clients.astro';
+import Contact from '@sections/contact/contact.astro';
 ---
 <Base>
-  <SiteHeader slot="header" />
+  <Header slot="header" />
   <Hero />
   <About />
   <Projects />
@@ -24,5 +24,5 @@ import Contact from '@sections/Contact/Contact.astro';
   <DigitalLab />
   <Clients />
   <Contact />
-  <SiteFooter slot="footer" />
+  <Footer slot="footer" />
 </Base>

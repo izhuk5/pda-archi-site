@@ -1,0 +1,47 @@
+/* Подвал по схеме референса: высотой в экран; сверху имя бюро в три строки и группы «подпись засечками → список рядом»,
+   посередине гигантское PDA обычным весом целиком от поля до поля, внизу строка реквизитов засечками. Тёмный, как секции после digital-lab. */
+.footer {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  row-gap: var(--space-24);
+  padding-block: var(--space-96) var(--space-24);
+  background: var(--color-bg-dark);
+  color: var(--color-fg-on-dark);
+  --color-line: var(--color-line-on-dark);
+  overflow: clip;
+}
+.footer-top { row-gap: var(--space-32); align-items: start; }
+.footer-name { grid-column: 1 / span 3; }
+.footer-line { display: block; }
+.footer-group { display: grid; grid-template-columns: subgrid; }
+.footer-group.is-nav { grid-column: 4 / span 3; }
+.footer-group.is-contact { grid-column: 7 / span 3; }
+.footer-group.is-address { grid-column: 10 / span 3; }
+.footer-label { grid-column: 1; }
+.footer-list { grid-column: 2 / -1; font-style: normal; display: flex; flex-direction: column; }
+.footer-mark { grid-row: 3; padding-inline: var(--page-margin); text-indent: var(--mega-bearing); overflow: clip; }  /* clip – маска для приёма letters */
+.footer-mark > * { text-indent: 0; }  /* буквы SplitText не наследуют отступ знака – иначе P сдвигается дважды */
+.footer-bottom { grid-row: 4; row-gap: var(--space-8); }
+.footer-b1 { grid-column: 1 / span 3; }
+.footer-b2 { grid-column: 4 / span 3; }
+.footer-b3 { grid-column: 7 / span 3; }
+.footer-b4 { grid-column: 10 / span 2; }
+.footer-b5 { grid-column: 12; justify-self: end; }
+/* Ссылки – по ширине текста: ячейка сетки растягивает элемент, и линия link-line шла бы на всю колонку */
+.footer-bottom .link { justify-self: start; }
+
+/* Поля знака = поля страницы: до 1023 – планшетные (кегль знака считается от них же, base.css) */
+@media (max-width: 1023px) {
+  .footer-mark { padding-inline: var(--page-margin-tablet); }
+}
+/* До 767 .grid-12 становится flex-колонкой (base.css), а здесь группы и реквизиты стоят по две в ряд – сетка остаётся */
+@media (max-width: 767px) {
+  .footer { min-height: auto; padding-top: var(--space-64); row-gap: var(--space-48); }
+  .footer .footer-top, .footer .footer-bottom { display: grid; }
+  .footer-name { grid-column: 1 / -1; }
+  .footer-group.is-nav, .footer-group.is-contact, .footer-group.is-address { grid-column: span 6; grid-template-columns: minmax(0, 1fr); row-gap: var(--space-12); }
+  .footer-label, .footer-list { grid-column: 1; }
+  .footer-b1, .footer-b2, .footer-b3, .footer-b4 { grid-column: span 6; }
+  .footer-b5 { grid-column: span 6; justify-self: start; }
+}

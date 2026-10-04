@@ -1,0 +1,11 @@
+---
+/* Поле формы: подпись над полем, поле – линия снизу. <Field label="Email" name="email" type="email" autocomplete="email" required />
+   multiline – <textarea> (rows – высота); wide – во всю ширину сетки формы (is-wide). Остальные атрибуты уходят на поле. */
+import './field.css';
+
+const { label, wide = false, multiline = false, class: className, ...attrs } = Astro.props;
+---
+<label class:list={['field', { 'is-wide': wide }, className]}>
+  <span class="field-label body-s">{label}</span>
+  {multiline ? <textarea class="field-input title-m" {...attrs}></textarea> : <input class="field-input title-m" {...attrs}>}
+</label>

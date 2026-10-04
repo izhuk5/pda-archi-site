@@ -137,7 +137,7 @@ const walk = (dir, ext) => (exists(dir) ? fs.readdirSync(dir, { recursive: true 
 /* --- CSS --------------------------------------------------------------------- */
 for (const file of walk(path.join(SRC, 'styles'), '.css')) lintCss(file, read(file));
 
-/* Секции и компоненты: папка Name/ с Name.astro, Name.css, Name.js. Их CSS глобальный (Astro его не скоупит),
+/* Секции и компоненты: папка name/ с name.astro, name.css, name.js (kebab-case; имя папки = класс блока). Их CSS глобальный (Astro его не скоупит),
    поэтому каждое правило обязано содержать класс блока или его продолжение: .hero, .hero-title, .hero.is-dark – иначе стили протекают в чужие секции */
 const UNITS_DIRS = ['sections', 'components'].map(d => path.join(SRC, d));
 const kebab = name => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
@@ -292,7 +292,7 @@ const lintImports = (file, raw) => {
 };
 for (const file of [...walk(SRC, '.astro'), ...walk(SRC, '.js')]) lintImports(file, read(file));
 
-/* --- Структура: секция и компонент – папка Name/ с Name.astro; Name.css и Name.js подключены в Name.astro --- */
+/* --- Структура: секция и компонент – папка name/ с name.astro; name.css и name.js подключены в name.astro --- */
 for (const dir of UNITS_DIRS) {
   if (!exists(dir)) continue;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -301,7 +301,7 @@ for (const dir of UNITS_DIRS) {
     if (!entry.isDirectory()) { add('structure', full, 0, `файл вне папки: ${entry.name} → ${path.basename(dir)}/${entry.name.split('.')[0]}/${entry.name}`); continue; }
     const name = entry.name;
     const astro = path.join(full, `${name}.astro`);
-    if (!/^[A-Z][A-Za-z0-9]*$/.test(name)) add('structure', full, 0, `имя папки – PascalCase, как у компонента: ${name}`);
+    if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(name)) add('structure', full, 0, `имя папки – kebab-case, как класс блока: ${name}`);
     if (!exists(astro)) { add('structure', full, 0, `нет ${name}.astro`); continue; }
     const text = read(astro);
     const fm = (FRONTMATTER.exec(text) || [''])[0];
@@ -354,7 +354,7 @@ if (exists(libsMd)) {
 /* --- Карта секций: id в src/sections/Name/Name.astro и на главной против карты в базе -- */
 const indexPage = path.join(SRC, 'pages', 'index.astro');
 const indexText = exists(indexPage) ? read(indexPage) : '';
-/* Только src/sections/Name/Name.astro: файлы не на своём месте уже названы в проверке структуры */
+/* Только src/sections/name/name.astro: файлы не на своём месте уже названы в проверке структуры */
 const sectionFiles = walk(path.join(SRC, 'sections'), '.astro').filter(f => path.basename(f, '.astro') === path.basename(path.dirname(f)));
 const idsHtml = [];
 for (const file of [indexPage, ...sectionFiles]) {
@@ -371,7 +371,7 @@ if (idsHtml.length) for (const id of mapIds) if (id && !idsHtml.some(s => s.id =
 for (const file of sectionFiles) {
   const name = path.basename(file);
   const folder = path.basename(path.dirname(file));
-  if (!indexText.includes(`sections/${folder}/${name}`)) add('map', file, 0, `секция не подключена в src/pages/index.astro (import ${folder} from '@sections/${folder}/${name}')`);
+  if (!indexText.includes(`sections/${folder}/${name}`)) add('map', file, 0, `секция не подключена в src/pages/index.astro (import … from '@sections/${folder}/${name}')`);
 }
 
 /* --- Сцена -------------------------------------------------------------------- */

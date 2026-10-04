@@ -1,0 +1,41 @@
+---
+/* About – заявление о работе с существующими зданиями, два абзаца, фото на всю ширину с параллаксом, история и факты
+   (docs/design-system.md → Паттерны, «Заявление с фото на всю ширину»). По замеру kononenkogroup.com.
+   Фото ≤ 478 – свой вертикальный кадр с запасом под параллакс: <source> из getImage(), основной кадр – <Image> (как в hero).
+   Движение: заявление – words, абзацы и история – lines, факты – stagger, рамка фото – scrub (параллакс в CSS). */
+import './about.css';
+import { Image, getImage } from 'astro:assets';
+import Caption from '@components/caption/caption.astro';
+import Facts from '@components/facts/facts.astro';
+import photo from '@assets/img/about-belvista-aerial-2000.jpg';
+import photoMobile from '@assets/img/about-belvista-aerial-mobile.jpg';
+
+const mobile = await getImage({ src: photoMobile, widths: [400, 800], sizes: '100vw' });
+---
+<section id="about" class="section about" aria-labelledby="about-title">
+  <div class="wrapper grid-12 about-body">
+    <h2 id="about-title" class="about-title display-statement" data-reveal="words">Existing buildings, a&nbsp;second life</h2>
+    <div class="about-lead">
+      <p class="body-s" data-reveal="lines">Offices become homes, Haussmann facades come back to life, timber extensions rise on old roofs, dated offices reach BREEAM and the French décret tertiaire.</p>
+      <p class="body-s" data-reveal="lines">Alongside, a digital practice: BIM, parametric design, VR and 3D&nbsp;printing.</p>
+    </div>
+  </div>
+  <figure class="about-figure">
+    <div class="about-frame" data-reveal="scrub">
+      <picture>
+        <source media="(max-width: 478px)" srcset={mobile.srcSet.attribute} sizes="100vw" width="800" height="1400">
+        <Image class="about-photo" src={photo} widths={[1000, 1600, 2000]} sizes="100vw" loading="lazy" alt="Belvista, 118 Champs-Élysées: the rehabilitated block and its roof terraces seen from above" />
+      </picture>
+    </div>
+    <Caption as="figcaption" class="wrapper about-caption body-s"><span>Belvista, 118 Champs-Élysées, Paris 8</span><span>Prime offices, rehabilitation</span></Caption>
+  </figure>
+  <div class="wrapper grid-12 about-info">
+    <p class="about-story display-l serif indent" data-reveal="lines">Founded in Paris by Pascal Dalous. Led today by Donatien Dalous, architect and environmental engineer.</p>
+    <Facts class="about-facts body-s" data-reveal="stagger">
+      <div class="facts-row"><dt>Founded</dt><dd>2002, Paris</dd></div>
+      <div class="facts-row"><dt>Team</dt><dd>20+ architects, engineers, designers and a team on site during construction</dd></div>
+      <div class="facts-row"><dt>Scale</dt><dd>From 200 to 30&nbsp;000+&nbsp;m²</dd></div>
+      <div class="facts-row"><dt>Projects</dt><dd>31: offices, homes, hotels, retail, industry and listed buildings</dd></div>
+    </Facts>
+  </div>
+</section>

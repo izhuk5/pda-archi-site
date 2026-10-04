@@ -1,0 +1,56 @@
+---
+/* Каркас каждой страницы: <head>, шрифты, глобальные стили, запуск движения.
+   Использование: <Base title="…" description="…"> секции </Base>.
+   Глобальные стили – только токены и база; стили секций и компонентов живут в их .astro-файлах (<style>, Astro их скоупит). */
+import '@styles/tokens.css';
+import '@styles/base.css';
+
+const {
+  title = 'PDA Architecture – Paris architects for existing buildings',
+  description = 'PDA Architecture, Paris, since 2002: we transform existing buildings – offices into homes, Haussmann facades, old offices raised to BREEAM.',
+} = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+
+  {/* Шрифты: свои файлы в public/fonts/, @font-face – в src/styles/base.css. Предзагрузка – оба начертания нужны первому экрану */}
+  <link rel="preload" href="/fonts/NeueMontreal-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/HedvigLettersSerif18pt-Regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  {/* Движение включено, если нет ?static и prefers-reduced-motion: класс ставится до первой отрисовки, иначе контент
+      сначала мелькнёт, потом спрячется под появление. Если движение не запустилось, src/lib/main.js класс снимает и всё показывает.
+      Обёртка (() => { … })() – чтобы const не попали в общую область видимости страницы: inline-скрипт – не модуль */}
+  <script is:inline>
+    (() => {
+      const isStatic = new URLSearchParams(window.location.search).has('static');
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Turn on animations only when both are true:
+      // the page is not in static mode (no ?static in the address),
+      // and the user does not ask for less motion in system settings.
+      // CSS uses the class "has-motion" to hide elements before they animate.
+      if (!isStatic && !prefersReducedMotion) {
+        document.documentElement.classList.add('has-motion');
+      }
+    })();
+  </script>
+</head>
+<body>
+  {/* Шапка и подвал – вне <main>: на главной это Header и Footer (slot="header" / slot="footer") */}
+  <slot name="header" />
+  <main>
+    <slot />
+  </main>
+  <slot name="footer" />
+
+  {/* Движение и 3D: GSAP, Lenis, Three.js из npm, Astro собирает их сам. Three.js грузится отдельным файлом, только если на странице есть [data-scene] */}
+  <script>
+    import '@lib/main.js';
+  </script>
+</body>
+</html>

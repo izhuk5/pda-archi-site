@@ -1,0 +1,123 @@
+---
+/* Expertise – 10 направлений в пяти группах строками-аккордеоном (docs/design-system.md → Паттерны, «Список-аккордеон»).
+   Строка – <details>: без JS и в ?static открывается нативно; с JS открытием управляет expertise.js (одна строка за раз,
+   приём accordion, якорь прокрутки). Тексты – перевод страниц экспертизы pda.archi, сокращённый; «In practice» – обычным текстом. */
+import './expertise.css';
+import SectionHead from '@components/section-head/section-head.astro';
+import Facts from '@components/facts/facts.astro';
+import Link from '@components/link/link.astro';
+---
+<section id="expertise" class="section expertise" aria-labelledby="expertise-title">
+  <SectionHead>
+    <h2 id="expertise-title" class="section-head-title display-s" data-reveal="lines">Expertise</h2>
+    <p class="section-head-lead body-l" data-reveal="lines">Ten disciplines in five areas, from the feasibility study to the last day on site.</p>
+  </SectionHead>
+  <div class="wrapper">
+    <ul class="expertise-list" data-reveal="stagger">
+      <li>
+        <details class="expertise-item is-open" open>
+          <summary class="expertise-summary grid-12">
+            <h3 class="expertise-name display-s">Reconstruction and conversion</h3>
+            <span class="expertise-disciplines body-s">Architecture, renovation and rehabilitation</span>
+            <span class="expertise-sign body-l" aria-hidden="true">+</span>
+          </summary>
+          <div class="expertise-panel">
+            <div class="expertise-content grid-12">
+              <div class="expertise-inner">
+                <p class="body-l">We take old buildings, occupied or empty, from feasibility study and diagnosis to the last day on site. Offices become homes, workshops become offices, Haussmann buildings are brought up to today’s standards.</p>
+                <p class="body-l">The team that starts a project is the team that finishes it.</p>
+                <Facts class="body-s">
+                  <div class="facts-row"><dt>Scale</dt><dd>200 to 30&nbsp;000+&nbsp;m²</dd></div>
+                  <div class="facts-row"><dt>Building types</dt><dd>Offices, homes, hotels, retail, industry, listed buildings</dd></div>
+                </Facts>
+                <p class="expertise-projects body-s">In practice: Virtuose, Chaussée, RaiseLab</p>
+              </div>
+            </div>
+          </div>
+        </details>
+      </li>
+      <li>
+        <details class="expertise-item">
+          <summary class="expertise-summary grid-12">
+            <h3 class="expertise-name display-s">Sustainability and certification</h3>
+            <span class="expertise-disciplines body-s">Environmental approach</span>
+            <span class="expertise-sign body-l" aria-hidden="true">+</span>
+          </summary>
+          <div class="expertise-panel">
+            <div class="expertise-content grid-12">
+              <div class="expertise-inner">
+                <p class="body-l">Every choice is made for real environmental performance: local and bio-based materials, low carbon from design to demolition, reuse and less waste on site.</p>
+                <p class="body-l">A complete renovation brings old buildings to BREEAM or HQE level and meets the French décret tertiaire.</p>
+                <Facts class="body-s">
+                  <div class="facts-row"><dt>Certifications</dt><dd><abbr>BREEAM</abbr>, <abbr>HQE</abbr>, <abbr>LEED</abbr>, WiredScore, BiodiverCity</dd></div>
+                  <div class="facts-row"><dt>Result</dt><dd>Virtuose: −40% energy under the décret tertiaire</dd></div>
+                  <div class="facts-row"><dt>Our studio</dt><dd>ISO 14001 certified since 2014</dd></div>
+                </Facts>
+                <p class="expertise-projects body-s">In practice: Virtuose, RaiseLab</p>
+              </div>
+            </div>
+          </div>
+        </details>
+      </li>
+      <li>
+        <details class="expertise-item">
+          <summary class="expertise-summary grid-12">
+            <h3 class="expertise-name display-s">Digital design</h3>
+            <span class="expertise-disciplines body-s">BIM, parametric design, virtual reality, 3D printing, 3D scanning</span>
+            <span class="expertise-sign body-l" aria-hidden="true">+</span>
+          </summary>
+          <div class="expertise-panel">
+            <div class="expertise-content grid-12">
+              <div class="expertise-inner">
+                <p class="body-l">BIM is used on every project, from the first sketch to the 3D-printed model. Parametric design tests many shapes and keeps only the material the structure needs. Clients walk through their building in VR before it is built.</p>
+                <p class="body-l">More in the <Link href="#digital-lab">Digital Lab</Link> below.</p>
+                <Facts class="body-s">
+                  <div class="facts-row"><dt>BIM</dt><dd>On every project</dd></div>
+                  <div class="facts-row"><dt>3D printing</dt><dd>Bio-based PLA, at every design stage</dd></div>
+                </Facts>
+              </div>
+            </div>
+          </div>
+        </details>
+      </li>
+      <li>
+        <details class="expertise-item">
+          <summary class="expertise-summary grid-12">
+            <h3 class="expertise-name display-s">Interiors</h3>
+            <span class="expertise-disciplines body-s">Interior architecture and design</span>
+            <span class="expertise-sign body-l" aria-hidden="true">+</span>
+          </summary>
+          <div class="expertise-panel">
+            <div class="expertise-content grid-12">
+              <div class="expertise-inner">
+                <p class="body-l">Space planning, fit-out of offices and homes, and the conversion of old apartments into office floors. Flexible, bright spaces built around new ways of working.</p>
+                <p class="expertise-projects body-s">In practice: Volney, Belvista</p>
+              </div>
+            </div>
+          </div>
+        </details>
+      </li>
+      <li>
+        <details class="expertise-item">
+          <summary class="expertise-summary grid-12">
+            <h3 class="expertise-name display-s">Site supervision</h3>
+            <span class="expertise-disciplines body-s">Construction management</span>
+            <span class="expertise-sign body-l" aria-hidden="true">+</span>
+          </summary>
+          <div class="expertise-panel">
+            <div class="expertise-content grid-12">
+              <div class="expertise-inner">
+                <p class="body-l">Before construction starts, we build the site virtually to plan every task in space and time. During works, all the companies on site work on this digital model of the building, and we stay the guarantor of the architecture.</p>
+                <p class="expertise-projects body-s">In practice: InBois</p>
+              </div>
+            </div>
+          </div>
+        </details>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<script>
+  import './expertise.js';
+</script>

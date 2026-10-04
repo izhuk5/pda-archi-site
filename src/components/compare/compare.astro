@@ -1,0 +1,25 @@
+---
+/* Сравнение «до / после»: два фото в одной ячейке сетки, «после» открыто справа от шторки (переменная --split).
+   Шторку двигает пальцем или мышью прозрачный input range (жест compare, compare.js); подпись кадра – в слоте:
+   <Compare before={…} after={…} beforeAlt="…" afterAlt="…" label="…"><span>During works</span><span>2025</span></Compare>
+   class – классы места; в пин-режиме transformation ползунок скрыт, шторку ведёт прокрутка (transformation.js). */
+import './compare.css';
+import { Image } from 'astro:assets';
+import Caption from '@components/caption/caption.astro';
+
+const { before, after, beforeAlt, afterAlt, label, class: className } = Astro.props;
+const widths = [600, 900, 1200];
+const sizes = '(max-width: 767px) 100vw, 42vw';
+---
+<figure class:list={['compare', className]}>
+  <div class="compare-frame">
+    <Image class="compare-before" src={before} widths={widths} sizes={sizes} loading="lazy" alt={beforeAlt} />
+    <Image class="compare-after" src={after} widths={widths} sizes={sizes} loading="lazy" alt={afterAlt} />
+    <input class="compare-range" type="range" min="0" max="100" value="50" aria-label={label}>
+  </div>
+  <Caption as="figcaption" keep class="body-s"><slot /></Caption>
+</figure>
+
+<script>
+  import './compare.js';
+</script>
