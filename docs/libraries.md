@@ -13,6 +13,7 @@
 | `lenis` | плавный скролл | `src/lib/main.js` |
 | `three` | 3D-сцена | `src/lib/scene.js`, грузится лениво, только при `[data-scene]` |
 | `prettier` (dev) | форматирование JS: одна команда на строку, длинные твины – по свойству в строке | `npm run format` (`src/**/*.{js,astro,css}`), в VS Code – при сохранении JS, `.astro` и CSS (`.vscode/settings.json`, расширение `esbenp.prettier-vscode`); настройки – `.prettierrc.json`; в сборку не попадает |
+| `netlify-cli` (dev) | статус и логи деплоев, ручная выкладка из терминала | `npx netlify login` (вход – только пользователь, в браузере), `npx netlify link` – связать папку с сайтом, `npx netlify status`; связка – в `.netlify/` (в `.gitignore`) |
 | `prettier-plugin-astro` (dev) | Prettier понимает `.astro`: frontmatter, разметку, `<script>` | подключён в `.prettierrc.json` (`plugins`, `parser: astro`) |
 
 ## GSAP: плагины
