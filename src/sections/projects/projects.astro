@@ -1,312 +1,33 @@
 ---
 /* Projects – главное доказательство: 8 проектов вразброс по сетке, под фото название, площадь, тип и год
-   (docs/design-system.md → Паттерны, «Сетка проектов вразброс»). Карточка открывает окно проекта.
-   Окна – все 13: 8 избранных + 5 для строк clients (125 Saussure, Le Biopark, Timbre, Verde, Coopération); их открывает
-   любая кнопка [data-project] на странице (project-sheet.js). Тексты – здесь, данными (при переходе на CMS выносятся):
+   (docs/design-system.md → Паттерны, «Сетка проектов вразброс»). Карточка не кликается: страниц и окон проектов на сайте нет.
+   Тексты – здесь, данными (при переходе на CMS выносятся):
    перевод технических карточек pda.archi, предлагаю заменить текстами клиента. Фото – src/assets/img/projects/<photo>.jpg.
    \u00a0 – неразрывный пробел (число и единица, «m²»). */
 import './projects.css';
 import SectionHead from '@components/section-head/section-head.astro';
 import ProjectCard from '@components/project-card/project-card.astro';
-import ProjectSheet from '@components/project-sheet/project-sheet.astro';
 
-const images = import.meta.glob('/src/assets/img/projects/*.jpg', { eager: true, import: 'default' });
-const photo = name => {
-  const img = images[`/src/assets/img/projects/${name}.jpg`];
-  if (!img) throw new Error(`projects: нет фото src/assets/img/projects/${name}.jpg`);
-  return img;
-};
+/* Обложки – явным импортом: в сборку попадают только они. glob по папке (даже ленивый) тянет в dist все фото проектов */
+import virtuosePhoto from '@assets/img/projects/virtuose-0.jpg';
+import volneyPhoto from '@assets/img/projects/volney-0.jpg';
+import inboisPhoto from '@assets/img/projects/inbois-0.jpg';
+import chausseePhoto from '@assets/img/projects/chaussee-0.jpg';
+import belvistaPhoto from '@assets/img/projects/belvista-0.jpg';
+import raiselabPhoto from '@assets/img/projects/raiselab-0.jpg';
+import caratPhoto from '@assets/img/projects/carat-0.jpg';
+import tribunesPhoto from '@assets/img/projects/tribunes-0.jpg';
 
 /* Карточки – в порядке сетки: пары «широкая + высокая», стороны чередуются (раскладка – projects.css, классы is-1…is-8) */
 const cards = [
-  { id: "virtuose", shape: "wide", photo: "virtuose-0", alt: "An office floor with the Eiffel Tower through the window", name: "Virtuose", area: "6\u00a0548\u00a0m²", type: "Prime offices, heavy rehabilitation, Paris 16", year: "2025" },
-  { id: "volney", shape: "tall", photo: "volney-0", alt: "The facade on rue Volney", name: "Volney", area: "2\u00a0400\u00a0m²", type: "Headquarters for a luxury brand, Paris 1", year: "2024" },
-  { id: "inbois", shape: "tall", photo: "inbois-0", alt: "Render: the timber extension from the courtyard", name: "InBois", area: "800\u00a0m²", type: "Timber extension of an office building, Paris 19", year: "Under construction" },
-  { id: "chaussee", shape: "wide", photo: "chaussee-0", alt: "The Haussmann facade on rue de la Chaussée d’Antin", name: "Chaussée", area: "2\u00a0400\u00a0m²", type: "Prime offices near the Grands Boulevards, Paris 9", year: "2024" },
-  { id: "belvista", shape: "wide", photo: "belvista-0", alt: "The planted roof terrace", name: "Belvista", area: "2\u00a0300\u00a0m²", type: "Prime offices on the Champs-Élysées, Paris 8", year: "2026" },
-  { id: "raiselab", shape: "tall", photo: "raiselab-0", alt: "The street facade", name: "RaiseLab", area: "2\u00a0200\u00a0m²", type: "Heavy rehabilitation and extension, Paris 11", year: "2021" },
-  { id: "carat", shape: "tall", photo: "carat-0", alt: "Render: the entrance to the new venue on Place Vendôme", name: "Carat", area: "23\u00a0000\u00a0m²", type: "A car park under Place Vendôme, turned into a place for French jewellery", year: "Research 2021" },
-  { id: "tribunes", shape: "wide", photo: "tribunes-0", alt: "The existing grandstands", name: "Tribunes", area: "12\u00a0400\u00a0m²", type: "Racecourse grandstands turned into a hybrid venue, Maisons-Laffitte", year: "Competition 2022" },
-];
-
-const sheets = [
-  {
-    id: "virtuose", title: "Virtuose", type: "Prime offices, heavy rehabilitation, Paris 16",
-    text: [
-      "A 1901 building in the 16th arrondissement, first designed as apartments, rehabilitated into prime offices for PIMCO. We kept its Haussmann character and opened the dark basement to daylight: a glass roof over the courtyard turned it into an agora for work and events.",
-      "New roof windows bring light to the top floor. The courtyard became a planted garden under a bioclimatic canopy that closes to keep the cool in during the day.",
-    ],
-    facts: [
-      ["Client", "PIMCO Prime Real Estate"],
-      ["Address", "29B/31 avenue Pierre 1er de Serbie, Paris 16"],
-      ["Area", "6 548\u00a0m²"],
-      ["Completed", "2025"],
-      ["Certification", "BREEAM, décret tertiaire −40%, SmartScore, bio-based label"],
-    ],
-    credit: "Photos: Florian Wattier, PDA",
-    photos: [
-      { file: "virtuose-0", alt: "An office floor with the Eiffel Tower through the window" },
-      { file: "virtuose-1", alt: "The Haussmann facade on avenue Pierre 1er de Serbie" },
-      { file: "virtuose-2", alt: "The restored staircase" },
-      { file: "virtuose-3", alt: "The curved courtyard facade" },
-      { file: "virtuose-4", alt: "Demolition works in the courtyard during construction" },
-    ],
-  },
-  {
-    id: "volney", title: "Volney", type: "Headquarters for a luxury brand, Paris 1",
-    text: [
-      "The former Hôtel Chatham, between the Opéra Garnier and Place Vendôme, rebuilt as the Paris headquarters of a luxury brand. We reworked the entrance, restored the original architectural elements and opened a daylit open space on the ground floor.",
-      "The energy retrofit targets the 2030 décret tertiaire. White offices, timber circulation, light that links every space.",
-    ],
-    facts: [
-      ["Client", "Swiss Life Asset Managers France"],
-      ["Address", "16 rue Volney, Paris 1"],
-      ["Area", "2 400\u00a0m²"],
-      ["Completed", "2024"],
-      ["Certification", "HQE Excellent, BREEAM, Osmoz, BiodiverCity, WiredScore, BBCA"],
-    ],
-    credit: "Photos: Florian Wattier, archives",
-    photos: [
-      { file: "volney-0", alt: "The facade on rue Volney" },
-      { file: "volney-1", alt: "The arched ground floor open space" },
-      { file: "volney-2", alt: "The Hôtel Chatham restaurant in the archives, before" },
-      { file: "volney-3", alt: "A meeting room under the arched window" },
-      { file: "volney-4", alt: "The new staircase" },
-    ],
-  },
-  {
-    id: "inbois", title: "InBois", type: "Timber extension of an office building, Paris 19",
-    text: [
-      "A former industrial building in the 19th arrondissement becomes a third place: coworking, meeting rooms, event spaces. A timber extension adds new floors on the existing roofs.",
-      "Images of the finished building are renders; the construction photos show the existing roofs and the timber structure going up.",
-    ],
-    facts: [
-      ["Client", "INCO"],
-      ["Address", "20 rue Clavel, Paris 19"],
-      ["Area", "800\u00a0m²"],
-      ["Status", "Under construction"],
-      ["Certification", "CircoLab, bio-based materials"],
-    ],
-    credit: "Photos: PDA, Florian Wattier",
-    photos: [
-      { file: "inbois-0", alt: "Render: the timber extension from the courtyard" },
-      { file: "inbois-1", alt: "Render: the courtyard and the timber facade" },
-      { file: "inbois-2", alt: "Render: the extension from above" },
-      { file: "inbois-3", alt: "The existing glass roofs before works" },
-      { file: "inbois-4", alt: "The timber structure during construction" },
-    ],
-  },
-  {
-    id: "chaussee", title: "Chaussée", type: "Prime offices near the Grands Boulevards, Paris 9",
-    text: [
-      "A pre-1948 building on two courts, rehabilitated into prime offices. A new entrance hall off the porch, a monumental staircase under a glass roof, and the original honey-oak parquet and marble fireplaces kept.",
-      "A service base with flex offices on the ground and lower floors.",
-    ],
-    facts: [
-      ["Client", "CRPN, with Nexity Property Management"],
-      ["Address", "60 rue de la Chaussée d’Antin, Paris 9"],
-      ["Area", "2 400\u00a0m²"],
-      ["Completed", "2024"],
-      ["Certification", "BREEAM, WiredScore, BiodiverCity, BBC Effinergie"],
-    ],
-    credit: "Photos: Florian Wattier",
-    photos: [
-      { file: "chaussee-0", alt: "The Haussmann facade on rue de la Chaussée d’Antin" },
-      { file: "chaussee-1", alt: "The new entrance hall" },
-      { file: "chaussee-2", alt: "The monumental staircase" },
-      { file: "chaussee-3", alt: "An office floor with the original parquet" },
-      { file: "chaussee-4", alt: "The staircase from below" },
-    ],
-  },
-  {
-    id: "belvista", title: "Belvista", type: "Prime offices on the Champs-Élysées, Paris 8",
-    text: [
-      "An 1880 building on the Champs-Élysées. We traced its history in the Paris archives before designing the intervention.",
-      "New circulation makes the common areas readable, the entrance hall is redesigned, and a roof that nobody could reach becomes a planted terrace with a 360° view over Paris.",
-    ],
-    facts: [
-      ["Client", "Confidential"],
-      ["Address", "118 avenue des Champs-Élysées, Paris 8"],
-      ["Area", "2 300\u00a0m²"],
-      ["Delivery", "2026"],
-      ["Certification", "HQE Excellent, BREEAM, Osmoz, BiodiverCity, WiredScore, BBCA"],
-    ],
-    credit: "Photos: PDA",
-    photos: [
-      { file: "belvista-0", alt: "The planted roof terrace" },
-      { file: "belvista-1", alt: "The roof terrace at sunset" },
-      { file: "belvista-2", alt: "The redesigned entrance hall" },
-      { file: "belvista-3", alt: "An office floor" },
-      { file: "belvista-4", alt: "The block from above" },
-    ],
-  },
-  {
-    id: "raiselab", title: "RaiseLab", type: "Heavy rehabilitation and extension, Paris 11",
-    text: [
-      "A 1970s workshop near République, transformed into eight levels of coworking, offices, event spaces, a bar, hotel rooms and a planted rooftop.",
-      "We kept 50% of the floors, added two levels on top and one below.",
-    ],
-    facts: [
-      ["Client", "Raise & RaiseLab"],
-      ["Address", "18 rue de la Fontaine au Roi, Paris 11"],
-      ["Area", "2 200\u00a0m²"],
-      ["Completed", "2021"],
-      ["Certification", "HQE Renovation, Exceptional"],
-    ],
-    credit: "Photos: PDA, Stéphane Muratet, Michel Tubiana",
-    photos: [
-      { file: "raiselab-0", alt: "The street facade" },
-      { file: "raiselab-1", alt: "The planted terraces from above" },
-      { file: "raiselab-2", alt: "The glass roof over the atrium" },
-      { file: "raiselab-3", alt: "The rooftop terrace" },
-      { file: "raiselab-4", alt: "The café under the glass roof" },
-    ],
-  },
-  {
-    id: "carat", title: "Carat", type: "A car park under Place Vendôme, turned into a place for French jewellery",
-    text: [
-      "What can an underground car park become in a city with fewer cars? This research project keeps the structure under Place Vendôme and turns it into craft workshops, a museum, exhibition halls and shops for French jewellery and watchmaking.",
-      "All images are renders.",
-    ],
-    facts: [
-      ["Type", "Research and design"],
-      ["Place", "Place Vendôme, Paris 1"],
-      ["Area", "23 000\u00a0m²"],
-      ["Year", "2021"],
-    ],
-    credit: "Photos: PDA, renders",
-    photos: [
-      { file: "carat-0", alt: "Render: the entrance to the new venue on Place Vendôme" },
-      { file: "carat-1", alt: "Render: Place Vendôme with the new pavilions" },
-      { file: "carat-2", alt: "Render: the hall under the column" },
-      { file: "carat-3", alt: "Render: Place Vendôme from above" },
-    ],
-  },
-  {
-    id: "tribunes", title: "Tribunes", type: "Racecourse grandstands turned into a hybrid venue, Maisons-Laffitte",
-    text: [
-      "On the banks of the Seine, one of the largest racecourses in Île-de-France, with the longest straight in Europe. Our competition entry, with Eiffage, opened the grandstands between inside and outside for a mixed-use venue around horses.",
-    ],
-    facts: [
-      ["Client", "Ville de Maisons-Laffitte, EPF Île-de-France, idVerde"],
-      ["Place", "Maisons-Laffitte"],
-      ["Area", "12 400\u00a0m²"],
-      ["Year", "Competition, 2022"],
-      ["Certification", "RE2020, HQE Bâtiment Durable"],
-    ],
-    credit: "Photos: PDA, renders",
-    photos: [
-      { file: "tribunes-0", alt: "The existing grandstands" },
-      { file: "tribunes-1", alt: "Render: the grandstands at night" },
-      { file: "tribunes-2", alt: "Render: the new stand" },
-      { file: "tribunes-3", alt: "Render: the grandstand along the track" },
-    ],
-  },
-  {
-    id: "saussure", title: "125 Saussure", type: "Heavy rehabilitation of a 1950s office building, Paris 17",
-    text: [
-      "A thirteen-level office block from the 1950s that had never been renovated: closed facade, little daylight, outdated systems. We opened the envelope, rebuilt the interiors for collaborative work and made the building reversible.",
-      "The project won the Geste d’Argent 2023 and the S.ARCH Best Completed award.",
-    ],
-    facts: [
-      ["Client", "AEW and Eiffage Immobilier"],
-      ["Address", "125 rue de Saussure, Paris 17"],
-      ["Area", "2 655\u00a0m²"],
-      ["Completed", "2022"],
-      ["Certification", "BREEAM, décret tertiaire"],
-      ["Awards", "Geste d’Argent 2023, S.ARCH 2023"],
-    ],
-    credit: "Photos: Florian Wattier",
-    photos: [
-      { file: "saussure-0", alt: "The new facade on rue de Saussure" },
-      { file: "saussure-1", alt: "The facade and its tree" },
-      { file: "saussure-2", alt: "Spiral stairs in the courtyard" },
-      { file: "saussure-3", alt: "The entrance" },
-      { file: "saussure-4", alt: "The courtyard from above" },
-    ],
-  },
-  {
-    id: "biopark", title: "Le Biopark", type: "Rehabilitation of a sustainable office building, Paris 13",
-    text: [
-      "A 1990 industrial building near Gare d’Austerlitz, home to health and science companies. After a tenant left, Gecina asked us to bring it in line with today’s offices. It now houses Future4care, a European e-health start-up accelerator.",
-      "A targeted, low-carbon renovation: a new threshold between street and building, and work only where the building needed it.",
-    ],
-    facts: [
-      ["Client", "Gecina"],
-      ["Address", "8 rue Jean Antoine de Baïf, Paris 13"],
-      ["Area", "6 400\u00a0m²"],
-      ["Completed", "2021"],
-      ["Certification", "HQE in operation"],
-    ],
-    credit: "Photos: Guillaume Guerin",
-    photos: [
-      { file: "biopark-0", alt: "The planted facade" },
-      { file: "biopark-1", alt: "The building from the street" },
-      { file: "biopark-2", alt: "The entrance hall with timber screens" },
-      { file: "biopark-3", alt: "The reception" },
-      { file: "biopark-4", alt: "An office floor" },
-    ],
-  },
-  {
-    id: "timbre", title: "Timbre", type: "Renovation of a mixed Haussmann building, Paris 9",
-    text: [
-      "An 1861 building by E. de Joly, raised in 1927. The project restores the facade, opens new spaces on the ground floor, keeps the offices above and turns the top three levels into triplex apartments.",
-      "The project is in design; some images are renders.",
-    ],
-    facts: [
-      ["Client", "Black Swan"],
-      ["Address", "25 rue Drouot, Paris 9"],
-      ["Area", "1 500\u00a0m²"],
-      ["Status", "In design"],
-    ],
-    credit: "Photos: Florian Wattier, PDA",
-    photos: [
-      { file: "timbre-0", alt: "The Haussmann facade on rue Drouot" },
-      { file: "timbre-1", alt: "The entrance corridor and its blue door" },
-      { file: "timbre-2", alt: "Render: the new ground floor" },
-      { file: "timbre-3", alt: "The original carriage door" },
-    ],
-  },
-  {
-    id: "verde", title: "Verde", type: "Reversible office building, Saint-Ouen",
-    text: [
-      "The Porte du Parc building from 2009, in a district that changed fast with metro line 14. Our competition entry gave it a new sustainable envelope and flexible floors that can turn into other uses.",
-      "Competition entry, 2023, not selected. All images are renders.",
-    ],
-    facts: [
-      ["Client", "Sogecap, with Sogeprom"],
-      ["Place", "Saint-Ouen"],
-      ["Area", "12 584\u00a0m²"],
-      ["Year", "Competition, 2023"],
-      ["Certification", "Reuse, WiredScore, BREEAM, Osmoz"],
-    ],
-    credit: "Photos: PDA, renders",
-    photos: [
-      { file: "verde-0", alt: "Render: the building from above" },
-      { file: "verde-1", alt: "Render: the building at dusk" },
-      { file: "verde-2", alt: "Render: an office floor" },
-      { file: "verde-3", alt: "Render: the roof terrace" },
-    ],
-  },
-  {
-    id: "cooperation", title: "Coopération", type: "Offices of the OECD, Paris 16",
-    text: [
-      "Offices on five levels in La Muette: twenty offices, a meeting room, a reception room and a former garage. Facades, metalwork, windows, roof and boiler room are renovated to meet the décret tertiaire.",
-    ],
-    facts: [
-      ["Client", "French Ministry for Europe and Foreign Affairs"],
-      ["Address", "5 rue Oswaldo Cruz, Paris 16"],
-      ["Area", "1 000\u00a0m²"],
-      ["Status", "In design"],
-      ["Certification", "Décret tertiaire"],
-    ],
-    credit: "Photos: Florian Wattier",
-    photos: [
-      { file: "cooperation-0", alt: "The facade on rue Oswaldo Cruz" },
-      { file: "cooperation-1", alt: "The street" },
-      { file: "cooperation-2", alt: "The entrance" },
-    ],
-  },
+  { id: "virtuose", shape: "wide", photo: virtuosePhoto, alt: "An office floor with the Eiffel Tower through the window", name: "Virtuose", area: "6\u00a0548\u00a0m²", type: "Prime offices, heavy rehabilitation, Paris 16", year: "2025" },
+  { id: "volney", shape: "tall", photo: volneyPhoto, alt: "The facade on rue Volney", name: "Volney", area: "2\u00a0400\u00a0m²", type: "Headquarters for a luxury brand, Paris 1", year: "2024" },
+  { id: "inbois", shape: "tall", photo: inboisPhoto, alt: "Render: the timber extension from the courtyard", name: "InBois", area: "800\u00a0m²", type: "Timber extension of an office building, Paris 19", year: "Under construction" },
+  { id: "chaussee", shape: "wide", photo: chausseePhoto, alt: "The Haussmann facade on rue de la Chaussée d’Antin", name: "Chaussée", area: "2\u00a0400\u00a0m²", type: "Prime offices near the Grands Boulevards, Paris 9", year: "2024" },
+  { id: "belvista", shape: "wide", photo: belvistaPhoto, alt: "The planted roof terrace", name: "Belvista", area: "2\u00a0300\u00a0m²", type: "Prime offices on the Champs-Élysées, Paris 8", year: "2026" },
+  { id: "raiselab", shape: "tall", photo: raiselabPhoto, alt: "The street facade", name: "RaiseLab", area: "2\u00a0200\u00a0m²", type: "Heavy rehabilitation and extension, Paris 11", year: "2021" },
+  { id: "carat", shape: "tall", photo: caratPhoto, alt: "Render: the entrance to the new venue on Place Vendôme", name: "Carat", area: "23\u00a0000\u00a0m²", type: "A car park under Place Vendôme, turned into a place for French jewellery", year: "Research 2021" },
+  { id: "tribunes", shape: "wide", photo: tribunesPhoto, alt: "The existing grandstands", name: "Tribunes", area: "12\u00a0400\u00a0m²", type: "Racecourse grandstands turned into a hybrid venue, Maisons-Laffitte", year: "Competition 2022" },
 ];
 ---
 <section id="projects" class="section projects" aria-labelledby="projects-title">
@@ -318,10 +39,9 @@ const sheets = [
     <ul class="projects-grid grid-12">
       {cards.map((c, i) => (
         <li class:list={['projects-item', `is-${i + 1}`, `is-${c.shape}`]}>
-          <ProjectCard project={c.id} photo={photo(c.photo)} alt={c.alt} shape={c.shape} name={c.name} area={c.area} type={c.type} year={c.year} />
+          <ProjectCard photo={c.photo} alt={c.alt} shape={c.shape} name={c.name} area={c.area} type={c.type} year={c.year} />
         </li>
       ))}
     </ul>
   </div>
-  {sheets.map(s => <ProjectSheet {...s} photos={s.photos.map(p => ({ src: photo(p.file), alt: p.alt }))} />)}
 </section>

@@ -25,7 +25,6 @@
   --color-scrim: rgba(10, 10, 10, 0.55);
   --color-scrim-0: rgba(10, 10, 10, 0);
   --color-scrim-strong: rgba(10, 10, 10, 0.7);  /* верх кадра на телефоне: мелкое меню на светлом потолке */
-  --color-backdrop: rgba(19, 19, 19, 0.6);
 
   /* Типографика: Neue Montreal + Hedvig Letters Serif 18pt – пара референса, решение пользователя. Файлы – public/fonts/ */
   --font-display: "Neue Montreal", "Helvetica Neue", Arial, sans-serif;

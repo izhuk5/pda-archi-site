@@ -1,6 +1,6 @@
 ---
 /* Clients – серьёзные люди: 11 заказчиков набраны текстом, без логотипов (docs/design-system.md → Паттерны, «Список клиентов»).
-   Строка – кнопка [data-project], открывает окно проекта из секции projects (project-sheet.js); при наведении – обложка (thumb-reveal).
+   Строка не кликается (окон и страниц проектов нет); при наведении – обложка проекта (thumb-reveal).
    Данные – технические карточки pda.archi и бриф. DWS убран (нет проекта), заказчик Belvista «Confidential» не показывается.
    Превью – src/assets/img/projects/thumbs/<project>.jpg, декор (alt=""): название проекта уже есть в строке. */
 import './clients.css';
@@ -37,12 +37,12 @@ const rows = [
     <ul class="clients-list" data-reveal="rows">
       {rows.map(r => (
         <li>
-          <button class="clients-row grid-12" type="button" data-project={r.project} aria-haspopup="dialog">
+          <div class="clients-row grid-12">
             <span class="clients-name display-s">{r.name}</span>
             <span class="clients-type body-s">{r.type}</span>
             <span class="clients-work body-s">{r.work}</span>
             <Image class="clients-thumb" src={thumb(r.project)} widths={[240, 480]} sizes="17vw" loading="lazy" alt="" />
-          </button>
+          </div>
         </li>
       ))}
     </ul>

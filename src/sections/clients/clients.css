@@ -1,9 +1,9 @@
 /* Clients: тёмная. Клиенты набраны текстом, без логотипов: строка с линией – название гротеском (1–6), тип (7–8), работы (9–10).
-   Каждая строка – кнопка, открывает окно проекта; при наведении курсор-рука, название сдвигается (row-shift),
+   Строка не кликается; при наведении название сдвигается (row-shift),
    в колонках 11–12 раскрывается обложка проекта (thumb-reveal). На телефоне обложек нет, строка стопкой. */
 .clients { display: flex; flex-direction: column; gap: var(--space-64); }
 .clients-list { border-bottom: 1px solid var(--color-line); }
-.clients-row { width: 100%; padding-block: var(--space-24); border-top: 1px solid var(--color-line); align-items: center; text-align: left; cursor: pointer; }
+.clients-row { width: 100%; padding-block: var(--space-24); border-top: 1px solid var(--color-line); align-items: center; }
 .clients-name { grid-column: 1 / span 6; transition: translate var(--dur-600) var(--ease-out); }
 .clients-type { grid-column: 7 / span 2; }  /* не серым: серый на тёмном – только ≥ 18 px, здесь 15 px */
 .clients-work { grid-column: 9 / span 2; }
@@ -17,9 +17,8 @@
   clip-path: inset(0 0 100% 0);
   transition: clip-path var(--dur-600) var(--ease-out);
 }
-.clients-row:hover .clients-name, .clients-row:focus-visible .clients-name { translate: var(--row-shift) 0; }
-.clients-row:hover .clients-thumb, .clients-row:focus-visible .clients-thumb { clip-path: inset(0 0 0 0); }
-.clients-row:focus-visible { outline: 1px solid var(--color-fg-on-dark); outline-offset: var(--space-4); }
+.clients-row:hover .clients-name { translate: var(--row-shift) 0; }
+.clients-row:hover .clients-thumb { clip-path: inset(0 0 0 0); }
 
 /* До 1023: название во всю ширину, тип и работы второй строкой рядом, без обложек (на старом сайте – до 768: iPad в вертикали так;
    на планшете колонки по 106 px переносили тип и работы на 3–4 строки, а обложка по наведению на тачскрине не нужна) */

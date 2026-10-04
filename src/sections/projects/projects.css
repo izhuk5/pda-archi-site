@@ -1,6 +1,6 @@
 /* Projects: восемь проектов вразброс по 12 колонкам, как у референса: пары «широкая 7 колонок + высокая 4», стороны чередуются,
    вторая карточка пары опущена на отступ из шкалы. Под фото – название и площадь, тип и год (Caption в ProjectCard).
-   Карточка открывает окно проекта (ProjectSheet). */
+   Карточка не кликается: окон проектов нет. */
 .projects { display: flex; flex-direction: column; gap: var(--space-96); }
 .projects-grid { row-gap: var(--space-96); align-items: start; }
 .projects-item.is-wide .project-card-frame { aspect-ratio: var(--ratio-card-wide); }

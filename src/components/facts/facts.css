@@ -1,5 +1,5 @@
 /* Факты: строки «название – значение» с линией сверху; название – треть строки, значение – две трети.
-   Цвет линии – --color-line: на тёмной секции он светлый сам (base.css). Где: about; дальше transformation, expertise, окно проекта. */
+   Цвет линии – --color-line: на тёмной секции он светлый сам (base.css). Где: about; дальше transformation, expertise. */
 .facts { display: flex; flex-direction: column; }
 .facts-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: var(--space-16); padding-block: var(--space-12); border-top: 1px solid var(--color-line); }
 .facts-row dd { margin: 0; }
