@@ -5,6 +5,7 @@
      Внутри ленты (containerAnimation): параллакс фото, появление текста шага, прогресс и счётчик. */
 import { gsap, ScrollTrigger } from '@lib/gsap.js';
 import { onMotion } from '@lib/env.js';
+import { tokenPx } from '@lib/tokens.js';
 
 const sec = document.getElementById('digital-lab');
 const track = sec?.querySelector('.digital-lab-track');
@@ -29,8 +30,8 @@ if (sec && track && count) {
 
 onMotion(() => {
   if (!sec || !track) return;
-  const css = name => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(name));
-  const yPx = () => css('--reveal-y') || 24;
+  const css = name => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(name));  /* числа без единиц */
+  const yPx = () => tokenPx('--reveal-y', 24);
   const mm = gsap.matchMedia();
   mm.add('(min-width: 768px)', () => {
     const shift = css('--parallax-x') || 6;

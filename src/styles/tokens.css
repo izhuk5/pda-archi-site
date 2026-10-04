@@ -1,4 +1,7 @@
 /* Токены. Единственное место в проекте, где допустимы сырые значения.
+   Размеры – в rem (1rem = 16px по умолчанию): вся вёрстка растёт, если человек увеличил шрифт в браузере. em – только то, что
+   должно идти за кеглем самого текста (трекинг, запас маски строки, отступ буквы, толщина линии ссылки); интерлиньяж – без единиц.
+   px остаются у линий в 1px (в правилах), у брейкпоинтов @media и у sizes картинок. В JS размер токена – tokenPx() из src/lib/tokens.js.
    Имена = имена в docs/design-system.md → Токены. Направление A «Фотография первой», значения перенесены из wow-site-starter (2026-10-04).
    Desktop-first: имя без суффикса – десктоп, -tablet – до 1023, -mobile – до 767 или 478 (где именно – в правиле, которое его читает).
    Токены, помеченные «не решено», ещё не выбраны – они появятся со своей секцией. Новое значение – сначала сюда и в базу, потом в правило. */
@@ -59,34 +62,34 @@
   --mask-bleed: 0.2em;      /* запас маски строки над и под строкой при интерлиньяже < 1: выносные элементы не режутся */
 
   /* Сетка. Брейкпоинты в CSS-переменную не вынести (media их не читает): только @media (max-width: 1023px | 767px | 478px) */
-  --container: 1920px;
+  --container: 120rem;
   --columns: 12;
-  --gutter: 20px;
-  --page-margin: 24px;
-  --page-margin-tablet: 16px;
+  --gutter: 1.25rem;
+  --page-margin: 1.5rem;
+  --page-margin-tablet: 1rem;
   /* Ширина одной колонки сетки – для отступов и мер, кратных колонке */
   --col: calc((100vw - 2 * var(--page-margin) - (var(--columns) - 1) * var(--gutter)) / var(--columns));
 
   /* Отступы: шкала, вертикальный ритм секций – --space-section */
-  --space-4: 4px;
-  --space-8: 8px;
-  --space-12: 12px;
-  --space-16: 16px;
-  --space-24: 24px;
-  --space-32: 32px;
-  --space-48: 48px;
-  --space-64: 64px;
-  --space-96: 96px;
-  --space-128: 128px;
-  --space-180: 180px;
+  --space-4: 0.25rem;
+  --space-8: 0.5rem;
+  --space-12: 0.75rem;
+  --space-16: 1rem;
+  --space-24: 1.5rem;
+  --space-32: 2rem;
+  --space-48: 3rem;
+  --space-64: 4rem;
+  --space-96: 6rem;
+  --space-128: 8rem;
+  --space-180: 11.25rem;
   --space-section: var(--space-128);
   --space-section-tablet: var(--space-64);
 
   /* Радиусы: в проекте не используются (фото и кнопки без скругления), значения шаблона */
-  --radius-s: 4px;
-  --radius-m: 12px;
-  --radius-l: 20px;
-  --radius-pill: 999px;
+  --radius-s: 0.25rem;
+  --radius-m: 0.75rem;
+  --radius-l: 1.25rem;
+  --radius-pill: 999rem;
 
   /* Движение: см. docs/motion.md. В GSAP – по имени без «--» (CustomEase): ease: 'ease-sharp' */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -96,7 +99,7 @@
   --dur-300: 300ms;
   --dur-600: 600ms;
   --dur-900: 900ms;
-  --reveal-y: 24px;
+  --reveal-y: 1.5rem;
   /* Линия ссылки при наведении (приём link-line, замер референса): толщина, длительность, кривая */
   --link-line: max(1px, 0.05em);
   --dur-link: 1.109s;

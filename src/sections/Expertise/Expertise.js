@@ -6,13 +6,14 @@
 import { gsap, ScrollTrigger } from '@lib/gsap.js';
 import { onMotion } from '@lib/env.js';
 import { scroll } from '@lib/scroll.js';
+import { tokenPx } from '@lib/tokens.js';
 
 let animate = false;
 onMotion(() => { animate = true; });
 
 const items = Array.from(document.querySelectorAll('.expertise-item'));
 const kids = item => item.querySelectorAll('.expertise-inner > *');
-const revealY = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--reveal-y')) || 24;
+const revealY = () => tokenPx('--reveal-y', 24);
 const refresh = () => ScrollTrigger.refresh();
 const scrollBy = d => { if (scroll.lenis) scroll.lenis.scrollTo(scroll.lenis.scroll + d, { immediate: true, force: true }); else window.scrollBy(0, d); };
 

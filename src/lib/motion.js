@@ -3,6 +3,7 @@
    Переопределения из разметки: data-reveal-delay="0.2", data-reveal-stagger="0.05".
    GSAP и плагины – из src/lib/gsap.js. Запускает src/lib/main.js. */
 import { gsap, ScrollTrigger, SplitText, CustomEase } from './gsap.js';
+import { tokenPx } from './tokens.js';
 
 const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const num = (el, key, fallback) => (el.dataset[key] !== undefined ? parseFloat(el.dataset[key]) : fallback);
@@ -11,7 +12,7 @@ const ready = el => el.classList.add('is-ready');
 const inFirstScreen = el => el.getBoundingClientRect().top < window.innerHeight;
 /* clamp(): у конца страницы точка 85 % может оказаться дальше, чем страница прокручивается, – тогда элемент не появится никогда */
 const trigger = (el, once = true) => ({ trigger: el, start: inFirstScreen(el) ? 'top bottom' : 'clamp(top 85%)', once });
-const yPx = () => parseFloat(css('--reveal-y')) || 24;
+const yPx = () => tokenPx('--reveal-y', 24);
 
 /* Easing из токенов. GSAP не понимает строку cubic-bezier(…) и молча подставляет свой дефолт, поэтому каждый --ease-* из :root
    регистрируется как CustomEase с тем же именем без «--»: --ease-sharp → ease: 'ease-sharp'. Новый токен подхватывается сам */
