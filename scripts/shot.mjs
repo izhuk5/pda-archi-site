@@ -122,11 +122,15 @@ const MEASURE = (id) => `(() => {
   const doc = document.documentElement;
   const cw = doc.clientWidth;
 
-  /* Горизонтальный скролл: элементы, вылезающие за ширину окна (overflow-x: clip у body прячет симптом, а не причину) */
+  /* Горизонтальный скролл: элементы, вылезающие за ширину окна (overflow-x: clip у body прячет симптом, а не причину).
+     Содержимое контейнера со своей прокруткой или обрезкой (лента со scroll-snap, рамка фото) страницу не расширяет –
+     пропускается; сам контейнер проверяется как обычный элемент */
+  const clipped = el => { for (let a = el.parentElement; a && a !== document.body; a = a.parentElement) if (getComputedStyle(a).overflowX !== 'visible') return true; return false; };
   const offenders = [];
   for (const el of document.body.querySelectorAll('*')) {
     const r = el.getBoundingClientRect();
     if (!r.width || !r.height) continue;
+    if (clipped(el)) continue;
     if (r.right > cw + 0.5 || r.left < -0.5) {
       if (offenders.some(o => o.el.contains(el))) continue;
       offenders.push({ el, text: name(el) + where(el) + ': ' + Math.round(r.left) + '…' + Math.round(r.right) + ' px при ширине ' + cw });
