@@ -38,11 +38,10 @@ const registerEases = () => {
   }
   found.forEach(prop => {
     const m = token(prop).match(/cubic-bezier\(([^)]+)\)/);
-    if (m) CustomEase.create(prop.slice(2), m[1].replace(/\s+/g, ''));
-    else console.warn(`motion: ${prop} не cubic-bezier(), пропущен`);
+    if (!m) return console.warn(`motion: ${prop} не cubic-bezier(), пропущен`);
+    CustomEase.create(prop.slice(2), m[1].replace(/\s+/g, ''));
   });
 };
-const ease = (name, fallback) => (CustomEase.get(name) ? name : fallback);
 
 export const PRESETS = {
   fade: el => {
@@ -188,7 +187,7 @@ export const PRESETS = {
       tl.to(el, { autoAlpha: 1, scale: 1, duration: 1.4, ease: 'power2.out' });
       if (section) tl.to(section, { '--photo-in': 1, duration: 1.4, ease: 'power2.out' }, 0);
     };
-    (el.decode ? el.decode() : Promise.resolve()).then(play, play);
+    el.decode().then(play, play);
   },
   scrub: el => {
     /* Прогресс прокрутки элемента через экран → CSS-переменная --p (0…1). Что с ней делать, решает правило секции */

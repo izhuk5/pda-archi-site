@@ -7,34 +7,33 @@
 import { gsap, ScrollTrigger } from '@lib/gsap.js';
 import { motionOn, onMotion, ready } from '@lib/env.js';
 
+/* Скрипт подключён из header.astro – шапка на странице есть всегда */
 const header = document.querySelector('.header');
-const lines = header ? header.querySelectorAll('.header-line') : [];
+const lines = header.querySelectorAll('.header-line');
 
 let hidden = false;
 
 const setBlend = on => header.classList.toggle('is-blend', on);
 
+/* Замер референса: скрытие – все строки разом; появление – по одной (имя, затем меню слева направо), шаг 0.1 s; длительности подобраны по кривым */
+const hideLines = () =>
+  gsap.to(lines, { yPercent: -100, duration: 1.3, ease: 'power4.out', overwrite: true });
+const showLines = () =>
+  gsap.fromTo(
+    lines,
+    { yPercent: 100 },
+    { yPercent: 0, duration: 1.55, ease: 'power4.out', stagger: 0.1, overwrite: true },
+  );
+
 const setHidden = next => {
   if (next === hidden) return;
   hidden = next;
   header.classList.toggle('is-hidden', next);
-  if (!motionOn) {
-    header.classList.toggle('is-gone', next);
-    return;
-  }
-  /* Замер референса: скрытие – все строки разом; появление – по одной (имя, затем меню слева направо), шаг 0.1 s; длительности подобраны по кривым */
-  if (next) gsap.to(lines, { yPercent: -100, duration: 1.3, ease: 'power4.out', overwrite: true });
-  else
-    gsap.fromTo(
-      lines,
-      { yPercent: 100 },
-      { yPercent: 0, duration: 1.55, ease: 'power4.out', stagger: 0.1, overwrite: true },
-    );
+  if (!motionOn) return header.classList.toggle('is-gone', next);
+  (next ? hideLines : showLines)();
 };
 
 ready.then(() => {
-  if (!header) return;
-
   /* header-blend: start – позиция прокрутки в px; функция, чтобы порог пересчитывался при ресайзе */
   const blend = ScrollTrigger.create({
     start: () => window.innerHeight / 3,
@@ -46,6 +45,7 @@ ready.then(() => {
 
   /* header-hide: подвал закрыл экран. Подвал ниже окна – его низ дошёл до низа окна, выше окна – его верх до верха окна.
      +=2 – запас 1 px на дробную прокрутку у конца страницы (ScrollTrigger срабатывает строго после start, отсюда ещё 1) */
+  /* Подвал – чужой компонент: на странице без него шапка просто не прячется */
   const footer = document.querySelector('.footer');
   if (!footer) return;
   const hide = ScrollTrigger.create({
@@ -62,7 +62,7 @@ ready.then(() => {
    (обе ждут один ready), поэтому hidden уже известен: страница открыта у подвала – входа нет, строки придут при прокрутке вверх.
    Иначе вход и скрытие спорили бы за одни строки, и часть меню оставалась видна под маской */
 onMotion(() => {
-  if (header && !hidden)
+  if (!hidden)
     gsap.from(lines, {
       yPercent: 100,
       duration: 1.55,

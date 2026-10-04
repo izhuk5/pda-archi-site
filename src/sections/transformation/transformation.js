@@ -4,8 +4,8 @@ import { gsap, ScrollTrigger, SplitText } from '@lib/gsap.js';
 import { onMotion } from '@lib/env.js';
 
 onMotion(() => {
+  /* Скрипт подключён из transformation.astro – секция на странице есть всегда */
   const el = document.getElementById('transformation');
-  if (!el) return;
   const mm = gsap.matchMedia();
   mm.add('(min-width: 768px)', () => {
     const chapters = Array.from(el.querySelectorAll('.transformation-chapter'));
@@ -53,7 +53,7 @@ onMotion(() => {
         },
       );
       gsap.to(caps[next], { autoAlpha: 1, duration: 0.6, delay: 0.5, overwrite: true });
-      if (count) count.textContent = `${next + 1} / ${chapters.length}`;
+      count.textContent = `${next + 1} / ${chapters.length}`;
       current = next;
     };
     /* Глава и прогресс считаются по времени таймлайна (onUpdate таймлайна, а не ScrollTrigger): scrub догоняет скролл ещё ~1 s
@@ -104,7 +104,7 @@ onMotion(() => {
       gsap.set([...frames, ...caps, ...frames.flatMap(f => [...f.querySelectorAll('img')])], {
         clearProps: 'all',
       });
-      if (count) count.textContent = `1 / ${chapters.length}`;
+      count.textContent = `1 / ${chapters.length}`;
     };
   });
   /* Пин создан здесь, а появления ниже по странице – в src/lib/motion.js, порядок запуска не гарантирован: без сортировки

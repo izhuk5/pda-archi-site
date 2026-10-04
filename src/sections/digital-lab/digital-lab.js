@@ -6,12 +6,12 @@ import { gsap, ScrollTrigger } from '@lib/gsap.js';
 import { onMotion } from '@lib/env.js';
 import { token, tokenPx } from '@lib/tokens.js';
 
+/* Скрипт подключён из digital-lab.astro – секция на странице есть всегда */
 const sec = document.getElementById('digital-lab');
-const track = sec?.querySelector('.digital-lab-track');
-const steps = sec ? Array.from(sec.querySelectorAll('.digital-lab-step')) : [];
+const track = sec.querySelector('.digital-lab-track');
+const steps = Array.from(sec.querySelectorAll('.digital-lab-step'));
 
 onMotion(() => {
-  if (!sec || !track) return;
   const yPx = () => tokenPx('--reveal-y', 24);
   const mm = gsap.matchMedia();
   mm.add('(min-width: 768px)', () => {
