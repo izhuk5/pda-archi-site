@@ -1,6 +1,7 @@
 /* Clients: тёмная. Клиенты набраны текстом, без логотипов: строка с линией – название гротеском (1–6), тип (7–8), работы (9–10).
-   Строка не кликается; при наведении название сдвигается (row-shift),
-   в колонках 11–12 раскрывается обложка проекта (thumb-reveal). На телефоне обложек нет, строка стопкой. */
+   Строка не кликается. Мышью: при наведении название сдвигается (row-shift), в колонках 11–12 раскрывается обложка (thumb-reveal).
+   Тач-экран: то же по скроллу – строка на линии 55 % экрана получает is-active (row-active, clients.js); без движения обложки открыты.
+   До 1023 обложка справа от типа и работ, место под неё зарезервировано – при раскрытии строка не меняет высоту. */
 .clients {
   display: flex;
   flex-direction: column;
@@ -38,15 +39,30 @@
   clip-path: inset(0 0 100% 0);
   transition: clip-path var(--dur-600) var(--ease-out);
 }
-.clients-row:hover .clients-name {
+/* Наведение – только мышью: на тач-экране тап залипает в :hover. Там то же состояние даёт скролл (is-active) */
+@media (hover: hover) and (pointer: fine) {
+  .clients-row:hover .clients-name {
+    translate: var(--row-shift) 0;
+  }
+  .clients-row:hover .clients-thumb {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.clients-row.is-active .clients-name {
   translate: var(--row-shift) 0;
 }
-.clients-row:hover .clients-thumb {
+.clients-row.is-active .clients-thumb {
   clip-path: inset(0 0 0 0);
 }
+/* Тач-экран без движения (?static, reduced motion): строки не становятся активными – обложки открыты сразу */
+@media (hover: none), (pointer: coarse) {
+  html:not(.has-motion) .clients-thumb {
+    clip-path: inset(0 0 0 0);
+  }
+}
 
-/* До 1023: название во всю ширину, тип и работы второй строкой рядом, без обложек (на старом сайте – до 768: iPad в вертикали так;
-   на планшете колонки по 106 px переносили тип и работы на 3–4 строки, а обложка по наведению на тачскрине не нужна) */
+/* До 1023: название во всю ширину, тип и работы второй строкой рядом, обложка 2:1 справа от них (колонки 10–12)
+   (на старом сайте – до 768: на планшете колонки по 106 px переносили тип и работы на 3–4 строки) */
 @media (max-width: 1023px) {
   .clients-row {
     row-gap: var(--space-8);
@@ -55,13 +71,18 @@
     grid-column: 1 / -1;
   }
   .clients-type {
-    grid-column: 1 / span 5;
+    grid-column: 1 / span 4;
   }
   .clients-work {
-    grid-column: 6 / -1;
+    grid-column: 5 / span 5;
   }
   .clients-thumb {
-    display: none;
+    grid-column: 10 / -1;
+    grid-row: 2;
+    align-self: start;
+    height: auto;
+    aspect-ratio: var(--ratio-photo-wide);
+    margin-block: 0;
   }
 }
 /* До 767 строка остаётся сеткой: .clients .clients-row сильнее .grid-12, который там становится flex-колонкой (base.css) */
@@ -70,9 +91,15 @@
     display: grid;
   }
 }
+/* До 478: тип и работы стопкой в колонках 1–8, обложка 3:2 справа от них (колонки 9–12) */
 @media (max-width: 478px) {
   .clients-type,
   .clients-work {
-    grid-column: 1 / -1;
+    grid-column: 1 / span 8;
+  }
+  .clients-thumb {
+    grid-column: 9 / -1;
+    grid-row: 2 / span 2;
+    aspect-ratio: var(--ratio-card-wide);
   }
 }

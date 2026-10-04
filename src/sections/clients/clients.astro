@@ -1,6 +1,6 @@
 ---
 /* Clients – серьёзные люди: 11 заказчиков набраны текстом, без логотипов (docs/design-system.md → Паттерны, «Список клиентов»).
-   Строка не кликается (окон и страниц проектов нет); при наведении – обложка проекта (thumb-reveal).
+   Строка не кликается (окон и страниц проектов нет); обложка проекта – при наведении мышью (thumb-reveal), на тач-экране – по скроллу (row-active, clients.js).
    Данные – технические карточки pda.archi и бриф. DWS убран (нет проекта), заказчик Belvista «Confidential» не показывается.
    Превью – src/assets/img/projects/thumbs/<project>.jpg, декор (alt=""): название проекта уже есть в строке. */
 import './clients.css';
@@ -109,7 +109,7 @@ const rows = [
               class="clients-thumb"
               src={thumb(r.project)}
               widths={[240, 480]}
-              sizes="17vw"
+              sizes="(max-width: 478px) 28vw, (max-width: 1023px) 22vw, 17vw"
               loading="lazy"
               alt=""
             />
@@ -119,3 +119,7 @@ const rows = [
     </ul>
   </div>
 </section>
+
+<script>
+  import './clients.js';
+</script>
