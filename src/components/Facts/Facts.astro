@@ -1,0 +1,9 @@
+---
+/* Факты: строки «название – значение» с линией сверху, список <dl>. Строки – в слоте:
+   <Facts class="about-facts body-s"><div class="facts-row"><dt>Founded</dt><dd>2002, Paris</dd></div></Facts>
+   class – классы места (колонки, размер текста); остальные атрибуты (data-reveal…) уходят на <dl>. */
+import './Facts.css';
+
+const { class: className, ...attrs } = Astro.props;
+---
+<dl class:list={['facts', className]} {...attrs}><slot /></dl>
