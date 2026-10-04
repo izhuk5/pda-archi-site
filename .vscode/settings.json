@@ -16,6 +16,15 @@
     "**/*.astro"
   ],
   "cssVariables.lookupFiles": [
-    "src/styles/tokens.css"
+    "**/src/styles/tokens.css"
+  ],
+  "cssVariables.blacklistFolders": [
+    "**/.git",
+    "**/node_modules",
+    "**/dist",
+    "**/dist/**",
+    "**/.astro",
+    "**/.astro/**",
+    "**/scripts/out"
   ]
 }

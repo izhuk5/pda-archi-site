@@ -6,7 +6,7 @@
 - Причина: в общих настройках VS Code пользователя Prettier – форматтер по умолчанию с `formatOnSave` для всех файлов; сохранение `base.css` развернуло компактные правила. Решение пользователя: Prettier для всего CSS, один стиль везде.
 - Все 19 файлов `.css` в `src/` отформатированы разом (правило – по свойству в строке). `.vscode/settings.json` – `[css]` формат при сохранении, `npm run format` – `src/**/*.{js,astro,css}`.
 - Проверка: вёрстка до и после в headless Chrome (`?static`, 1440 и 390) – 476 элементов, отличий 0; `npm run check` – 0, и линтер по-прежнему ловит сырые px, хексы и правила без класса блока в многострочном CSS (проверено вставкой).
-- Подсказка значений переменных при наведении: VS Code сам видит только переменные своего файла, а токены – в `tokens.css`. В `.vscode` – расширение CSS Variable Autocomplete (`vunguyentuan.vscode-css-variables`, рекомендация) и `cssVariables.lookupFiles: src/styles/tokens.css`. Само расширение пользователь ставит в VS Code.
+- Подсказка значений переменных при наведении: VS Code сам видит только переменные своего файла, а токены – в `tokens.css`. В `.vscode` – расширение CSS Variable Autocomplete (`vunguyentuan.vscode-css-variables`, рекомендация) и `cssVariables.lookupFiles: **/src/styles/tokens.css` (путь без `**/` расширение не применило). Грабля: расширение читало `dist/` и падало, когда сборка удаляла файлы (ENOENT в «CSS Variables Language Server») – `dist`, `.astro`, `scripts/out` в `cssVariables.blacklistFolders`.
 
 ## 2026-10-04 – без неразрывных пробелов
 - Решение пользователя: `&nbsp;` и `\u00a0` в текстах не ставим. Тексты уйдут в CMS (Sanity) – там неразрывные пробелы при желании ставит клиент сам.
