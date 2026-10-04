@@ -1,0 +1,16 @@
+/* Поле формы: подпись над полем, поле – линия снизу (цвет линии – --color-line, на тёмной секции светлый сам); фокус – линия цветом текста.
+   is-wide – во всю ширину сетки формы. Где: contact. */
+.field { display: flex; flex-direction: column; gap: var(--space-8); }
+.field.is-wide { grid-column: 1 / -1; }
+.field-input {
+  width: 100%;
+  padding: var(--space-8) 0;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--color-line);
+  border-radius: 0;
+  resize: vertical;
+  transition: border-color var(--dur-300) var(--ease-out);
+}
+.field-input:focus { outline: none; border-bottom-color: currentColor; }
+.field-input:user-invalid { border-bottom-color: currentColor; border-bottom-style: dashed; }
