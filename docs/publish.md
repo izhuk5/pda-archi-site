@@ -20,6 +20,8 @@
 Хостинг выбирается один раз и записывается в `LOG.md` вместе с адресом.
 
 ## Выбрано: Netlify
+Сайт – `pda-archi-site` в команде `ihorzhuk94`: https://pda-archi-site.netlify.app, админка – https://app.netlify.com/projects/pda-archi-site. Создан через CLI (`netlify sites:create`), папка связана (`netlify link`, `.netlify/` в `.gitignore`). Автодеплой с GitHub подключает `netlify init` – доступ к репозиторию пользователь подтверждает в браузере.
+
 Репозиторий – `git@github.com:izhuk5/pda-archi-site.git` (публичный, ветка `main`). Настройки сборки – в `netlify.toml` в корне: `npm run build`, папка `dist`, Node 22, кеш `/_astro/*` на год. В Netlify: Add new site → Import an existing project → GitHub → `pda-archi-site`, поля сборки подтянутся из `netlify.toml`. Каждый push в `main` выкладывается сам.
 
 В публичный репозиторий не попадает `brief/` (бриф клиента и референсы – только на диске, в `.gitignore`).
