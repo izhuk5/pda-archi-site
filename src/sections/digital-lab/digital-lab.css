@@ -1,8 +1,8 @@
 /* Digital Lab: тёмная часть начинается здесь. Горизонтальная лента, вариант A «Ритм»:
    фраза и подзаголовок, затем пять шагов через один – высокий кадр с текстом сбоку внизу и низкий кадр с текстом над ним.
    Номера – display-l засечками, чертежи – белыми линиями на тёмном (инверсия). Счётчика и линии прогресса нет (решение пользователя 2026-10-04).
-   Без движения (телефон, ?static, reduced motion) – лента листается вбок со scroll-snap.
-   С приёмом h-scroll (от 768) секция закрепляется, лента едет по скроллу, фото – параллакс внутри кадров.
+   С приёмом h-scroll (на любой ширине) секция закрепляется, лента едет по скроллу, фото – параллакс внутри кадров.
+   Без движения (?static, reduced motion) – лента листается вбок со scroll-snap.
    .section.digital-lab – сильнее .section из base.css: отступы секции свои. */
 .section.digital-lab {
   padding-block: var(--space-64);
@@ -128,14 +128,48 @@
   .digital-lab-step.is-short .digital-lab-text {
     max-width: none;
   }
+  /* Все кадры одной пропорции: иначе шаги разной высоты, и лента высотой в самый высокий оставляет пустоту под остальными */
+  /* align-self: stretch – на всю ширину шага (десктопный start сжимал кадр до картинки, пока она не загрузилась – до 0);
+     min-height: 0 – иначе высота по содержимому перебивает aspect-ratio и вертикальное фото растягивает кадр */
   .digital-lab-figure,
   .digital-lab-step.is-tall .digital-lab-figure,
   .digital-lab-step.is-short .digital-lab-figure {
     height: auto;
+    aspect-ratio: var(--ratio-card-wide);
+    align-self: stretch;
+    min-height: 0;
   }
   .digital-lab-figure img {
     width: 100%;
-    height: auto;
+    height: 100%;
     max-width: 100%;
+    object-fit: cover;
+  }
+  /* Пин (h-scroll): лента одной строкой, как на десктопе – фраза первой панелью, затем шаги «кадр сверху, текст снизу».
+     Всё в один экран (100svh), по центру по высоте – под шапкой остаётся воздух */
+  .section.digital-lab.is-pinned {
+    padding-block: 0;
+  }
+  /* Шаги – по верхнему краю (кадры на одной линии при разной длине текста), строка ленты – по центру экрана, фраза – по центру строки */
+  .digital-lab.is-pinned .digital-lab-track {
+    display: flex;
+    align-items: flex-start;
+    align-self: center;
+    gap: var(--space-48);
+  }
+  .digital-lab.is-pinned .digital-lab-intro {
+    width: var(--h-intro-w-mobile);
+    align-self: center;
+  }
+  .digital-lab.is-pinned .digital-lab-intro > * {
+    position: static;
+    width: auto;
+  }
+  .digital-lab.is-pinned .digital-lab-step {
+    width: var(--h-step-w-mobile);
+  }
+  .digital-lab.is-pinned .digital-lab-figure {
+    height: var(--h-figure-mobile);
+    aspect-ratio: auto;
   }
 }
