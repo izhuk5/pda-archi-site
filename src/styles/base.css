@@ -98,11 +98,11 @@ h1, h2, h3 { text-wrap: balance; }
 @media (max-width: 1023px) {
   .wrapper { padding-inline: var(--page-margin-tablet); }
   .section { padding-block: var(--space-section-tablet); }
+  .display-mega { font-size: var(--fs-mega-tablet); }
 }
 @media (max-width: 767px) {
   .grid-12 { display: flex; flex-direction: column; }
 }
 @media (max-width: 478px) {
   .indent { text-indent: var(--indent-line-mobile); }
-  .display-mega { font-size: var(--fs-mega-mobile); }
 }

@@ -4,7 +4,7 @@
 
 ## Как продолжить в новом чате
 Файлы, с которых начинать: `src/pages/index.astro`, `src/sections/`, `src/styles/tokens.css`, `src/lib/motion.js`.
-Последняя собранная секция: – (идёт перенос, см. ниже).
+Последнее перенесённое: шапка и подвал (компоненты `SiteHeader`, `SiteFooter`, `Link`), 2026-10-04. Следующая – hero.
 Локальный просмотр: `npm run dev`, затем `http://localhost:4321/`. Статика без анимаций: `?static`, нужная секция: `?static&to=<id>`.
 
 ### Перенос с wow-site-starter (идёт с 2026-10-04)
@@ -158,7 +158,9 @@ Desktop-first, диапазоны как в Webflow, но планшет до 10
 | `Facts` – строки «название – значение» с линией | `.facts`, `.facts-row` | – | окно проекта, transformation, about, expertise |
 | `Compare` – два фото в одной ячейке, шторка, ползунок пальцем (`compare`) | `.compare`, `.compare-frame` | – | transformation |
 | `SectionHead` – заголовок 5 колонок слева, лид засечками на 7–12 | `.section-head`, `.section-head-title`, `.section-head-lead` | – | projects, expertise, clients |
-| `Link` – линия ссылки (`link-line`) | `.link` | в тексте и активная – линия видна; вариант для меню и подвала (было `.ulink`) – линия при наведении, имя варианта решить при переносе шапки | шапка, подвал, contact |
+| `Link` – ссылка с линией (`link-line`), рендерит `<a>`; атрибуты (`target`, `rel`, `aria-*`) и `class` места проходят на него | `.link` | `quiet` → `.link.is-quiet` – меню и подвал: линия только при наведении (было `.ulink`); без него – ссылка в тексте и активная, линия видна | шапка, подвал; дальше contact |
+| `SiteHeader` – закреплённая шапка: имя в три строки, меню; строки в масках (`.site-header-mask` / `.site-header-line`) для `header-hide`; `SiteHeader.js` – `header-blend`, `header-hide` | `.site-header` | состояния `is-blend`, `is-hidden`, `is-gone` ставит JS | все страницы, слот `header` каркаса `Base.astro` (вне `<main>`) |
+| `SiteFooter` – подвал: имя, группы Navigation / Contact / Address, знак PDA (`letters`), реквизиты | `.site-footer` | группы `is-nav`, `is-contact`, `is-address` | все страницы, слот `footer` каркаса (вне `<main>`) |
 | `Parallax` – фото в рамке с параллаксом | `.parallax`, `.parallax-img` | пропорцию рамки задаёт секция | about |
 | `Field` – подпись, поле линией снизу, фокус – белая линия | `.field`, `.field-input` | `is-wide` в сетке формы | contact |
 | `Button` – обводка, hover `fill-up` | `.button` | – | contact |
@@ -201,6 +203,8 @@ Desktop-first, диапазоны как в Webflow, но планшет до 10
 
 ## Ручная доводка
 Места, которые Claude пометил как «нужна рука», и что с ними сделано. Перенесены со старого сайта – действуют и здесь.
+- подвал – на 768–1023 стоит десктопная сетка (как у старого сайта на 769–1023): на 768 «All rights reserved» и «© 2026» в нижней строке переносятся на две строки (колонка 169 px). Если на планшете нужно аккуратнее – правило ≤ 1023 с группами по две в ряд, как на телефоне.
+- шапка – поля на 768–1023 теперь 16 px, как у `.wrapper` (на старом сайте шапка держала 24 px до 500, а контент – 16 от 768: края не совпадали). Проверить на планшете, что имя и меню стоят по краю контента.
 - hero – меню на телефоне: на самых светлых точках потолка контраст 3.3 при норме 4.5 для текста 15 px (медиана 6.8). Подвинуть кадр или усилить затемнение верха.
 - hero – тексты – перевод фактов брифа, предлагаю заменить после английских текстов клиента. favicon нет – сделать из логотипа клиента.
 - шапка – в режиме difference над фото (hero после трети экрана, about, проекты) цвет букв инвертирует картинку, как у референса. Если над фото проектов читается плохо – выключать difference над фото (класс по секции).
@@ -229,6 +233,7 @@ Desktop-first, диапазоны как в Webflow, но планшет до 10
 
 ## Журнал изменений
 Дата – секция – что сделано – файлы.
+- 2026-10-04 – шапка и подвал – перенесены компонентами `SiteHeader`, `SiteFooter` и `Link` (было `.ulink` → `Link quiet`, `.footer__*` → `.site-footer-*`, `.mask__line` → `.site-header-line`). Каркас получил слоты `header` и `footer` вне `<main>`. Сравнение со старым сайтом по координатам и размерам всех элементов (`?static`): 1440, 1024, 390 – совпадают до пикселя; 768 – десктопная сетка вместо телефонной (граница 768 → 767), 600 – поля шапки и знака 16 вместо 24 (планшетные поля шаблона, кегль знака `--fs-mega-tablet` от них же). Движение проверено прокруткой: вход шапки, `is-blend` после трети экрана, скрытие у подвала и возврат по одной, `letters` у PDA. Исправлено против старого сайта: если страница открыта у подвала, вход шапки и скрытие спорили за строки и меню оставалось видно – вход теперь только когда шапка не скрыта. Файлы: src/components/Link/*, src/components/SiteHeader/*, src/components/SiteFooter/*, src/layouts/Base.astro, src/pages/index.astro, src/styles/tokens.css, src/styles/base.css, docs/motion.md.
 - 2026-10-04 – перенос, шаг 0 – фундамент с wow-site-starter: бриф, референсы и исходник брифа; токены направления A (имена под шаблон: `--fw-display`/`--fw-title` вместо прежних весов, `-tablet` вместо `-mobile` у полей и отступа секций; студийные токены, подложка чертежей и смещение подчёркивания не перенесены – не используются); шкала текста, `.indent`, `.nowrap`, `.display-mega`, `.display-statement` в `base.css`; шрифты в `public/fonts/` (только Regular: Medium нигде не использовался); 84 используемых фото в `src/assets/img/`; приёмы `words`, `letters`, `rows`, `photo-in` и запуск первого экрана и `clamp()` в `src/lib/motion.js`; приёмы секций и hover – в `docs/motion.md`; эта база – только действующие решения. Файлы: brief/*, src/styles/tokens.css, src/styles/base.css, src/layouts/Base.astro, src/lib/motion.js, src/assets/SOURCES.md, src/assets/img/**, public/fonts/*, docs/motion.md, docs/design-system.md.
 - 2026-10-03 – заготовка – desktop-first: база десктоп, `max-width: 1023 | 767 | 478`; токены `-tablet`; `.grid-12` до 767 – flex-колонка – src/styles/base.css, src/styles/tokens.css.
 - 2026-10-03 – заготовка – классы kebab-case, варианты – `is-*`: `.section.is-dark`, `.section.is-sheet`, `.scene-fallback` – src/styles/base.css.

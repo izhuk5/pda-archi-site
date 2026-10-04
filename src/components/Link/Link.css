@@ -1,0 +1,13 @@
+/* Линия ссылки (приём link-line, как у референса): линия – фон-градиент у низа строки, растёт по ширине.
+   .link – ссылка в тексте (и активная): линия видна, при наведении уезжает вправо, после – возвращается слева.
+   .link.is-quiet – меню и подвал: в покое линии нет, при наведении растёт слева направо, при уходе уезжает вправо.
+   Ширина ссылки = ширина текста: в ячейке сетки – justify-self: start, во flex-колонке – align-items: flex-start у родителя. */
+.link {
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) no-repeat;
+  background-position: 0 100%;
+  background-size: 100% var(--link-line);
+  transition: background-size var(--dur-link) var(--ease-link);
+}
+.link:hover, .link:focus-visible, .link.is-quiet { background-position: 100% 100%; background-size: 0% var(--link-line); }
+.link.is-quiet:hover, .link.is-quiet:focus-visible { background-position: 0 100%; background-size: 100% var(--link-line); }

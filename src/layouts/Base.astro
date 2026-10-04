@@ -31,9 +31,12 @@ const {
   </script>
 </head>
 <body>
+  {/* Шапка и подвал – вне <main>: на главной это SiteHeader и SiteFooter (slot="header" / slot="footer") */}
+  <slot name="header" />
   <main>
     <slot />
   </main>
+  <slot name="footer" />
 
   {/* Движение и 3D: GSAP, Lenis, Three.js из npm, Astro собирает их сам. Three.js грузится отдельным файлом, только если на странице есть [data-scene] */}
   <script>

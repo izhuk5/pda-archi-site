@@ -145,7 +145,7 @@
   --mega-ratio: 1.775;  /* ширина краски PDA в долях кегля, обычный вес (замер на 1440: 1 363 px при кегле 768 px) */
   --mega-bearing: -0.066em;  /* левый отступ буквы P внутри шрифта – знак встаёт ровно по полю */
   --fs-mega: calc((100vw - 2 * var(--page-margin)) / var(--mega-ratio));
-  --fs-mega-mobile: calc((100vw - 2 * var(--page-margin-tablet)) / var(--mega-ratio));
+  --fs-mega-tablet: calc((100vw - 2 * var(--page-margin-tablet)) / var(--mega-ratio));
   --lh-mega: 0.8;
   --ls-mega: -0.04em;
 

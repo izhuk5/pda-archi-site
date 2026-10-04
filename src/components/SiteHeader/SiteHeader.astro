@@ -1,0 +1,25 @@
+---
+/* Закреплённая шапка: имя бюро в три строки слева, меню справа (docs/design-system.md → Карта секций, абзац о шапке).
+   Каждая строка – маска (.site-header-mask режет) и строка внутри (.site-header-line двигается): приём header-hide, SiteHeader.js.
+   Подключается в src/pages/index.astro в слот header каркаса – вне <main>. */
+import './SiteHeader.css';
+import Link from '@components/Link/Link.astro';
+---
+<header class="site-header body-s">
+  <a class="site-header-name" href="#hero" aria-label="PDA Architecture, Paris – to the top">
+    <span class="site-header-mask"><span class="site-header-line">PDA</span></span>
+    <span class="site-header-mask"><span class="site-header-line">Architecture</span></span>
+    <span class="site-header-mask"><span class="site-header-line serif">Paris</span></span>
+  </a>
+  <nav aria-label="Main">
+    <ul class="site-header-nav">
+      <li class="site-header-mask"><Link quiet class="site-header-line" href="#projects">Projects</Link></li>
+      <li class="site-header-mask"><Link quiet class="site-header-line" href="#expertise">Expertise</Link></li>
+      <li class="site-header-mask"><Link class="site-header-line" href="#contact">Discuss a project</Link></li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  import './SiteHeader.js';
+</script>
