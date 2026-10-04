@@ -4,7 +4,7 @@
    Без пина (≤ 767, ?static, reduced motion) – лента листается вбок со scroll-snap, прогресс идёт за ней; с пином (от 768,
    приём h-scroll) – лента едет по скроллу. Всё поведение – digital-lab.js. Тексты – пересказ страниц Digital Lab, BIM, 3D-печать, IA pda.archi. */
 import './digital-lab.css';
-import { Image } from 'astro:assets';
+import Photo from '@components/photo/photo.astro';
 import scanSection from '@assets/img/digital/scan-section.jpg';
 import modelAxonometry from '@assets/img/digital/model-axonometry.jpg';
 import generateGrid from '@assets/img/digital/generate-grid.jpg';
@@ -76,7 +76,7 @@ const widths = img => [700, 1000, 1400].filter(w => w <= img.width);
     {steps.map(s => (
       <li class:list={['digital-lab-step', `is-${s.shape}`]}>
         <figure class:list={['digital-lab-figure', { 'is-drawing': s.drawing }]}>
-          <Image
+          <Photo
             src={s.img}
             widths={widths(s.img)}
             sizes="(max-width: 767px) 82vw, 64vw"

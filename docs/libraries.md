@@ -105,7 +105,7 @@ export { ..., Flip };                   // 3. экспорт – дальше im
 
 | Что | Зачем | Статус |
 |---|---|---|
-| `<Image>`, `<Picture>` из `astro:assets` | WebP/AVIF, размеры, `srcset`, `loading` сами | используем (правило в CLAUDE.md) |
+| `getImage()` из `astro:assets` | AVIF/WebP/JPG нужных ширин при сборке | используем внутри компонента `Photo`; `<Image>` / `<Picture>` напрямую не используются: `<Picture>` не умеет свой кадр для телефона |
 | `fonts` в `astro.config.mjs` | локальные шрифты с оптимизацией и preload | когда перейдём с Google Fonts на локальные |
 | `astro:transitions` (View Transitions) | плавные переходы между страницами | не берём: сайт одностраничный, а после каждого перехода Lenis и ScrollTrigger пришлось бы запускать заново |
 

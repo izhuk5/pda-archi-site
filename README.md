@@ -61,7 +61,7 @@ src/
     motion.js        реестр приёмов data-reveal
     scene.js         Three.js: рендерер, ленивый старт, пауза вне экрана; объект сцены – слот
   assets/
-    img/             картинки – выводятся через <Image>, Astro сам делает WebP/AVIF и srcset
+    img/             картинки – выводятся компонентом Photo: AVIF + WebP и srcset при сборке
     SOURCES.md       источники всех ассетов: картинки, видео, модели
 public/
   video/  models/    файлы, которые уходят на хостинг как есть

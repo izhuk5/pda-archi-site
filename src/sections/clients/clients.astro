@@ -4,7 +4,7 @@
    Данные – технические карточки pda.archi и бриф. DWS убран (нет проекта), заказчик Belvista «Confidential» не показывается.
    Превью – src/assets/img/projects/thumbs/<project>.jpg, декор (alt=""): название проекта уже есть в строке. */
 import './clients.css';
-import { Image } from 'astro:assets';
+import Photo from '@components/photo/photo.astro';
 import SectionHead from '@components/section-head/section-head.astro';
 
 const thumbs = import.meta.glob('/src/assets/img/projects/thumbs/*.jpg', {
@@ -105,7 +105,7 @@ const rows = [
             <span class="clients-name display-s">{r.name}</span>
             <span class="clients-type body-s">{r.type}</span>
             <span class="clients-work body-s">{r.work}</span>
-            <Image
+            <Photo
               class="clients-thumb"
               src={thumb(r.project)}
               widths={[240, 480]}

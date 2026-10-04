@@ -1,16 +1,14 @@
 ---
 /* About – заявление о работе с существующими зданиями, два абзаца, фото на всю ширину с параллаксом, история и факты
    (docs/design-system.md → Паттерны, «Заявление с фото на всю ширину»). По замеру kononenkogroup.com.
-   Фото ≤ 478 – свой вертикальный кадр с запасом под параллакс: <source> из getImage(), основной кадр – <Image> (как в hero).
+   Фото ≤ 478 – свой вертикальный кадр с запасом под параллакс: компонент Photo с пропом mobile (как в hero).
    Движение: заявление – words, абзацы и история – lines, факты – stagger, рамка фото – scrub (параллакс в CSS). */
 import './about.css';
-import { Image, getImage } from 'astro:assets';
+import Photo from '@components/photo/photo.astro';
 import Caption from '@components/caption/caption.astro';
 import Facts from '@components/facts/facts.astro';
 import photo from '@assets/img/about-belvista-aerial-2000.jpg';
 import photoMobile from '@assets/img/about-belvista-aerial-mobile.jpg';
-
-const mobile = await getImage({ src: photoMobile, widths: [400, 800], sizes: '100vw' });
 ---
 
 <section id="about" class="section about" aria-labelledby="about-title">
@@ -30,23 +28,15 @@ const mobile = await getImage({ src: photoMobile, widths: [400, 800], sizes: '10
   </div>
   <figure class="about-figure">
     <div class="about-frame" data-reveal="scrub">
-      <picture>
-        <source
-          media="(max-width: 478px)"
-          srcset={mobile.srcSet.attribute}
-          sizes="100vw"
-          width="800"
-          height="1400"
-        />
-        <Image
-          class="about-photo"
-          src={photo}
-          widths={[1000, 1600, 2000]}
-          sizes="100vw"
-          loading="lazy"
-          alt="Belvista, 118 Champs-Élysées: the rehabilitated block and its roof terraces seen from above"
-        />
-      </picture>
+      <Photo
+        class="about-photo"
+        src={photo}
+        widths={[1000, 1600, 2000]}
+        mobile={photoMobile}
+        mobileWidths={[400, 800]}
+        sizes="100vw"
+        alt="Belvista, 118 Champs-Élysées: the rehabilitated block and its roof terraces seen from above"
+      />
     </div>
     <Caption as="figcaption" class="wrapper about-caption body-s">
       <span>Belvista, 118 Champs-Élysées, Paris 8</span>

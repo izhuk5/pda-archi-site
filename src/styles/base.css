@@ -46,6 +46,16 @@ img,
 video {
   height: auto;
 }
+/* <picture> из компонента Photo – только обёртка форматов: без класса её нет в раскладке, <img> встаёт в сетку и flex родителя.
+   С классом (hero-picture) – обычный блок со своими стилями */
+picture:not([class]) {
+  display: contents;
+}
+/* Иначе при display: contents пустые <source> становятся ячейками сетки родителя и добавляют row-gap.
+   Формат браузер выбирает по атрибутам <source>, CSS на выбор не влияет */
+picture > source {
+  display: none;
+}
 button,
 input,
 textarea,

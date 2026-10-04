@@ -1,0 +1,63 @@
+---
+/* Фото сайта: <picture> с AVIF и WebP – браузер берёт первый формат, который понимает, старый – JPG.
+   Форматы и ширины Astro готовит при сборке (getImage), сервер не нужен.
+   <Photo src={photo} widths={[800, 1600]} sizes="50vw" alt="Описание кадра" />
+   – mobile, mobileWidths – свой кадр для телефона (≤ 478 px): отдельные <source media> тех же форматов;
+   – class – на <img>; pictureClass – на <picture>. Без него <picture> – display: contents (base.css), и <img> стоит в раскладке
+     так, будто обёртки нет;
+   – остальные атрибуты (data-reveal, fetchpriority) – на <img>. */
+import { getImage } from 'astro:assets';
+
+const FORMATS = ['avif', 'webp'];
+const MOBILE = '(max-width: 478px)';
+
+const {
+  src,
+  widths,
+  sizes,
+  alt,
+  loading = 'lazy',
+  mobile,
+  mobileWidths,
+  class: className,
+  pictureClass,
+  ...rest
+} = Astro.props;
+
+const sources = (image, imageWidths, media) =>
+  Promise.all(
+    FORMATS.map(async format => {
+      const img = await getImage({ src: image, widths: imageWidths, sizes, format });
+      return { media, format, img };
+    }),
+  );
+
+const mobileSources = mobile ? await sources(mobile, mobileWidths, MOBILE) : [];
+const mainSources = await sources(src, widths);
+const fallback = await getImage({ src, widths, sizes, format: 'jpg' });
+---
+
+<picture class={pictureClass}>
+  {[...mobileSources, ...mainSources].map(({ media, format, img }) => (
+    <source
+      media={media}
+      type={`image/${format}`}
+      srcset={img.srcSet.attribute}
+      sizes={sizes}
+      width={img.attributes.width}
+      height={img.attributes.height}
+    />
+  ))}
+  <img
+    class={className}
+    src={fallback.src}
+    srcset={fallback.srcSet.attribute}
+    sizes={sizes}
+    width={fallback.attributes.width}
+    height={fallback.attributes.height}
+    alt={alt}
+    loading={loading}
+    decoding="async"
+    {...rest}
+  />
+</picture>

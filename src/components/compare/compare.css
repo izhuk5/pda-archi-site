@@ -12,7 +12,10 @@
   aspect-ratio: var(--ratio-photo-mobile);
   overflow: clip;
 }
-.compare-frame > * {
+/* Фото лежат в <picture> (display: contents), поэтому по классам, а не .compare-frame > * */
+.compare-before,
+.compare-after,
+.compare-range {
   grid-area: 1 / 1;
 }
 .compare-before,

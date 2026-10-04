@@ -218,8 +218,9 @@ const lintAstro = (file) => {
       if (/display\s*:\s*none/i.test(style[1])) add('hidden', file, line, `display: none в разметке – блок «на потом»?: ${short(style[1])}`);
       lintCss(file, `x{${style[1]}}`, { fileText: text, offset: m.index });
     }
-    if (tag === 'img') add('media', file, line, '<img> – только <Image> / <Picture> из astro:assets: WebP/AVIF, размеры, srcset и loading Astro ставит сам');
-    if ((tag === 'Image' || tag === 'Picture') && !/\salt\s*=/.test(attrs)) add('media', file, line, `<${tag}> без alt (декор – alt="")`);
+    /* <img> собирает только компонент Photo (AVIF + WebP + JPG из getImage); остальные выводят картинки через него */
+    if (tag === 'img' && !file.includes(`${path.sep}components${path.sep}photo${path.sep}`)) add('media', file, line, '<img> – только через компонент Photo (src/components/photo/): AVIF и WebP, размеры и srcset Astro делает при сборке');
+    if (['Image', 'Picture', 'Photo'].includes(tag) && !/\salt\s*=/.test(attrs)) add('media', file, line, `<${tag}> без alt (декор – alt="")`);
     if (tag === 'video' && /\ssrc\s*=/.test(attrs)) add('media', file, line, '<video src> – только data-src + preload="none", src ставит src/lib/main.js');
     for (const r of attrs.matchAll(/data-reveal\s*=\s*"([^"]+)"/g)) {
       if (!presets.has(r[1])) add('motion', file, line, `data-reveal="${r[1]}" нет в реестре src/lib/motion.js / docs/motion.md`);

@@ -2,7 +2,7 @@
 /* Карточка проекта – не ссылка и не кнопка (окон и страниц проектов нет). Фото в рамке, под ним две строки Caption:
    название и площадь, тип и год. Пропорцию рамки задаёт секция (shape влияет только на sizes картинки). Hover card-zoom. */
 import './project-card.css';
-import { Image } from 'astro:assets';
+import Photo from '@components/photo/photo.astro';
 import Caption from '@components/caption/caption.astro';
 
 const { photo, alt, shape = 'wide', name, area, type, year } = Astro.props;
@@ -14,7 +14,7 @@ const widths = [480, 800, 1100, 1600].filter(w => w <= photo.width);
 
 <div class="project-card">
   <span class="project-card-frame" data-reveal="clip">
-    <Image
+    <Photo
       class="project-card-photo"
       src={photo}
       widths={widths}

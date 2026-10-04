@@ -4,7 +4,7 @@
    <Compare before={…} after={…} beforeAlt="…" afterAlt="…" label="…"><span>During works</span><span>2025</span></Compare>
    class – классы места; в пин-режиме transformation ползунок скрыт, шторку ведёт прокрутка (transformation.js). */
 import './compare.css';
-import { Image } from 'astro:assets';
+import Photo from '@components/photo/photo.astro';
 import Caption from '@components/caption/caption.astro';
 
 const { before, after, beforeAlt, afterAlt, label, class: className } = Astro.props;
@@ -14,7 +14,7 @@ const sizes = '(max-width: 767px) 100vw, 42vw';
 
 <figure class:list={['compare', className]}>
   <div class="compare-frame">
-    <Image
+    <Photo
       class="compare-before"
       src={before}
       widths={widths}
@@ -22,7 +22,7 @@ const sizes = '(max-width: 767px) 100vw, 42vw';
       loading="lazy"
       alt={beforeAlt}
     />
-    <Image
+    <Photo
       class="compare-after"
       src={after}
       widths={widths}
