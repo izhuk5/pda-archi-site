@@ -5,19 +5,53 @@
    с красной строкой (display-l serif indent, 1–11), под ней справа факты строками (Facts) на колонках 7–12 – по линии лида projects.
    Маска строки у заявления шире строки на --mask-bleed: при интерлиньяже 0.8 иначе режутся выносные элементы во время появления.
    .section.about – сильнее .section из base.css: верхний отступ секции свой (180 – больше воздуха после hero). */
-.section.about { padding-top: var(--space-180); display: flex; flex-direction: column; gap: var(--space-128); }
-.about-body { row-gap: var(--space-48); }  /* от базовой линии заголовка до заглавных абзацев ~57 px, у референса ~60 */
-.about-title { grid-column: 1 / -1; display: flow-root; text-align: center; text-wrap: balance; }
+.section.about {
+  padding-top: var(--space-180);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-128);
+}
+.about-body {
+  row-gap: var(--space-48);
+} /* от базовой линии заголовка до заглавных абзацев ~57 px, у референса ~60 */
+.about-title {
+  grid-column: 1 / -1;
+  display: flow-root;
+  text-align: center;
+  text-wrap: balance;
+}
 /* Маска строки выше строки на --mask-bleed сверху и снизу, поля возвращают её на место. Поля соседних масок схлопываются в одно,
    поэтому у второй и дальше – двойное: высота заголовка при разбивке = высоте в покое. flow-root – поля не уходят за заголовок. */
-.about-title .line-mask { padding-block: var(--mask-bleed); margin-block: calc(-1 * var(--mask-bleed)); }
-.about-title .line-mask + .line-mask { margin-top: calc(-2 * var(--mask-bleed)); }
-.about-lead { grid-column: 1 / -1; display: flex; justify-content: center; gap: var(--indent-line); }
-.about-lead p { width: var(--measure-statement); }
-.about-figure { display: flex; flex-direction: column; gap: var(--space-12); }
+.about-title .line-mask {
+  padding-block: var(--mask-bleed);
+  margin-block: calc(-1 * var(--mask-bleed));
+}
+.about-title .line-mask + .line-mask {
+  margin-top: calc(-2 * var(--mask-bleed));
+}
+.about-lead {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: var(--indent-line);
+}
+.about-lead p {
+  width: var(--measure-statement);
+}
+.about-figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
 /* Рамка с параллаксом: режет кадр; картинка выше рамки на --parallax-extra, сдвиг – translate от --p (не transform: GSAP его перезаписывает) */
-.about-frame { aspect-ratio: var(--ratio-photo-wide); min-height: 0; overflow: clip; }
-.about-frame picture { display: contents; }
+.about-frame {
+  aspect-ratio: var(--ratio-photo-wide);
+  min-height: 0;
+  overflow: clip;
+}
+.about-frame picture {
+  display: contents;
+}
 .about-photo {
   width: 100%;
   height: calc(100% + var(--parallax-extra));
@@ -26,19 +60,45 @@
   translate: 0 calc((var(--p, 0.5) - 1) * var(--parallax-shift));
   will-change: translate;
 }
-.about-info { row-gap: var(--space-64); }
-.about-story { grid-column: 1 / span 11; }
-.about-facts { grid-column: 7 / span 6; border-bottom: 1px solid var(--color-line); }
+.about-info {
+  row-gap: var(--space-64);
+}
+.about-story {
+  grid-column: 1 / span 11;
+}
+.about-facts {
+  grid-column: 7 / span 6;
+  border-bottom: 1px solid var(--color-line);
+}
 
 /* До 767 .grid-12 – flex-колонка (base.css): история и факты сами встают во всю ширину */
 @media (max-width: 767px) {
-  .section.about { padding-top: var(--space-128); gap: var(--space-96); }
+  .section.about {
+    padding-top: var(--space-128);
+    gap: var(--space-96);
+  }
 }
 @media (max-width: 478px) {
-  .section.about { padding-top: var(--space-96); gap: var(--space-64); }
-  .about-body { row-gap: var(--space-32); }
-  .about-lead { flex-direction: column; align-items: center; gap: var(--space-24); text-align: center; }
-  .about-lead p { width: auto; }
-  .about-info { row-gap: var(--space-32); }
-  .about-frame { aspect-ratio: var(--ratio-photo-mobile); }
+  .section.about {
+    padding-top: var(--space-96);
+    gap: var(--space-64);
+  }
+  .about-body {
+    row-gap: var(--space-32);
+  }
+  .about-lead {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-24);
+    text-align: center;
+  }
+  .about-lead p {
+    width: auto;
+  }
+  .about-info {
+    row-gap: var(--space-32);
+  }
+  .about-frame {
+    aspect-ratio: var(--ratio-photo-mobile);
+  }
 }

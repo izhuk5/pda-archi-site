@@ -12,7 +12,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "node scripts/check.mjs",
-    "format": "prettier --write \"src/**/*.{js,astro}\"",
+    "format": "prettier --write \"src/**/*.{js,astro,css}\"",
     "shot": "node scripts/shot.mjs",
     "versions": "npm outdated"
   },

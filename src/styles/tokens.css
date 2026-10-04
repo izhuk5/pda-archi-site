@@ -8,14 +8,14 @@
 :root {
   /* Цвет: один акцент на весь сайт, нейтральные с оттенком – решение, не дефолт */
   --color-bg-page: #ffffff;
-  --color-bg-sheet: #f4f4f2;          /* не решено */
-  --color-bg-dark: #131313;           /* тёмная часть страницы, с digital-lab; тот же тон, что основной текст */
-  --color-bg-elevated: #1a1a1a;       /* не решено */
+  --color-bg-sheet: #f4f4f2; /* не решено */
+  --color-bg-dark: #131313; /* тёмная часть страницы, с digital-lab; тот же тон, что основной текст */
+  --color-bg-elevated: #1a1a1a; /* не решено */
   --color-fg: #131313;
-  --color-fg-muted: #6b6b6b;          /* не решено; серый на светлом – только display-размеры */
+  --color-fg-muted: #6b6b6b; /* не решено; серый на светлом – только display-размеры */
   --color-fg-on-dark: #ffffff;
-  --color-fg-muted-on-dark: #a8a8a3;  /* серый на тёмном – только ≥ 18 px (CLAUDE.md, грабли); контраст 8.0 к --color-bg-dark */
-  --color-accent: #131313;            /* не решено: акцент выбирается, когда он впервые понадобится */
+  --color-fg-muted-on-dark: #a8a8a3; /* серый на тёмном – только ≥ 18 px (CLAUDE.md, грабли); контраст 8.0 к --color-bg-dark */
+  --color-accent: #131313; /* не решено: акцент выбирается, когда он впервые понадобится */
   --color-line: rgba(19, 19, 19, 0.2);
   --color-line-on-dark: rgba(255, 255, 255, 0.22);
 
@@ -24,29 +24,42 @@
   --color-line-on-photo: rgba(255, 255, 255, 0.5);
   --color-scrim: rgba(10, 10, 10, 0.55);
   --color-scrim-0: rgba(10, 10, 10, 0);
-  --color-scrim-strong: rgba(10, 10, 10, 0.7);  /* верх кадра на телефоне: мелкое меню на светлом потолке */
+  --color-scrim-strong: rgba(
+    10,
+    10,
+    10,
+    0.7
+  ); /* верх кадра на телефоне: мелкое меню на светлом потолке */
 
   /* Типографика: Neue Montreal + Hedvig Letters Serif 18pt – пара референса, решение пользователя. Файлы – public/fonts/ */
-  --font-display: "Neue Montreal", "Helvetica Neue", Arial, sans-serif;
-  --font-text: "Neue Montreal", "Helvetica Neue", Arial, sans-serif;
-  --font-serif: "Hedvig Letters Serif", Georgia, serif;
+  --font-display: 'Neue Montreal', 'Helvetica Neue', Arial, sans-serif;
+  --font-text: 'Neue Montreal', 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Hedvig Letters Serif', Georgia, serif;
 
   /* Шкала кеглей: классы в base.css ссылаются только сюда */
-  --fs-display-xl: clamp(3rem, 7.3vw, 7.5rem);   /* один H1 – имя бюро в hero */
-  --fs-statement: clamp(2.6rem, 9.115vw, 11rem); /* заявление about по центру, как у референса: 131 px на 1440, 41.6 px на 390 */
-  --fs-display-l: clamp(2.25rem, 6vw, 6.5rem);   /* фраза-утверждение засечками (transformation): 86 px на 1440 */
-  --fs-display-s: clamp(2.25rem, 4.2vw, 4rem);   /* заголовки секций, названия строк: 60 px на 1440 */
-  --fs-title-m: 1.5rem;                          /* название главы (transformation) */
-  --fs-title-xxs: 1rem;                          /* не решено */
-  --fs-body-l: clamp(1.25rem, 1.7vw, 1.625rem);  /* фраза засечками */
+  --fs-display-xl: clamp(3rem, 7.3vw, 7.5rem); /* один H1 – имя бюро в hero */
+  --fs-statement: clamp(
+    2.6rem,
+    9.115vw,
+    11rem
+  ); /* заявление about по центру, как у референса: 131 px на 1440, 41.6 px на 390 */
+  --fs-display-l: clamp(
+    2.25rem,
+    6vw,
+    6.5rem
+  ); /* фраза-утверждение засечками (transformation): 86 px на 1440 */
+  --fs-display-s: clamp(2.25rem, 4.2vw, 4rem); /* заголовки секций, названия строк: 60 px на 1440 */
+  --fs-title-m: 1.5rem; /* название главы (transformation) */
+  --fs-title-xxs: 1rem; /* не решено */
+  --fs-body-l: clamp(1.25rem, 1.7vw, 1.625rem); /* фраза засечками */
   --fs-body-m: 1.125rem;
-  --fs-body-s: 0.9375rem;                        /* навигация, подписи */
+  --fs-body-s: 0.9375rem; /* навигация, подписи */
 
   /* Веса: в проекте одно начертание – Regular 400 */
   --fw-display: 400;
   --fw-title: 400;
 
-  --lh-statement: 0.8;      /* у референса 0.7; у нас хвост g в «buildings» ложится на вторую строку – 0.8 даёт ~0.1em зазора */
+  --lh-statement: 0.8; /* у референса 0.7; у нас хвост g в «buildings» ложится на вторую строку – 0.8 даёт ~0.1em зазора */
   --lh-display: 0.86;
   --lh-display-l: 0.95;
   --lh-display-s: 0.9;
@@ -58,7 +71,7 @@
   --ls-statement: -0.03em;
   --ls-display: -0.035em;
   --ls-body: -0.01em;
-  --mask-bleed: 0.2em;      /* запас маски строки над и под строкой при интерлиньяже < 1: выносные элементы не режутся */
+  --mask-bleed: 0.2em; /* запас маски строки над и под строкой при интерлиньяже < 1: выносные элементы не режутся */
 
   /* Сетка. Брейкпоинты в CSS-переменную не вынести (media их не читает): только @media (max-width: 1023px | 767px | 478px) */
   --container: 120rem;
@@ -67,7 +80,9 @@
   --page-margin: 1.5rem;
   --page-margin-tablet: 1rem;
   /* Ширина одной колонки сетки – для отступов и мер, кратных колонке */
-  --col: calc((100vw - 2 * var(--page-margin) - (var(--columns) - 1) * var(--gutter)) / var(--columns));
+  --col: calc(
+    (100vw - 2 * var(--page-margin) - (var(--columns) - 1) * var(--gutter)) / var(--columns)
+  );
 
   /* Отступы: шкала, вертикальный ритм секций – --space-section */
   --space-4: 0.25rem;
@@ -118,13 +133,15 @@
   /* Параллакс фото (about): на сколько картинка выше рамки – это же её ход за время прохода рамки через экран.
      40 % рамки = ±20 %, как у референса (±144 px на рамке 720). Пропорции рамки: 2:1 как у референса, 4:5 на телефоне */
   --parallax-extra: 40%;
-  --parallax-shift: 28.571%;   /* тот же ход в долях высоты самой картинки: 40 / 140 */
+  --parallax-shift: 28.571%; /* тот же ход в долях высоты самой картинки: 40 / 140 */
   --ratio-photo-wide: 2 / 1;
   --ratio-photo-mobile: 4 / 5;
   /* Параллакс фото hero: отставание от прокрутки. У референса 20 % пути: за 900 px прокрутки фото отстаёт на 180 px.
      scrub идёт от «верх секции у низа экрана» до «низ у верха»: при загрузке --p = 0.5, на выходе 1 → ход 0.4 высоты */
   --parallax-hero: 40%;
-  --measure-statement: calc(3 * var(--col) + 2 * var(--gutter));   /* абзац под заявлением about: 3 колонки */
+  --measure-statement: calc(
+    3 * var(--col) + 2 * var(--gutter)
+  ); /* абзац под заявлением about: 3 колонки */
 
   /* Карточки проектов: широкая и высокая, как у референса (643 × 405 и 361 × 525) */
   --ratio-card-wide: 3 / 2;
@@ -144,8 +161,8 @@
   --h-step-w-mobile: 82vw;
 
   /* Подвал: гигантское PDA на всю ширину (буквы почти касаются полей); шрифт гротеск, интерлиньяж ниже 1 */
-  --mega-ratio: 1.775;  /* ширина краски PDA в долях кегля, обычный вес (замер на 1440: 1 363 px при кегле 768 px) */
-  --mega-bearing: -0.066em;  /* левый отступ буквы P внутри шрифта – знак встаёт ровно по полю */
+  --mega-ratio: 1.775; /* ширина краски PDA в долях кегля, обычный вес (замер на 1440: 1 363 px при кегле 768 px) */
+  --mega-bearing: -0.066em; /* левый отступ буквы P внутри шрифта – знак встаёт ровно по полю */
   --fs-mega: calc((100vw - 2 * var(--page-margin)) / var(--mega-ratio));
   --fs-mega-tablet: calc((100vw - 2 * var(--page-margin-tablet)) / var(--mega-ratio));
   --lh-mega: 0.8;
@@ -160,5 +177,5 @@
   --z-scene: 0;
   --z-content: 1;
   --z-header: 10;
-  --z-nav: 100;   /* закреплённая шапка над всеми секциями */
+  --z-nav: 100; /* закреплённая шапка над всеми секциями */
 }

@@ -1,9 +1,18 @@
 /* Голова секции: заголовок на 5 колонок слева, лид засечками на колонках 7–12, по нижнему краю. Где: projects; дальше expertise, clients. */
-.section-head { row-gap: var(--space-24); align-items: end; }
-.section-head-title { grid-column: 1 / span 5; }
-.section-head-lead { grid-column: 7 / span 6; }
+.section-head {
+  row-gap: var(--space-24);
+  align-items: end;
+}
+.section-head-title {
+  grid-column: 1 / span 5;
+}
+.section-head-lead {
+  grid-column: 7 / span 6;
+}
 
 /* До 767 .grid-12 – flex-колонка (base.css): заголовок над лидом во всю ширину; align-items: end там прижал бы их вправо */
 @media (max-width: 767px) {
-  .section-head { align-items: stretch; }
+  .section-head {
+    align-items: stretch;
+  }
 }

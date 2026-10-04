@@ -2,35 +2,118 @@
    слева текст главы, справа кадр 4:5 со шторкой пальцем. С пином (от 768, класс is-pinned из transformation.js)
    все главы лежат в одной строке сетки друг на друге, шторку ведёт прокрутка, кадр следующей главы открывается снизу поверх,
    текст главы меняется строками из масок. Внизу слева – счётчик и линия прогресса, как у digital-lab. */
-.transformation-body { row-gap: var(--space-96); align-items: start; }
-.transformation-head { grid-column: 1 / span 6; display: flex; flex-direction: column; gap: var(--space-48); }
-.transformation-chapters { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; row-gap: var(--space-96); }
-.transformation-chapter { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: end; }
-.transformation-text { grid-column: 1 / span 4; display: flex; flex-direction: column; gap: var(--space-16); }
-.transformation-figure { grid-column: 8 / span 5; }
+.transformation-body {
+  row-gap: var(--space-96);
+  align-items: start;
+}
+.transformation-head {
+  grid-column: 1 / span 6;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-48);
+}
+.transformation-chapters {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  row-gap: var(--space-96);
+}
+.transformation-chapter {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: end;
+}
+.transformation-text {
+  grid-column: 1 / span 4;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+.transformation-figure {
+  grid-column: 8 / span 5;
+}
 
 /* Пин: секция ровно в экран, голова и главы в одной строке; кадр по высоте экрана */
-.transformation.is-pinned { height: 100svh; padding-block: var(--space-48); }
-.transformation.is-pinned .transformation-body { height: 100%; grid-template-rows: minmax(0, 1fr); }
-.transformation.is-pinned .transformation-head { grid-row: 1; }
-.transformation.is-pinned .transformation-chapters { grid-row: 1; height: 100%; grid-template-rows: minmax(0, 1fr); }
+.transformation.is-pinned {
+  height: 100svh;
+  padding-block: var(--space-48);
+}
+.transformation.is-pinned .transformation-body {
+  height: 100%;
+  grid-template-rows: minmax(0, 1fr);
+}
+.transformation.is-pinned .transformation-head {
+  grid-row: 1;
+}
+.transformation.is-pinned .transformation-chapters {
+  grid-row: 1;
+  height: 100%;
+  grid-template-rows: minmax(0, 1fr);
+}
 /* Строка главы = высота главы, а не контент: иначе кадр 4:5 считает высоту от ширины 5 колонок и на широком экране (1920×960) выходит за низ */
-.transformation.is-pinned .transformation-chapter { grid-row: 1; height: 100%; grid-template-rows: minmax(0, 1fr); }
-.transformation.is-pinned .transformation-figure { height: 100%; justify-content: end; }
-.transformation.is-pinned .compare-frame { flex: 1; min-height: 0; aspect-ratio: auto; }
-.transformation.is-pinned .compare-range { display: none; }
-.transformation.is-pinned .transformation-text { padding-bottom: var(--space-64); }
-.transformation-progress { display: none; }
-.transformation.is-pinned .transformation-progress { grid-row: 1; grid-column: 1 / span 4; align-self: end; display: flex; align-items: center; gap: var(--space-24); }
-.transformation-count { font-variant-numeric: tabular-nums; }
+.transformation.is-pinned .transformation-chapter {
+  grid-row: 1;
+  height: 100%;
+  grid-template-rows: minmax(0, 1fr);
+}
+.transformation.is-pinned .transformation-figure {
+  height: 100%;
+  justify-content: end;
+}
+.transformation.is-pinned .compare-frame {
+  flex: 1;
+  min-height: 0;
+  aspect-ratio: auto;
+}
+.transformation.is-pinned .compare-range {
+  display: none;
+}
+.transformation.is-pinned .transformation-text {
+  padding-bottom: var(--space-64);
+}
+.transformation-progress {
+  display: none;
+}
+.transformation.is-pinned .transformation-progress {
+  grid-row: 1;
+  grid-column: 1 / span 4;
+  align-self: end;
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+}
+.transformation-count {
+  font-variant-numeric: tabular-nums;
+}
 /* Линия прогресса – псевдоэлемент, без пустых элементов: заполненная доля – --tr-p (ставит transformation.js) */
-.transformation-progress::after { content: ""; flex: 1; height: 1px; background: linear-gradient(to right, var(--color-fg) calc(var(--tr-p, 0) * 100%), var(--color-line) 0); }
+.transformation-progress::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    var(--color-fg) calc(var(--tr-p, 0) * 100%),
+    var(--color-line) 0
+  );
+}
 
 /* До 767 .grid-12 – flex-колонка (base.css): голова, главы, текст и кадр друг под другом во всю ширину.
    align-items: stretch – иначе start из базового правила сужает главы в колонке по содержимому (subgrid там не работает) */
 @media (max-width: 767px) {
-  .transformation-body { align-items: stretch; }
-  .transformation-body, .transformation-chapters { row-gap: var(--space-64); }
-  .transformation-head, .transformation-text, .transformation-figure { grid-column: 1 / -1; }
-  .transformation-chapter { row-gap: var(--space-24); }
+  .transformation-body {
+    align-items: stretch;
+  }
+  .transformation-body,
+  .transformation-chapters {
+    row-gap: var(--space-64);
+  }
+  .transformation-head,
+  .transformation-text,
+  .transformation-figure {
+    grid-column: 1 / -1;
+  }
+  .transformation-chapter {
+    row-gap: var(--space-24);
+  }
 }

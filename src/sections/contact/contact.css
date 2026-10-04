@@ -1,32 +1,84 @@
 /* Contact: тёмная. Фраза засечками с красной строкой (1–9). Слева контакты строками-ссылками с линией (1–5),
    справа короткая форма (7–12): имя и компания в ряд, почта и сообщение во всю ширину, кнопка и строка о данных.
    Форма открывает почтовую программу с готовым письмом (contact.js) – до подключения отправки с сервера. */
-.contact-body { row-gap: var(--space-64); align-items: start; }
-.contact-title { grid-column: 1 / span 9; }
-.contact-details { grid-column: 1 / span 5; font-style: normal; border-bottom: 1px solid var(--color-line); }
-.contact-line { display: flex; flex-direction: column; gap: var(--space-4); padding-block: var(--space-16); border-top: 1px solid var(--color-line); }
-.contact-line .title-m { transition: translate var(--dur-600) var(--ease-out); }
-.contact-line:hover .title-m, .contact-line:focus-visible .title-m { translate: var(--row-shift) 0; }
-.contact-form { grid-column: 7 / span 6; display: flex; flex-direction: column; gap: var(--space-32); }
-.contact-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-32) var(--gutter); }
-.contact-submit { display: flex; align-items: center; gap: var(--space-24); }
-.contact-status:empty { display: none; }
+.contact-body {
+  row-gap: var(--space-64);
+  align-items: start;
+}
+.contact-title {
+  grid-column: 1 / span 9;
+}
+.contact-details {
+  grid-column: 1 / span 5;
+  font-style: normal;
+  border-bottom: 1px solid var(--color-line);
+}
+.contact-line {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-block: var(--space-16);
+  border-top: 1px solid var(--color-line);
+}
+.contact-line .title-m {
+  transition: translate var(--dur-600) var(--ease-out);
+}
+.contact-line:hover .title-m,
+.contact-line:focus-visible .title-m {
+  translate: var(--row-shift) 0;
+}
+.contact-form {
+  grid-column: 7 / span 6;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-32);
+}
+.contact-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-32) var(--gutter);
+}
+.contact-submit {
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+}
+.contact-status:empty {
+  display: none;
+}
 /* Кнопка: обводка, при наведении фон заливается снизу вверх (fill-up), текст меняет цвет. Одна на сайте – стили здесь, не компонент */
 .contact-button {
   padding: var(--space-12) var(--space-32);
   border: 1px solid currentColor;
   background: linear-gradient(currentColor, currentColor) 0 100% / 100% 0 no-repeat;
-  transition: background-size var(--dur-600) var(--ease-out), color var(--dur-600) var(--ease-out);
+  transition:
+    background-size var(--dur-600) var(--ease-out),
+    color var(--dur-600) var(--ease-out);
 }
-.contact-button:hover, .contact-button:focus-visible { background-image: linear-gradient(var(--color-fg-on-dark), var(--color-fg-on-dark)); background-size: 100% 100%; color: var(--color-bg-dark); }
-.contact-button:focus-visible { outline: 1px solid currentColor; outline-offset: var(--space-4); }
+.contact-button:hover,
+.contact-button:focus-visible {
+  background-image: linear-gradient(var(--color-fg-on-dark), var(--color-fg-on-dark));
+  background-size: 100% 100%;
+  color: var(--color-bg-dark);
+}
+.contact-button:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: var(--space-4);
+}
 
 /* До 767 .grid-12 – flex-колонка (base.css): фраза, контакты и форма друг под другом во всю ширину;
    align-items: start там сузил бы их по содержимому */
 @media (max-width: 767px) {
-  .contact-body { align-items: stretch; }
+  .contact-body {
+    align-items: stretch;
+  }
 }
 @media (max-width: 478px) {
-  .contact-fields { grid-template-columns: minmax(0, 1fr); }
-  .contact-submit { flex-direction: column; align-items: flex-start; }
+  .contact-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .contact-submit {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

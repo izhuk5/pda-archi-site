@@ -7,6 +7,15 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
   "prettier.requireConfig": true,
-  "prettier.documentSelectors": ["**/*.astro"]
+  "prettier.documentSelectors": [
+    "**/*.astro"
+  ],
+  "cssVariables.lookupFiles": [
+    "src/styles/tokens.css"
+  ]
 }

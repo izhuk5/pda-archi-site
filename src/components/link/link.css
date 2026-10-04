@@ -9,5 +9,14 @@
   background-size: 100% var(--link-line);
   transition: background-size var(--dur-link) var(--ease-link);
 }
-.link:hover, .link:focus-visible, .link.is-quiet { background-position: 100% 100%; background-size: 0% var(--link-line); }
-.link.is-quiet:hover, .link.is-quiet:focus-visible { background-position: 0 100%; background-size: 100% var(--link-line); }
+.link:hover,
+.link:focus-visible,
+.link.is-quiet {
+  background-position: 100% 100%;
+  background-size: 0% var(--link-line);
+}
+.link.is-quiet:hover,
+.link.is-quiet:focus-visible {
+  background-position: 0 100%;
+  background-size: 100% var(--link-line);
+}

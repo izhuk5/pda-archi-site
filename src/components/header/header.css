@@ -15,19 +15,42 @@
   mix-blend-mode: normal;
   pointer-events: none;
 }
-.header a { pointer-events: auto; }
-.header.is-blend { mix-blend-mode: difference; }
-.header.is-hidden a { pointer-events: none; }
-.header.is-gone { visibility: hidden; }
-.header-name { display: flex; flex-direction: column; }
-.header-nav { display: flex; gap: var(--space-24); }
-.header-mask { display: block; overflow: clip; }
-.header-line { display: block; }
+.header a {
+  pointer-events: auto;
+}
+.header.is-blend {
+  mix-blend-mode: difference;
+}
+.header.is-hidden a {
+  pointer-events: none;
+}
+.header.is-gone {
+  visibility: hidden;
+}
+.header-name {
+  display: flex;
+  flex-direction: column;
+}
+.header-nav {
+  display: flex;
+  gap: var(--space-24);
+}
+.header-mask {
+  display: block;
+  overflow: clip;
+}
+.header-line {
+  display: block;
+}
 
 /* Поля шапки = поля страницы (.wrapper): до 1023 – планшетные */
 @media (max-width: 1023px) {
-  .header { padding-inline: var(--page-margin-tablet); }
+  .header {
+    padding-inline: var(--page-margin-tablet);
+  }
 }
 @media (max-width: 767px) {
-  .header-nav li:nth-child(2) { display: none; }
+  .header-nav li:nth-child(2) {
+    display: none;
+  }
 }

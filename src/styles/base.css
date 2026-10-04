@@ -1,12 +1,28 @@
 /* База: шрифты, reset, документ, сетка, шкала текста, состояния движения. Сырых значений здесь нет – только токены. */
 /* Шрифты – свои файлы в public/fonts/ (источник – src/assets/SOURCES.md). Одно начертание на семейство, поэтому без font-weight:
    по умолчанию это normal (400) – вес текста задают токены --fw-* */
-@font-face { font-family: "Neue Montreal"; src: url("/fonts/NeueMontreal-Regular.woff2") format("woff2"); font-display: swap; }
-@font-face { font-family: "Hedvig Letters Serif"; src: url("/fonts/HedvigLettersSerif18pt-Regular.woff2") format("woff2"); font-display: swap; }
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('/fonts/NeueMontreal-Regular.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Hedvig Letters Serif';
+  src: url('/fonts/HedvigLettersSerif18pt-Regular.woff2') format('woff2');
+  font-display: swap;
+}
 
-*, *::before, *::after { box-sizing: border-box; }
-* { margin: 0; }
-html { -webkit-text-size-adjust: 100%; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
 body {
   min-height: 100dvh;
   background: var(--color-bg-page);
@@ -17,16 +33,53 @@ body {
   letter-spacing: var(--ls-body);
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
-  text-wrap: pretty;  /* наследуется всем текстом (dd, подписи, строки списков): без одного слова в последней строке; заголовки – balance */
+  text-wrap: pretty; /* наследуется всем текстом (dd, подписи, строки списков): без одного слова в последней строке; заголовки – balance */
 }
-img, video, canvas, svg { display: block; max-width: 100%; }
-img, video { height: auto; }
-button, input, textarea, select { font: inherit; color: inherit; }
-button { background: none; border: 0; padding: 0; cursor: pointer; }
-a { color: inherit; text-decoration: none; }
-ul, ol { list-style: none; padding: 0; }
-p, h1, h2, h3, h4 { overflow-wrap: break-word; }
-h1, h2, h3 { text-wrap: balance; }
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+img,
+video {
+  height: auto;
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+}
+p,
+h1,
+h2,
+h3,
+h4 {
+  overflow-wrap: break-word;
+}
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
 
 /* Сетка, desktop-first. База – десктоп (макет 1440): 12 колонок, ширина элементов – через grid-column, не через px.
    До 1023 (tablet) – меньшие поля и отступы секций, сетка та же. До 767 (mobile) – .grid-12 становится flex-колонкой:
@@ -57,52 +110,152 @@ h1, h2, h3 { text-wrap: balance; }
 
 /* Шкала текста. Размер текста в правилах секций не ставится – только эти классы */
 /* Гигантский знак в подвале: единственное место такого масштаба, кегль = ширина страницы / ширина слова; на телефоне – свои поля */
-.display-mega { white-space: nowrap; font-family: var(--font-display); font-size: var(--fs-mega); line-height: var(--lh-mega); letter-spacing: var(--ls-mega); font-weight: var(--fw-display); }
-.display-statement { font-family: var(--font-display); font-size: var(--fs-statement); line-height: var(--lh-statement); letter-spacing: var(--ls-statement); font-weight: var(--fw-display); }
-.display-xl { font-family: var(--font-display); font-size: var(--fs-display-xl); line-height: var(--lh-display); letter-spacing: var(--ls-display); font-weight: var(--fw-display); }
-.display-l  { font-family: var(--font-display); font-size: var(--fs-display-l);  line-height: var(--lh-display-l); letter-spacing: var(--ls-display); font-weight: var(--fw-display); }
-.display-s  { font-family: var(--font-display); font-size: var(--fs-display-s);  line-height: var(--lh-display-s); letter-spacing: var(--ls-display); font-weight: var(--fw-display); }
-.title-m    { font-family: var(--font-display); font-size: var(--fs-title-m);    line-height: var(--lh-title); font-weight: var(--fw-title); }
-.title-xxs  { font-family: var(--font-text);    font-size: var(--fs-title-xxs);  line-height: var(--lh-title); font-weight: var(--fw-title); }
-.body-l     { font-family: var(--font-serif); font-size: var(--fs-body-l); line-height: var(--lh-body-l); letter-spacing: var(--ls-body); }
-.body-m     { font-size: var(--fs-body-m); line-height: var(--lh-body-m); letter-spacing: var(--ls-body); }
-.body-s     { font-size: var(--fs-body-s); line-height: var(--lh-body-s); letter-spacing: var(--ls-body); }
-.serif      { font-family: var(--font-serif); }
+.display-mega {
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-size: var(--fs-mega);
+  line-height: var(--lh-mega);
+  letter-spacing: var(--ls-mega);
+  font-weight: var(--fw-display);
+}
+.display-statement {
+  font-family: var(--font-display);
+  font-size: var(--fs-statement);
+  line-height: var(--lh-statement);
+  letter-spacing: var(--ls-statement);
+  font-weight: var(--fw-display);
+}
+.display-xl {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-xl);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  font-weight: var(--fw-display);
+}
+.display-l {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-l);
+  line-height: var(--lh-display-l);
+  letter-spacing: var(--ls-display);
+  font-weight: var(--fw-display);
+}
+.display-s {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-s);
+  line-height: var(--lh-display-s);
+  letter-spacing: var(--ls-display);
+  font-weight: var(--fw-display);
+}
+.title-m {
+  font-family: var(--font-display);
+  font-size: var(--fs-title-m);
+  line-height: var(--lh-title);
+  font-weight: var(--fw-title);
+}
+.title-xxs {
+  font-family: var(--font-text);
+  font-size: var(--fs-title-xxs);
+  line-height: var(--lh-title);
+  font-weight: var(--fw-title);
+}
+.body-l {
+  font-family: var(--font-serif);
+  font-size: var(--fs-body-l);
+  line-height: var(--lh-body-l);
+  letter-spacing: var(--ls-body);
+}
+.body-m {
+  font-size: var(--fs-body-m);
+  line-height: var(--lh-body-m);
+  letter-spacing: var(--ls-body);
+}
+.body-s {
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
+  letter-spacing: var(--ls-body);
+}
+.serif {
+  font-family: var(--font-serif);
+}
 /* Число с единицей в тексте с анимацией lines – не разрывать строкой (SplitText уважает nowrap) */
-.nowrap     { white-space: nowrap; }
-.muted      { color: var(--color-fg-muted); }
-.section.is-dark .muted { color: var(--color-fg-muted-on-dark); }
+.nowrap {
+  white-space: nowrap;
+}
+.muted {
+  color: var(--color-fg-muted);
+}
+.section.is-dark .muted {
+  color: var(--color-fg-muted-on-dark);
+}
 
 /* Красная строка: первая строка крупной фразы с отступом в колонку (приём референса). Для display-l serif и больших фраз.
    SplitText (приём lines) делит текст на блоки-строки: каждый унаследовал бы отступ, строки сузились бы и перенеслись иначе,
    а после revert() текст прыгнул бы обратно. Отступ – только у первой строки-блока.
    При замере SplitText оборачивает слова в span – им отступ тоже не нужен. */
-.indent { text-indent: var(--indent-line); }
-.indent > * { text-indent: 0; }
-.indent > .line-mask:first-child, .indent > .line:first-child { text-indent: inherit; }
+.indent {
+  text-indent: var(--indent-line);
+}
+.indent > * {
+  text-indent: 0;
+}
+.indent > .line-mask:first-child,
+.indent > .line:first-child {
+  text-indent: inherit;
+}
 
 /* Движение: пока JS не подготовил элемент, он скрыт – но только когда движение включено (html.has-motion).
    Без JS, в ?static и при prefers-reduced-motion класса нет, и всё видно сразу */
-.has-motion [data-reveal]:not(.is-ready) { visibility: hidden; }
+.has-motion [data-reveal]:not(.is-ready) {
+  visibility: hidden;
+}
 
 /* Холст сцены: единственное абсолютное позиционирование по умолчанию (docs/scene.md) */
-[data-scene] { position: relative; }
-[data-scene] canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: var(--z-scene); }
-[data-scene] > :not(canvas) { position: relative; z-index: var(--z-content); }
-[data-scene].is-live .scene-fallback { display: none; }
+[data-scene] {
+  position: relative;
+}
+[data-scene] canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-scene);
+}
+[data-scene] > :not(canvas) {
+  position: relative;
+  z-index: var(--z-content);
+}
+[data-scene].is-live .scene-fallback {
+  display: none;
+}
 
 .visually-hidden {
-  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 @media (max-width: 1023px) {
-  .wrapper { padding-inline: var(--page-margin-tablet); }
-  .section { padding-block: var(--space-section-tablet); }
-  .display-mega { font-size: var(--fs-mega-tablet); }
+  .wrapper {
+    padding-inline: var(--page-margin-tablet);
+  }
+  .section {
+    padding-block: var(--space-section-tablet);
+  }
+  .display-mega {
+    font-size: var(--fs-mega-tablet);
+  }
 }
 @media (max-width: 767px) {
-  .grid-12 { display: flex; flex-direction: column; }
+  .grid-12 {
+    display: flex;
+    flex-direction: column;
+  }
 }
 @media (max-width: 478px) {
-  .indent { text-indent: var(--indent-line-mobile); }
+  .indent {
+    text-indent: var(--indent-line-mobile);
+  }
 }
