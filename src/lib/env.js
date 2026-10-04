@@ -8,4 +8,7 @@ export const isStatic = params.has('static');
 export const motionOn = document.documentElement.classList.contains('has-motion');
 
 export const ready = Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 3000))]);
-export const onMotion = fn => ready.then(() => { if (motionOn) fn(); });
+export const onMotion = fn =>
+  ready.then(() => {
+    if (motionOn) fn();
+  });

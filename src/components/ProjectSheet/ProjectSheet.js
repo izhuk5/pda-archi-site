@@ -11,7 +11,9 @@ document.querySelectorAll('.project-sheet').forEach(dialog => {
     opener?.focus({ preventScroll: true });
     opener = null;
   });
-  dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
+  dialog.addEventListener('click', e => {
+    if (e.target === dialog) dialog.close();
+  });
   dialog.querySelector('[data-close]')?.addEventListener('click', () => dialog.close());
 });
 

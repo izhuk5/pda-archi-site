@@ -18,10 +18,18 @@ const setHidden = next => {
   if (next === hidden) return;
   hidden = next;
   header.classList.toggle('is-hidden', next);
-  if (!motionOn) { header.classList.toggle('is-gone', next); return; }
+  if (!motionOn) {
+    header.classList.toggle('is-gone', next);
+    return;
+  }
   /* Замер референса: скрытие – все строки разом; появление – по одной (имя, затем меню слева направо), шаг 0.1 s; длительности подобраны по кривым */
   if (next) gsap.to(lines, { yPercent: -100, duration: 1.3, ease: 'power4.out', overwrite: true });
-  else gsap.fromTo(lines, { yPercent: 100 }, { yPercent: 0, duration: 1.55, ease: 'power4.out', stagger: 0.1, overwrite: true });
+  else
+    gsap.fromTo(
+      lines,
+      { yPercent: 100 },
+      { yPercent: 0, duration: 1.55, ease: 'power4.out', stagger: 0.1, overwrite: true },
+    );
 };
 
 ready.then(() => {
@@ -54,5 +62,12 @@ ready.then(() => {
    (обе ждут один ready), поэтому hidden уже известен: страница открыта у подвала – входа нет, строки придут при прокрутке вверх.
    Иначе вход и скрытие спорили бы за одни строки, и часть меню оставалась видна под маской */
 onMotion(() => {
-  if (header && !hidden) gsap.from(lines, { yPercent: 100, duration: 1.55, ease: 'power4.out', stagger: 0.1, delay: 1.1 });
+  if (header && !hidden)
+    gsap.from(lines, {
+      yPercent: 100,
+      duration: 1.55,
+      ease: 'power4.out',
+      stagger: 0.1,
+      delay: 1.1,
+    });
 });

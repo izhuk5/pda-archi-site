@@ -183,7 +183,9 @@ for (const dir of UNITS_DIRS) for (const file of walk(dir, '.js')) {
 /* --- .astro: разметка, <style>, <script>, frontmatter ---------------------------- */
 const motionJs = path.join(SRC, 'lib', 'motion.js');
 const presetsBlock = exists(motionJs) ? (read(motionJs).split('export const PRESETS')[1] || '') : '';
-const presets = new Set([...presetsBlock.matchAll(/^\s+'([a-z-]+)':/gm)].map(m => m[1]));
+/* Ключи реестра – на первом уровне PRESETS (два пробела), значение – стрелочная функция; кавычки у ключа – как поставит Prettier:
+   fade: el => …, 'photo-in': el => … (старая запись 'fade': (el) => … тоже читается). Вложенные ключи твинов (y:, ease:) не попадают */
+const presets = new Set([...presetsBlock.matchAll(/^ {2}'?([a-z-]+)'?:\s*\(?\w+\)?\s*=>/gm)].map(m => m[1]));
 const FRONTMATTER = /^---\r?\n[\s\S]*?\r?\n---/;
 
 const lintAstro = (file) => {

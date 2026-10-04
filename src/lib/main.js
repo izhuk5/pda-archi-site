@@ -14,9 +14,26 @@ import { scroll } from './scroll.js';
 const lazyVideo = () => {
   const vids = document.querySelectorAll('video[data-src]');
   if (!vids.length) return;
-  const load = v => { v.src = v.dataset.src; v.removeAttribute('data-src'); v.load(); if (v.autoplay) v.play().catch(() => {}); };
-  if (isStatic || !('IntersectionObserver' in window)) { vids.forEach(load); return; }
-  const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { load(e.target); io.unobserve(e.target); } }), { rootMargin: '50% 0px' });
+  const load = v => {
+    v.src = v.dataset.src;
+    v.removeAttribute('data-src');
+    v.load();
+    if (v.autoplay) v.play().catch(() => {});
+  };
+  if (isStatic || !('IntersectionObserver' in window)) {
+    vids.forEach(load);
+    return;
+  }
+  const io = new IntersectionObserver(
+    entries =>
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          load(e.target);
+          io.unobserve(e.target);
+        }
+      }),
+    { rootMargin: '50% 0px' },
+  );
   vids.forEach(v => io.observe(v));
 };
 
@@ -27,9 +44,23 @@ const lazyScene = () => {
   const canvas = document.createElement('canvas');
   const webgl = !!(canvas.getContext('webgl2') || canvas.getContext('webgl'));
   if (!webgl || !motionOn) return;
-  const start = () => import('./scene.js').then(m => m.mount(host)).catch(err => console.warn('scene: не запустилась', err));
-  if (!('IntersectionObserver' in window)) { start(); return; }
-  const io = new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) { io.disconnect(); start(); } }, { rootMargin: '100% 0px' });
+  const start = () =>
+    import('./scene.js')
+      .then(m => m.mount(host))
+      .catch(err => console.warn('scene: не запустилась', err));
+  if (!('IntersectionObserver' in window)) {
+    start();
+    return;
+  }
+  const io = new IntersectionObserver(
+    entries => {
+      if (entries.some(e => e.isIntersecting)) {
+        io.disconnect();
+        start();
+      }
+    },
+    { rootMargin: '100% 0px' },
+  );
   io.observe(host);
 };
 
@@ -37,17 +68,19 @@ const lazyScene = () => {
 const smoothScroll = () => {
   if (!motionOn) return null;
   const lenis = new Lenis({ lerp: 0.1 });
-  scroll.lenis = lenis;  /* для секций и компонентов: src/lib/scroll.js */
+  scroll.lenis = lenis; /* для секций и компонентов: src/lib/scroll.js */
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(t => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
-  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
-    /* getElementById, а не querySelector: href="#" и id с цифры не роняют обработчик */
-    const target = document.getElementById(a.getAttribute('href').slice(1));
-    if (!target) return;
-    e.preventDefault();
-    lenis.scrollTo(target, { duration: 1.2 });
-  }));
+  document.querySelectorAll('a[href^="#"]').forEach(a =>
+    a.addEventListener('click', e => {
+      /* getElementById, а не querySelector: href="#" и id с цифры не роняют обработчик */
+      const target = document.getElementById(a.getAttribute('href').slice(1));
+      if (!target) return;
+      e.preventDefault();
+      lenis.scrollTo(target, { duration: 1.2 });
+    }),
+  );
   return lenis;
 };
 
