@@ -24,11 +24,14 @@
     translate var(--dur-600) var(--ease-out),
     rotate var(--dur-600) var(--ease-out);
 }
-.expertise-summary:hover .expertise-name {
-  translate: var(--row-shift) 0;
-}
-.expertise-summary:hover .expertise-sign {
-  translate: calc(-1 * var(--row-shift)) 0;
+/* row-shift – только там, где есть наведение мышью: на тач-экране тап включает :hover, он залипает, и заголовок уезжает при открытии */
+@media (hover: hover) and (pointer: fine) {
+  .expertise-summary:hover .expertise-name {
+    translate: var(--row-shift) 0;
+  }
+  .expertise-summary:hover .expertise-sign {
+    translate: calc(-1 * var(--row-shift)) 0;
+  }
 }
 .expertise-item.is-open .expertise-sign {
   rotate: var(--sign-turn);

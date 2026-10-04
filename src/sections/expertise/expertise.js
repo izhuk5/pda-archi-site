@@ -1,6 +1,7 @@
 /* Аккордеон expertise (приём accordion, docs/motion.md). Нативный <details> остаётся для доступности и работы без JS;
    клик по summary перехватывается, высота и содержимое анимируются GSAP, открыта одна строка.
-   Пока движение не включено (?static, reduced motion, шрифты ещё грузятся) – мгновенно. После смены высоты – ScrollTrigger.refresh для секций ниже.
+   Пока движение не включено (?static, reduced motion, шрифты ещё грузятся) – мгновенно. На тач-экране – только высота панели,
+   текст внутри не анимируется (gsap.matchMedia по наличию мыши). После смены высоты – ScrollTrigger.refresh для секций ниже.
    Якорь: если закрывается строка выше кликнутой, всё ниже неё уезжает вверх (замер: на 370 px на 1440) – пока идёт анимация,
    прокрутка компенсирует сдвиг, и кликнутая строка остаётся под курсором. */
 import { gsap, ScrollTrigger } from '@lib/gsap.js';
@@ -8,13 +9,27 @@ import { onMotion } from '@lib/env.js';
 import { scroll } from '@lib/scroll.js';
 import { tokenPx } from '@lib/tokens.js';
 
-let animate = false;
-onMotion(() => {
-  animate = true;
-});
-
 const items = Array.from(document.querySelectorAll('.expertise-item'));
 const kids = item => item.querySelectorAll('.expertise-inner > *');
+
+/* Устройство с мышью: тач-экраны получают только раскрытие по высоте */
+const FINE_POINTER = '(hover: hover) and (pointer: fine)';
+let animate = false;
+let textMotion = false;
+onMotion(() => {
+  animate = true;
+  gsap.matchMedia().add(FINE_POINTER, () => {
+    textMotion = true;
+    /* Ушли с мыши на тач (планшет с клавиатурой) – текст, спрятанный закрытием, снова виден */
+    return () => {
+      textMotion = false;
+      gsap.set(
+        items.flatMap(i => [...kids(i)]),
+        { clearProps: 'opacity,visibility,transform' },
+      );
+    };
+  });
+});
 const revealY = () => tokenPx('--reveal-y', 24);
 const refresh = () => ScrollTrigger.refresh();
 const scrollBy = d => {
@@ -47,16 +62,22 @@ const close = item => {
   }
   const y = revealY();
   gsap.killTweensOf([panel, ...kids(item)]);
-  gsap
-    .timeline({
-      onComplete: () => {
-        item.open = false;
-        gsap.set(panel, { clearProps: 'height' });
-        refresh();
-      },
-    })
-    .to(kids(item), { autoAlpha: 0, y: -y / 2, duration: 0.25, ease: 'power2.in', stagger: 0.03 })
-    .to(panel, { height: 0, duration: 0.6, ease: 'power3.inOut' }, 0.1);
+  const tl = gsap.timeline({
+    onComplete: () => {
+      item.open = false;
+      gsap.set(panel, { clearProps: 'height' });
+      refresh();
+    },
+  });
+  if (textMotion)
+    tl.to(kids(item), {
+      autoAlpha: 0,
+      y: -y / 2,
+      duration: 0.25,
+      ease: 'power2.in',
+      stagger: 0.03,
+    });
+  tl.to(panel, { height: 0, duration: 0.6, ease: 'power3.inOut' }, textMotion ? 0.1 : 0);
 };
 
 const open = item => {
@@ -66,15 +87,16 @@ const open = item => {
   if (!animate) return;
   const y = revealY();
   gsap.killTweensOf([panel, ...kids(item)]);
-  gsap
+  const tl = gsap
     .timeline({
       onComplete: () => {
         gsap.set(panel, { clearProps: 'height' });
         refresh();
       },
     })
-    .fromTo(panel, { height: 0 }, { height: 'auto', duration: 0.6, ease: 'power3.inOut' })
-    .fromTo(
+    .fromTo(panel, { height: 0 }, { height: 'auto', duration: 0.6, ease: 'power3.inOut' });
+  if (textMotion)
+    tl.fromTo(
       kids(item),
       { autoAlpha: 0, y },
       { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out', stagger: 0.06 },
