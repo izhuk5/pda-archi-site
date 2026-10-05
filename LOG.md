@@ -2,6 +2,9 @@
 
 Новые записи сверху. Формат: дата – решение – почему – что изменилось в файлах. Сюда – продукт, процесс, технологии. Дизайн – в `docs/design-system.md`.
 
+## 2026-10-05 – Lighthouse: ширины фото hero и about
+- «Improve image delivery» (64 КБ): в `srcset` не было ширины под ноутбук ~1440 – браузер брал следующую (1920 / 1600). Добавлены промежуточные 1440 и 1600 (hero), 1280 и 1440 (about); исходники 2400 и 2000 px – с запасом. Сборка не замедлилась заметно (AVIF кешируется).
+
 ## 2026-10-05 – Lighthouse: доступность
 - По отчёту PageSpeed (mobile: Performance 99, Accessibility 92, Best Practices 100, SEO 100, Agentic Browsing 1/2) исправлены две ошибки: запрещённый `aria-label` на `<p>` от SplitText (`aria: 'none'` для строк и слов) и мелкие ссылки подвала вплотную (`row-gap` у списка). «Accessibility tree is not well-formed» в Agentic Browsing – вероятно, та же причина (aria-label + aria-hidden у нарезки).
 - Не трогали (не ошибки): Performance – подсказки (forced reflow, 25 КБ на картинках, render-blocking CSS, 2 длинные задачи); Best Practices – информационные пункты о CSP, COOP, XFO, Trusted Types (заголовки безопасности – вопрос пользователю).
