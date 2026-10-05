@@ -10,7 +10,7 @@
      spacer  пустые элементы-распорки, двойной <br>
      hidden  атрибут hidden, display: none в разметке, закомментированная разметка
      text    длинное тире, точка-разделитель, lorem ipsum, капс в тексте
-     media   <img> вместо <Image> из astro:assets, <Image> без alt, <video> с src вместо data-src
+     media   <img> вне компонента Photo, Photo / Image без alt, <video> с src вместо data-src
      motion  data-reveal вне реестра; реестр в src/js/motion.js и docs/motion.md расходится
      docs    токены в tokens.css и docs/design-system.md расходятся
      map     id секций не по карте, секция не подключена на главной
