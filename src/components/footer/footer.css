@@ -37,11 +37,14 @@
 .footer-label {
   grid-column: 1;
 }
+/* row-gap – цель для пальца: ссылка 18 px высотой, с промежутком 8 px центры соседних ссылок в 26 px друг от друга
+   (WCAG 2.5.8, Lighthouse «touch targets»: от 24 px) */
 .footer-list {
   grid-column: 2 / -1;
   font-style: normal;
   display: flex;
   flex-direction: column;
+  row-gap: var(--space-8);
 }
 .footer-mark {
   grid-row: 3;

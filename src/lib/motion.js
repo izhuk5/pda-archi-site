@@ -5,6 +5,11 @@
 import { gsap, ScrollTrigger, SplitText, CustomEase } from './gsap.js';
 import { token, tokenPx } from './tokens.js';
 
+/* Доступность нарезки SplitText. По умолчанию (aria: 'auto') он ставит элементу aria-label с текстом, а кускам – aria-hidden;
+   на <p> aria-label запрещён (Lighthouse: prohibited ARIA). Строки и слова не рвут слов – скринридер читает их как обычный текст,
+   поэтому 'none'. Буквы ('chars') – только 'auto' и только на заголовках: иначе текст читается по буквам */
+const ARIA_TEXT = 'none';
+
 const num = (el, key, fallback) =>
   el.dataset[key] !== undefined ? parseFloat(el.dataset[key]) : fallback;
 /* Снять visibility: hidden с элемента (base.css) – после того, как GSAP выставил стартовое состояние */
@@ -58,7 +63,12 @@ export const PRESETS = {
     });
   },
   lines: el => {
-    const split = SplitText.create(el, { type: 'lines', mask: 'lines', linesClass: 'line' });
+    const split = SplitText.create(el, {
+      type: 'lines',
+      mask: 'lines',
+      linesClass: 'line',
+      aria: ARIA_TEXT,
+    });
     markReady(el);
     gsap.from(split.lines, {
       yPercent: 110,
@@ -72,7 +82,12 @@ export const PRESETS = {
   },
   words: el => {
     /* Заявление about (docs/motion.md): слова по одному выезжают из маски строки, замер kononenkogroup.com – 1.55 s expo.out, шаг 0.1 */
-    const split = SplitText.create(el, { type: 'lines,words', mask: 'lines', linesClass: 'line' });
+    const split = SplitText.create(el, {
+      type: 'lines,words',
+      mask: 'lines',
+      linesClass: 'line',
+      aria: ARIA_TEXT,
+    });
     markReady(el);
     gsap.from(split.words, {
       yPercent: 101,
@@ -99,7 +114,8 @@ export const PRESETS = {
   },
   letters: el => {
     /* Знак в подвале (docs/motion.md): буквы по одной снизу, маска – сам элемент (overflow: clip в CSS) */
-    const split = SplitText.create(el, { type: 'chars' });
+    /* Знак в подвале и так aria-hidden – своего aria не нужно */
+    const split = SplitText.create(el, { type: 'chars', aria: 'none' });
     markReady(el);
     gsap.from(split.chars, {
       y: () => el.offsetHeight * 1.05,

@@ -21,6 +21,7 @@ onMotion(() => {
         type: 'lines',
         mask: 'lines',
         linesClass: 'line',
+        aria: 'none' /* строки слов не рвут; aria-label на <p> запрещён – см. src/lib/motion.js */,
         autoSplit: true,
         onSplit: self => {
           lines[i] = self.lines;
