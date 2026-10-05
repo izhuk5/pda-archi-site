@@ -1,15 +1,20 @@
 ---
-/* Фото сайта: <picture> с AVIF и WebP – браузер берёт первый формат, который понимает, старый – JPG.
+/* Фото сайта: <picture> – AVIF в <source>, WebP в самом <img>. Браузер берёт AVIF, если понимает, иначе WebP
+   (WebP – все браузеры с 2020 года, Safari 14+; JPG больше не нужен). WebP в src, а не JPG: проверки «картинки не в
+   современном формате» смотрят только на src у <img>, а не на <source>.
    Форматы и ширины Astro готовит при сборке (getImage), сервер не нужен.
    <Photo src={photo} widths={[800, 1600]} sizes="50vw" alt="Описание кадра" />
-   – mobile, mobileWidths – свой кадр для телефона (≤ 478 px): отдельные <source media> тех же форматов;
+   – mobile, mobileWidths – свой кадр для телефона (≤ 478 px): отдельные <source media> в AVIF и WebP (запасной <img> – основной кадр);
    – class – на <img>; pictureClass – на <picture>. Без него <picture> – display: contents (base.css), и <img> стоит в раскладке
      так, будто обёртки нет;
    – остальные атрибуты (data-reveal, fetchpriority) – на <img>. */
 import { getImage } from 'astro:assets';
 
-const FORMATS = ['avif', 'webp'];
 const MOBILE = '(max-width: 478px)';
+/* Основной кадр: AVIF в <source>, WebP – в <img>. Мобильный кадр: оба формата в <source> – у <img> его нет */
+const MAIN_SOURCES = ['avif'];
+const MOBILE_SOURCES = ['avif', 'webp'];
+const FALLBACK = 'webp';
 
 const {
   src,
@@ -24,17 +29,17 @@ const {
   ...rest
 } = Astro.props;
 
-const sources = (image, imageWidths, media) =>
+const sources = (image, imageWidths, formats, media) =>
   Promise.all(
-    FORMATS.map(async format => {
+    formats.map(async format => {
       const img = await getImage({ src: image, widths: imageWidths, sizes, format });
       return { media, format, img };
     }),
   );
 
-const mobileSources = mobile ? await sources(mobile, mobileWidths, MOBILE) : [];
-const mainSources = await sources(src, widths);
-const fallback = await getImage({ src, widths, sizes, format: 'jpg' });
+const mobileSources = mobile ? await sources(mobile, mobileWidths, MOBILE_SOURCES, MOBILE) : [];
+const mainSources = await sources(src, widths, MAIN_SOURCES);
+const fallback = await getImage({ src, widths, sizes, format: FALLBACK });
 ---
 
 <picture class={pictureClass}>
