@@ -14,15 +14,19 @@ const num = (el, key, fallback) =>
   el.dataset[key] !== undefined ? parseFloat(el.dataset[key]) : fallback;
 /* Снять visibility: hidden с элемента (base.css) – после того, как GSAP выставил стартовое состояние */
 const markReady = el => el.classList.add('is-ready');
+/* Замеры – одним проходом до изменений DOM (initMotion): чтение размеров сразу после записи заставляет браузер
+   пересчитывать раскладку на каждом элементе (Lighthouse: forced reflow) */
+let firstScreen = new Set();
+let revealY = 24;
 /* Элемент, видимый уже при загрузке (первый экран), появляется сразу: его верх ниже линии 85 % и иначе ждал бы прокрутки */
-const inFirstScreen = el => el.getBoundingClientRect().top < window.innerHeight;
+const inFirstScreen = el => firstScreen.has(el);
 /* clamp(): у конца страницы точка 85 % может оказаться дальше, чем страница прокручивается, – тогда элемент не появится никогда */
 const trigger = el => ({
   trigger: el,
   start: inFirstScreen(el) ? 'top bottom' : 'clamp(top 85%)',
   once: true,
 });
-const yPx = () => tokenPx('--reveal-y', 24);
+const yPx = () => revealY;
 
 /* Easing из токенов. GSAP не понимает строку cubic-bezier(…) и молча подставляет свой дефолт, поэтому каждый --ease-* из :root
    регистрируется как CustomEase с тем же именем без «--»: --ease-sharp → ease: 'ease-sharp'. Новый токен подхватывается сам */
@@ -220,17 +224,39 @@ export const PRESETS = {
   },
 };
 
+/* Подготовить элемент: приём из реестра (нарезка, стартовое состояние, твин с ScrollTrigger). Неизвестный приём – виден сразу */
+const prepare = el => {
+  const fn = PRESETS[el.dataset.reveal];
+  if (!fn) {
+    console.warn(`motion: приёма "${el.dataset.reveal}" нет в реестре (docs/motion.md)`);
+    return markReady(el);
+  }
+  fn(el);
+};
+
 export const initMotion = () => {
   registerEases();
-  document.querySelectorAll('[data-reveal]').forEach(el => {
-    const name = el.dataset.reveal;
-    const fn = PRESETS[name];
-    if (!fn) {
-      console.warn(`motion: приёма "${name}" нет в реестре (docs/motion.md)`);
-      markReady(el);
-      return;
-    }
-    fn(el);
-  });
+  const els = [...document.querySelectorAll('[data-reveal]')];
+  /* Сначала только чтение: первый экран и сдвиг появления */
+  revealY = tokenPx('--reveal-y', 24);
+  firstScreen = new Set(els.filter(el => el.getBoundingClientRect().top < window.innerHeight));
+  /* Первый экран готовится сразу, остальное – когда до элемента полтора экрана: при загрузке не режем и не измеряем
+     все 32 элемента разом (Lighthouse: forced reflow, длинные задачи). Скрытым до подготовки элемент держит base.css */
+  els.filter(inFirstScreen).forEach(prepare);
+  const io = new IntersectionObserver(
+    entries =>
+      entries
+        .filter(e => e.isIntersecting)
+        .forEach(e => {
+          io.unobserve(e.target);
+          prepare(e.target);
+        }),
+    { rootMargin: '150% 100%' },
+  );
+  els.filter(el => !inFirstScreen(el)).forEach(el => io.observe(el));
+  /* Один пересчёт на всю страницу. Пины transformation и digital-lab к этому моменту уже созданы: их скрипты стоят в HTML
+     раньше base.astro, и их onMotion() выполняется до initMotion. Триггеры, созданные позже по мере прокрутки,
+     меряют себя сами при создании – пины выше уже на месте. Секции сами refresh() не вызывают */
+  ScrollTrigger.sort();
   ScrollTrigger.refresh();
 };

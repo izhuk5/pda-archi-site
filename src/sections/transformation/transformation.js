@@ -1,6 +1,6 @@
 /* Пин-секция «было – стало» (приём compare-pin, docs/motion.md): шторка и смена кадра – по скроллу, смена текста главы – по времени.
    Только от 768 px (gsap.matchMedia); телефон, ?static, reduced motion – главы стопкой со шторкой пальцем (compare.js). */
-import { gsap, ScrollTrigger, SplitText } from '@lib/gsap.js';
+import { gsap, SplitText } from '@lib/gsap.js';
 import { onMotion } from '@lib/env.js';
 
 onMotion(() => {
@@ -108,8 +108,5 @@ onMotion(() => {
       count.textContent = `1 / ${chapters.length}`;
     };
   });
-  /* Пин создан здесь, а появления ниже по странице – в src/lib/motion.js, порядок запуска не гарантирован: без сортировки
-     триггеры ниже не учтут три экрана прокрутки пина и сработают раньше, чем элемент доедет до экрана */
-  ScrollTrigger.sort();
-  ScrollTrigger.refresh();
+  /* sort() и refresh() – один раз на всю страницу в конце initMotion (src/lib/motion.js): появления ниже учтут три экрана пина */
 });

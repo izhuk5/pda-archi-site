@@ -3,7 +3,7 @@
      Раскладку в пине на телефоне задаёт CSS (.digital-lab.is-pinned в блоке ≤ 767).
    – Без движения (?static, reduced motion): лента листается вбок со scroll-snap, JS не нужен.
      Внутри ленты (containerAnimation): параллакс фото и появление текста шага. */
-import { gsap, ScrollTrigger } from '@lib/gsap.js';
+import { gsap } from '@lib/gsap.js';
 import { onMotion } from '@lib/env.js';
 import { token, tokenPx } from '@lib/tokens.js';
 
@@ -60,7 +60,5 @@ onMotion(() => {
       scrollTrigger: { trigger: s, containerAnimation: tw, start: 'left 85%' },
     });
   });
-  /* Пин создан здесь, а появления ниже – в src/lib/motion.js: без сортировки триггеры ниже не учтут прокрутку ленты */
-  ScrollTrigger.sort();
-  ScrollTrigger.refresh();
+  /* sort() и refresh() – один раз на всю страницу в конце initMotion (src/lib/motion.js): появления ниже учтут прокрутку ленты */
 });
